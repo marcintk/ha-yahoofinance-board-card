@@ -1,0 +1,145 @@
+# Example card configuration for ha-yahoofinance-board-card
+#
+# Prerequisites:
+#   - yahoofinance integration installed and configured (see homeassistant/configuration.yaml below)
+#   - sensor.stock_refresh_signal helper (input_number with values 0-3, rotated by automation)
+
+type: custom:ha-yahoofinance-board-card
+prefix: sensor.yahoofinance_
+refresh_signal: sensor.stock_refresh_signal
+pinned:
+  - symbol: dji
+    name: "DOW JONES"
+  - symbol: gspc
+    name: "S&P 500"
+  - symbol: ixic
+    name: "NASDAQ"
+  - symbol: dax
+    name: "DAX(DE)"
+  - symbol: ftse
+    name: "FTSE100(UK)"
+  - symbol: n225
+    name: "NIKKEI(JP)"
+  - symbol: tnx
+    name: "10Y TREASURY"
+  - symbol: gc_f
+    name: "+Gold"
+  - symbol: bz_f
+    name: "+Crude Oil (Brent)"
+  - symbol: cl_f
+    name: "+Crude Oil (WTI)"
+  - symbol: ng_f
+    name: "+Natural Gas"
+  - symbol: usdpln_x
+    name: "=USD/PLN"
+  - symbol: usdcny_x
+    name: "=USD/CNY"
+  - symbol: usdjpy_x
+    name: "=USD/JPY"
+  - symbol: usdrub_x
+    name: "=USD/RUB"
+  - symbol: usdars_x
+    name: "=USD/ARS"
+  - symbol: btc_usd
+    name: "=BTC/USD (Bitcoin)"
+  - symbol: eth_usd
+    name: "=ETH/USD (Etherium)"
+sorted:
+  - symbol: sabr
+    name: "Sabre"
+    highlight: "gold"
+  - symbol: ams_mc
+    name: "Amadeus"
+  - symbol: aal
+    name: "American Airlines"
+  - symbol: ba
+    name: "Boeing"
+  - symbol: goog
+    name: "Google"
+    special: true
+  - symbol: amzn
+    name: "Amazon"
+    special: true
+  - symbol: aapl
+    name: "Apple"
+  - symbol: msft
+    name: "Microsoft"
+  - symbol: meta
+    name: "Meta"
+  - symbol: tsla
+    name: "Tesla"
+  - symbol: nvda
+    name: "NVidia"
+  - symbol: amd
+    name: "AMD"
+  - symbol: intc
+    name: "Intel"
+  - symbol: nflx
+    name: "Netflix"
+    special: true
+  - symbol: cost
+    name: "Costco"
+    special: true
+  - symbol: wmt
+    name: "Walmart"
+  - symbol: spcx
+    name: "SpaceX"
+  - symbol: brk_a
+    name: "Berkshire A"
+  - symbol: brk_b
+    name: "Berkshire B"
+
+---
+# homeassistant/configuration.yaml
+# Symbol names for entity IDs: lowercase, replace . with _, replace - with _, remove ^
+# Examples: ^DJI -> dji, BRK-A -> brk_a, GC=F -> gc_f, AMS.MC -> ams_mc, BTC-USD -> btc_usd
+
+yahoofinance:
+  scan_interval:
+    minutes: 1
+  show_trending_icon: false
+  decimal_places: 2
+  include_post_values: true
+  include_pre_values: true
+  include_fifty_day_values: true
+  include_two_hundred_day_values: true
+  include_fifty_two_week_values: false
+  include_dividend_values: true
+  symbols:
+    - ^FTSE
+    - ^IXIC
+    - ^DJI
+    - ^GSPC
+    - ^TNX
+    - ^N225
+    - DAX
+    - BRK-A
+    - BRK-B
+    - SABR
+    - AMS.MC
+    - AAL
+    - TSLA
+    - BA
+    - AMZN
+    - WMT
+    - GOOG
+    - NVDA
+    - AMD
+    - INTC
+    - AAPL
+    - META
+    - NFLX
+    - MSFT
+    - COST
+    - SPCX
+    - GC=F
+    - CL=F
+    - BZ=F
+    - NG=F
+    - BTC-USD
+    - ETH-USD
+    - USDPLN=X
+    - USDCNY=X
+    - USDJPY=X
+    - USDRUB=X
+    - USDARS=X
