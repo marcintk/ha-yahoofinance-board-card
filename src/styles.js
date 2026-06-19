@@ -14,7 +14,7 @@ export const CARD_STYLES = `
     display: grid;
     grid-template-columns: 1fr 50px 50px 45px 50px 50px 56px;
     grid-template-rows: 1fr;
-    align-items: center;
+    align-items: stretch;
     line-height: 1;
   }
 
@@ -31,19 +31,20 @@ export const CARD_STYLES = `
 
   .col-name {
     padding-left: 2px;
-    text-align: start;
     letter-spacing: 0.05em;
     font-weight: bold;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
   }
 
   .col-prepost, .col-1d, .col-50d, .col-200d, .col-data, .col-price {
     padding: 0 2px;
-    text-align: end;
     font-weight: bold;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .stock-header .col-prepost,

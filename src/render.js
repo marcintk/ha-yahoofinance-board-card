@@ -36,9 +36,10 @@ export function stockRowHtml(stock, attrs, signalState, highlightColor) {
     rateColor(attrs?.twoHundredDayAverageChangePercent ?? 0, 30),
     null
   );
-  const priceStyle = styleAttr('dimgray', highlightColor ?? null);
+  const priceStyle = styleAttr('dimgray', null);
+  const rowStyle = highlightColor ? ` style="background-color:${esc(highlightColor)};"` : '';
 
-  return `<div class="stock-row">
+  return `<div class="stock-row"${rowStyle}>
     <div class="col-name"${nameStyle}>${esc(displayName(stock))}</div>
     <div class="col-prepost"${prepostStyle}>${esc(prepostText(attrs))}</div>
     <div class="col-1d"${change1dStyle}>${esc(formatRate(attrs?.regularMarketChangePercent, 2))}</div>
