@@ -74,16 +74,16 @@ supported symbols.
 
 ### Card options
 
-| Option           | Type   | Default                | Description                                                    |
-| ---------------- | ------ | ---------------------- | -------------------------------------------------------------- |
-| `prefix`         | string | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                    |
-| `refresh_signal` | string | —                      | Entity whose state (0–3) cycles the data column                |
-| `pinned`         | list   | `[]`                   | Stocks rendered in configured order (indices, commodities, FX) |
-| `sorted`         | list   | `[]`                   | Stocks sorted by 1-day change descending (individual equities) |
-| `height`         | string | auto                   | Card height (CSS value); omit to fit content                   |
-| `lazyRefresh`    | number | `1`                    | Seconds to debounce after a state event; `0` = immediate       |
-| `fixedRefresh`   | number | `60`                   | Re-render every N seconds regardless of events; `0` = disabled |
-| `debug`          | boolean | `false`               | Enables debug overlay (event/filter/render counters) and version badge (top-left) |
+| Option           | Type    | Default                | Description                                                                       |
+| ---------------- | ------- | ---------------------- | --------------------------------------------------------------------------------- |
+| `prefix`         | string  | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                       |
+| `refresh_signal` | string  | —                      | Entity whose state (0–3) cycles the data column                                   |
+| `pinned`         | list    | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                    |
+| `sorted`         | list    | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                    |
+| `height`         | string  | auto                   | Card height (CSS value); omit to fit content                                      |
+| `lazyRefresh`    | number  | `1`                    | Seconds to debounce after a state event; `0` = immediate                          |
+| `fixedRefresh`   | number  | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                    |
+| `debug`          | boolean | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left) |
 
 ### Stock entry options
 
