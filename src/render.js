@@ -13,14 +13,16 @@ function displayName(stock) {
   return stock.name;
 }
 
-export function headerHtml() {
+const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
+
+export function headerHtml(dataIndex) {
   return `<div class="stock-header">
     <div class="col-name"></div>
     <div class="col-prepost">Pre/Post</div>
     <div class="col-1d">1d%</div>
     <div class="col-50d">50d%</div>
     <div class="col-200d">200d%</div>
-    <div class="col-data">Data</div>
+    <div class="col-data">${DATA_LABELS[dataIndex] ?? 'PE'}</div>
     <div class="col-price">Price</div>
   </div>`;
 }

@@ -38,10 +38,26 @@ describe('headerHtml', () => {
   });
 
   it('contains column label text', () => {
-    const html = headerHtml();
+    const html = headerHtml(0);
     expect(html).toContain('Pre/Post');
     expect(html).toContain('1d%');
     expect(html).toContain('Price');
+  });
+
+  it('shows PE for dataIndex 0', () => {
+    expect(headerHtml(0)).toContain('>PE<');
+  });
+
+  it('shows FPE for dataIndex 1', () => {
+    expect(headerHtml(1)).toContain('>FPE<');
+  });
+
+  it('shows Div for dataIndex 2', () => {
+    expect(headerHtml(2)).toContain('>Div<');
+  });
+
+  it('shows Vol for dataIndex 3', () => {
+    expect(headerHtml(3)).toContain('>Vol<');
   });
 });
 
