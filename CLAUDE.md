@@ -22,6 +22,7 @@ test file.
 | Source file           | Test file                   | Responsibility                                                                                  |
 | --------------------- | --------------------------- | ----------------------------------------------------------------------------------------------- |
 | `src/index.js`        | `test/index.test.js`        | Custom element class, HA lifecycle hooks, entity cache, render orchestration                    |
+| `src/debug.js`        | `test/debug.test.js`        | `DebugMetrics` — event/filter/render counters with time-window bucketing; debug overlay HTML    |
 | `src/subscription.js` | `test/subscription.test.js` | `SubscriptionManager` — WebSocket subscribe/unsubscribe with stale-gen guard                    |
 | `src/render.js`       | `test/render.test.js`       | `headerHtml()`, `stockRowHtml()`, `pinnedHtml()`, `sortedHtml()` — HTML generation              |
 | `src/display.js`      | `test/display.test.js`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()` |
