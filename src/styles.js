@@ -14,8 +14,8 @@ export const CARD_STYLES = `
     display: grid;
     grid-template-columns: 1fr 50px 50px 45px 50px 50px 56px;
     grid-template-rows: 1fr;
-    min-height: 20px;
     align-items: center;
+    line-height: 1;
   }
 
   .stock-header {
@@ -57,7 +57,7 @@ export const CARD_STYLES = `
   }
 
   .col-price {
-    padding: 2px 1px;
+    padding: 0 1px;
   }
 
   .empty {
