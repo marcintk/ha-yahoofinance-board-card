@@ -19,7 +19,6 @@ export const CARD_STYLES = `
   }
 
   .stock-header {
-    font-size: 9px;
     color: var(--secondary-text-color, gray);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     padding: 2px 0;
@@ -54,7 +53,6 @@ export const CARD_STYLES = `
   .stock-header .col-data,
   .stock-header .col-price {
     font-weight: normal;
-    font-size: 9px;
   }
 
   .col-price {

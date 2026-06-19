@@ -177,7 +177,7 @@ class YahooFinanceBoardCard extends HTMLElement {
       const resolvedPrefix = prefix ?? 'sensor.yahoofinance_';
 
       const body =
-        headerHtml() +
+        headerHtml(this._dataIndex) +
         (pinned.length ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex) : '') +
         (sorted.length ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex) : '');
 
