@@ -83,6 +83,7 @@ supported symbols.
 | `height`         | string | auto                   | Card height (CSS value); omit to fit content                   |
 | `lazyRefresh`    | number | `1`                    | Seconds to debounce after a state event; `0` = immediate       |
 | `fixedRefresh`   | number | `60`                   | Re-render every N seconds regardless of events; `0` = disabled |
+| `debug`          | boolean | `false`               | Enables debug overlay (event/filter/render counters) and version badge (top-left) |
 
 ### Stock entry options
 
