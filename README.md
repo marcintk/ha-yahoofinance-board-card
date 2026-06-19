@@ -17,9 +17,6 @@ Requires the [yahoofinance](https://github.com/iprak/yahoofinance) integration (
 it provides the `sensor.yahoofinance_<symbol>` entities this card reads. See
 [docs/configuration-example.yaml](docs/configuration-example.yaml) for sensor setup.
 
-The optional `refresh_signal` entity cycles the data column. Use an `input_number` helper (values
-0–3) rotated by an automation on a schedule.
-
 ## Installation
 
 ### Via HACS (recommended)
@@ -48,7 +45,6 @@ Add a **Manual card** to your dashboard and paste:
 ```yaml
 type: custom:ha-yahoofinance-board-card
 prefix: sensor.yahoofinance_
-refresh_signal: sensor.stock_refresh_signal
 pinned:
   - symbol: dji
     name: "DOW JONES"
@@ -74,16 +70,16 @@ supported symbols.
 
 ### Card options
 
-| Option           | Type    | Default                | Description                                                                       |
-| ---------------- | ------- | ---------------------- | --------------------------------------------------------------------------------- |
-| `prefix`         | string  | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                       |
-| `refresh_signal` | string  | —                      | Entity whose state (0–3) cycles the data column                                   |
-| `pinned`         | list    | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                    |
-| `sorted`         | list    | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                    |
-| `height`         | string  | auto                   | Card height (CSS value); omit to fit content                                      |
-| `lazyRefresh`    | number  | `1`                    | Seconds to debounce after a state event; `0` = immediate                          |
-| `fixedRefresh`   | number  | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                    |
-| `debug`          | boolean | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left) |
+| Option              | Type    | Default                | Description                                                                       |
+| ------------------- | ------- | ---------------------- | --------------------------------------------------------------------------------- |
+| `prefix`            | string  | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                       |
+| `pinned`            | list    | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                    |
+| `sorted`            | list    | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                    |
+| `data_rotate_every` | number  | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled         |
+| `height`            | string  | auto                   | Card height (CSS value); omit to fit content                                      |
+| `lazy_refresh`      | number  | `1`                    | Seconds to debounce after a state event; `0` = immediate                          |
+| `fixed_refresh`     | number  | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                    |
+| `debug`             | boolean | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left) |
 
 ### Stock entry options
 
@@ -109,15 +105,15 @@ Finance ticker:
 
 ### Columns
 
-| Column   | Shows                                                                             |
-| -------- | --------------------------------------------------------------------------------- |
-| Name     | Stock name; colored by 1d change during `REGULAR` session, gray otherwise         |
-| Pre/Post | Pre or post market change %; background color indicates session type              |
-| 1d%      | Regular market change %; highlighted gray background during `REGULAR` session     |
-| 50d%     | 50-day average change % (±30% threshold for color)                                |
-| 200d%    | 200-day average change % (±30% threshold for color)                               |
-| Data     | Cycles through PE / Forward PE / Dividend Rate / Volume based on `refresh_signal` |
-| Price    | Current price: pre/post/regular market depending on session                       |
+| Column   | Shows                                                                                     |
+| -------- | ----------------------------------------------------------------------------------------- |
+| Name     | Stock name; colored by 1d change during `REGULAR` session, gray otherwise                 |
+| Pre/Post | Pre or post market change %; background color indicates session type                      |
+| 1d%      | Regular market change %; highlighted gray background during `REGULAR` session             |
+| 50d%     | 50-day average change % (±30% threshold for color)                                        |
+| 200d%    | 200-day average change % (±30% threshold for color)                                       |
+| Data     | Cycles through PE / Forward PE / Dividend Rate / Volume every `data_rotate_every` seconds |
+| Price    | Current price: pre/post/regular market depending on session                               |
 
 ### Market states and colors
 

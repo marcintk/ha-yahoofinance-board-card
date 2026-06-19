@@ -11,10 +11,12 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._config = null;
     this._hass = null;
     this._fixedTimer = null;
+    this._dataTimer = null;
     this._debugTimer = null;
     this._renderTimer = null;
     this._trackedIds = null;
     this._lastBody = null;
+    this._dataIndex = 0;
     this._subscription = new SubscriptionManager();
     this._debug = new DebugMetrics();
   }
@@ -24,7 +26,9 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._clearSubscription();
     this._trackedIds = null;
     this._lastBody = null;
+    this._dataIndex = 0;
     this._startFixedTimer();
+    this._startDataTimer();
     if (this._hass) {
       this._buildTrackedIds();
       this._render();
@@ -63,8 +67,6 @@ class YahooFinanceBoardCard extends HTMLElement {
       ...pinned.map((s) => `${prefix}${s.symbol}`),
       ...sorted.map((s) => `${prefix}${s.symbol}`),
     ]);
-    const signal = this._config?.refresh_signal;
-    if (signal) this._trackedIds.add(signal);
   }
 
   _hasRelevantChange(newHass, prevHass) {
@@ -78,7 +80,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   _scheduleRender() {
     if (this._renderTimer) return;
     if (this._config?.debug) this._debug.track('filtered');
-    const lazyMs = (this._config?.lazyRefresh ?? 1) * 1000;
+    const lazyMs = (this._config?.lazy_refresh ?? 1) * 1000;
     if (lazyMs === 0) {
       this._render();
       return;
@@ -116,7 +118,7 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   _startFixedTimer() {
     this._stopFixedTimer();
-    const fixedMs = (this._config?.fixedRefresh ?? 60) * 1000;
+    const fixedMs = (this._config?.fixed_refresh ?? 60) * 1000;
     if (fixedMs > 0) {
       this._fixedTimer = setInterval(() => {
         if (this._hass && this._config) this._render();
@@ -138,14 +140,33 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
+  _startDataTimer() {
+    this._stopDataTimer();
+    const intervalMs = (this._config?.data_rotate_every ?? 60) * 1000;
+    if (intervalMs > 0) {
+      this._dataTimer = setInterval(() => {
+        this._dataIndex = (this._dataIndex + 1) % 4;
+        if (this._hass && this._config) this._render();
+      }, intervalMs);
+    }
+  }
+
+  _stopDataTimer() {
+    if (this._dataTimer) {
+      clearInterval(this._dataTimer);
+      this._dataTimer = null;
+    }
+  }
+
   disconnectedCallback() {
     this._stopFixedTimer();
+    this._stopDataTimer();
     this._clearSubscription();
   }
 
   _render() {
     try {
-      const { prefix, refresh_signal, pinned = [], sorted = [], height, debug } = this._config;
+      const { prefix, pinned = [], sorted = [], height, debug } = this._config;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
@@ -154,12 +175,11 @@ class YahooFinanceBoardCard extends HTMLElement {
       }
 
       const resolvedPrefix = prefix ?? 'sensor.yahoofinance_';
-      const signalState = refresh_signal ? (states[refresh_signal]?.state ?? '0') : '0';
 
       const body =
         headerHtml() +
-        (pinned.length ? pinnedHtml(pinned, states, resolvedPrefix, signalState) : '') +
-        (sorted.length ? sortedHtml(sorted, states, resolvedPrefix, signalState) : '');
+        (pinned.length ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex) : '') +
+        (sorted.length ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex) : '');
 
       if (body === this._lastBody) return;
       this._lastBody = body;
@@ -208,7 +228,6 @@ class YahooFinanceBoardCard extends HTMLElement {
   static getStubConfig() {
     return {
       prefix: 'sensor.yahoofinance_',
-      refresh_signal: 'sensor.stock_refresh_signal',
       pinned: [
         { symbol: 'dji', name: 'DOW JONES' },
         { symbol: 'gspc', name: 'S&P 500' },

@@ -67,9 +67,19 @@ describe('stockRowHtml', () => {
     expect(html).toContain('>Apple<');
   });
 
-  it('applies highlight color as price background', () => {
+  it('applies highlight color as row background', () => {
     const html = stockRowHtml(stock, baseAttrs, '0', 'gold');
-    expect(html).toContain('background-color:gold');
+    expect(html).toContain('class="stock-row" style="background-color:gold;"');
+  });
+
+  it('does not apply highlight to the price cell', () => {
+    const html = stockRowHtml(stock, baseAttrs, '0', 'gold');
+    expect(html).toContain('class="col-price" style="color:dimgray;"');
+  });
+
+  it('renders row with no style attribute when highlight is null', () => {
+    const html = stockRowHtml(stock, baseAttrs, '0', null);
+    expect(html).toContain('class="stock-row">');
   });
 
   it('renders with null attrs without throwing', () => {
