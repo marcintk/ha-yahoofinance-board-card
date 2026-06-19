@@ -77,6 +77,17 @@ describe('DebugMetrics', () => {
       expect(c.hour1).toBe(5);
       expect(c.hour3).toBe(5);
     });
+
+    it('stops scanning at entries older than 1 hour', () => {
+      const d = new DebugMetrics();
+      const now = 7_200_000;
+      vi.setSystemTime(now - 3_700_000);
+      d.track('events'); // >1h ago but <3h → in arr but not counted by loop
+      vi.setSystemTime(now);
+      const c = d.counts('events');
+      expect(c.hour1).toBe(0);
+      expect(c.hour3).toBe(1); // arr.length still counts it
+    });
   });
 
   describe('tableHtml', () => {
