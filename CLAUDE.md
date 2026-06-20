@@ -7,6 +7,7 @@ npm run build:prod     # minified production build
 npm run dev            # watch mode
 npm test               # run tests
 npm run test:coverage  # run tests with coverage report
+npm run typecheck      # tsc --noEmit (type check only, no emit)
 npm run check          # biome lint + format (src/ and test/)
 npm run format:md      # prettier for markdown files
 ```
@@ -16,24 +17,26 @@ built by CI on every release and attached as a GitHub Release asset that HACS do
 
 ## Module Map
 
-Every `src/*.js` module has a corresponding `test/*.test.js`. New source files must ship with their
-test file.
+Every `src/*.ts` module has a corresponding `test/*.test.ts`. New source files must ship with their
+test file. Shared interfaces and types live in `src/types.ts`; global declarations
+(`__CARD_VERSION__`, `Window.customCards`) are in `src/global.d.ts`.
 
-| Source file           | Test file                   | Responsibility                                                                                  |
-| --------------------- | --------------------------- | ----------------------------------------------------------------------------------------------- |
-| `src/index.js`        | `test/index.test.js`        | Custom element class, HA lifecycle hooks, entity cache, render orchestration                    |
-| `src/debug.js`        | `test/debug.test.js`        | `DebugMetrics` — event/filter/render counters with time-window bucketing; debug overlay HTML    |
-| `src/subscription.js` | `test/subscription.test.js` | `SubscriptionManager` — WebSocket subscribe/unsubscribe with stale-gen guard                    |
-| `src/render.js`       | `test/render.test.js`       | `headerHtml()`, `stockRowHtml()`, `pinnedHtml()`, `sortedHtml()` — HTML generation              |
-| `src/display.js`      | `test/display.test.js`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()` |
-| `src/format.js`       | `test/format.test.js`       | Text formatters: `formatRate()`, `formatPrice()`, `priceText()`, `prepostText()`, `dataText()`  |
-| `src/styles.js`       | `test/styles.test.js`       | CSS string exported as `CARD_STYLES`, injected into Shadow DOM on each render                   |
-| `src/utils.js`        | `test/utils.test.js`        | `esc()` — HTML escaping, `MARKET_STATES` — valid market state set                               |
+| Source file           | Test file                   | Responsibility                                                                                   |
+| --------------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| `src/index.ts`        | `test/index.test.ts`        | Custom element class, HA lifecycle hooks, entity cache, render orchestration                     |
+| `src/debug.ts`        | `test/debug.test.ts`        | `DebugMetrics` — event/filter/render counters with time-window bucketing; debug overlay HTML     |
+| `src/subscription.ts` | `test/subscription.test.ts` | `SubscriptionManager` — WebSocket subscribe/unsubscribe with stale-gen guard                     |
+| `src/render.ts`       | `test/render.test.ts`       | `headerHtml()`, `stockRowHtml()`, `pinnedHtml()`, `sortedHtml()` — HTML generation               |
+| `src/display.ts`      | `test/display.test.ts`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()`  |
+| `src/format.ts`       | `test/format.test.ts`       | Text formatters: `formatRate()`, `formatPrice()`, `priceText()`, `prepostText()`, `dataText()`   |
+| `src/styles.ts`       | `test/styles.test.ts`       | CSS string exported as `CARD_STYLES`, injected into Shadow DOM on each render                    |
+| `src/utils.ts`        | `test/utils.test.ts`        | `esc()` — HTML escaping, `MARKET_STATES` — valid market state set                                |
+| `src/types.ts`        | _(no test file)_            | Shared TypeScript interfaces: `CardConfig`, `Hass`, `StockEntry`, `YahooFinanceAttributes`, etc. |
 
 ## Architecture Notes
 
-- **Shadow DOM / full replacement**: `shadowRoot.innerHTML` is fully replaced on every render — no
-  diffing. Fast enough for ~40 rows max.
+- **Shadow DOM / full replacement**: `_root.innerHTML` (`ShadowRoot` stored at construction) is
+  fully replaced on every render — no diffing. Fast enough for ~40 rows max.
 - **WebSocket subscription**: card subscribes to `state_changed` events on first `set hass`;
   callback calls `_scheduleRender()`, which arms a debounce timer (`_renderTimer`). Rendering always
   uses `_hass.states`, not the event payload.

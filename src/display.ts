@@ -1,4 +1,6 @@
-export function rateColor(rate, threshold = 10.0) {
+import type { MarketState, YahooFinanceAttributes } from './types.js';
+
+export function rateColor(rate: number, threshold = 10.0): string {
   if (rate > threshold) return 'lightseagreen';
   if (rate > 0) return 'seagreen';
   if (rate < -threshold) return 'darkorange';
@@ -6,7 +8,7 @@ export function rateColor(rate, threshold = 10.0) {
   return 'gray';
 }
 
-export function nameColor(attrs) {
+export function nameColor(attrs: YahooFinanceAttributes | null): string {
   if (!attrs) return 'gray';
   if (attrs.marketState === 'REGULAR') {
     return rateColor(attrs.regularMarketChangePercent ?? 0);
@@ -14,7 +16,7 @@ export function nameColor(attrs) {
   return 'gray';
 }
 
-export function prepostColor(attrs) {
+export function prepostColor(attrs: YahooFinanceAttributes | null): string {
   if (!attrs) return 'gray';
   const state = attrs.marketState;
   if (state === 'PREPRE' || state === 'PRE') return rateColor(attrs.preMarketChangePercent ?? 0);
@@ -23,7 +25,7 @@ export function prepostColor(attrs) {
   return 'gray';
 }
 
-export function prepostBg(marketState) {
+export function prepostBg(marketState: MarketState | null | undefined): string | null {
   if (marketState === 'PREPRE') return 'lightblue';
   if (marketState === 'PRE') return 'khaki';
   if (marketState === 'POST') return 'pink';
@@ -31,7 +33,7 @@ export function prepostBg(marketState) {
   return null;
 }
 
-export function changeBg(marketState) {
+export function changeBg(marketState: MarketState | null | undefined): string | null {
   if (marketState === 'REGULAR') return 'lightgray';
   return null;
 }

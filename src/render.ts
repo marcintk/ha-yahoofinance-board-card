@@ -1,21 +1,22 @@
 import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from './display.js';
 import { dataText, formatRate, prepostText, priceText } from './format.js';
+import type { HassEntityState, StockEntry, YahooFinanceAttributes } from './types.js';
 import { esc } from './utils.js';
 
-function styleAttr(color, bg) {
+function styleAttr(color: string, bg: string | null): string {
   let s = `color:${esc(color)};`;
   if (bg) s += `background-color:${esc(bg)};`;
   return ` style="${s}"`;
 }
 
-function displayName(stock) {
+function displayName(stock: StockEntry): string {
   if (stock.special) return `--${stock.name}--`;
   return stock.name;
 }
 
 const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
 
-export function headerHtml(dataIndex) {
+export function headerHtml(dataIndex: number): string {
   return `<div class="stock-header">
     <div class="col-name"></div>
     <div class="col-prepost">Pre/Post</div>
@@ -27,7 +28,12 @@ export function headerHtml(dataIndex) {
   </div>`;
 }
 
-export function stockRowHtml(stock, attrs, signalState, highlightColor) {
+export function stockRowHtml(
+  stock: StockEntry,
+  attrs: YahooFinanceAttributes | null,
+  signalState: number,
+  highlightColor: string | null
+): string {
   const ms = attrs?.marketState ?? null;
 
   const nameStyle = styleAttr(nameColor(attrs), null);
@@ -52,7 +58,12 @@ export function stockRowHtml(stock, attrs, signalState, highlightColor) {
   </div>`;
 }
 
-export function pinnedHtml(stocks, states, prefix, signalState) {
+export function pinnedHtml(
+  stocks: StockEntry[],
+  states: Record<string, HassEntityState | undefined>,
+  prefix: string,
+  signalState: number
+): string {
   return stocks
     .map((stock) => {
       const entity = states[`${prefix}${stock.symbol}`];
@@ -61,7 +72,12 @@ export function pinnedHtml(stocks, states, prefix, signalState) {
     .join('');
 }
 
-export function sortedHtml(stocks, states, prefix, signalState) {
+export function sortedHtml(
+  stocks: StockEntry[],
+  states: Record<string, HassEntityState | undefined>,
+  prefix: string,
+  signalState: number
+): string {
   const withChange = stocks.map((stock) => {
     const attrs = states[`${prefix}${stock.symbol}`]?.attributes ?? null;
     return { stock, attrs, change: attrs?.regularMarketChangePercent ?? 0 };
