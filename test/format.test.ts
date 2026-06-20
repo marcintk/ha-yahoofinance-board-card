@@ -15,7 +15,7 @@ describe('formatRate', () => {
   });
 
   it('returns - for NaN input', () => {
-    expect(formatRate('abc', 2)).toBe('-');
+    expect(formatRate(NaN, 2)).toBe('-');
   });
 
   it('returns - for undefined', () => {
@@ -49,7 +49,7 @@ describe('formatPrice', () => {
   });
 
   it('falls back to fallback price when price is NaN', () => {
-    expect(formatPrice('abc', 150)).toBe('150.0');
+    expect(formatPrice(NaN, 150)).toBe('150.0');
   });
 
   it('returns - when both price and fallback are zero', () => {
@@ -57,7 +57,7 @@ describe('formatPrice', () => {
   });
 
   it('returns - when both are NaN', () => {
-    expect(formatPrice('abc', 'xyz')).toBe('-');
+    expect(formatPrice(NaN, NaN)).toBe('-');
   });
 
   it('uses default fallback of 0 when omitted', () => {
@@ -146,66 +146,66 @@ describe('dataText', () => {
   };
 
   it('returns trailingPE for signal state 0', () => {
-    expect(dataText(fullAttrs, '0')).toContain('25.5X');
+    expect(dataText(fullAttrs, 0)).toContain('25.5X');
   });
 
   it('returns forwardPE for signal state 1', () => {
-    expect(dataText(fullAttrs, '1')).toContain('22.3X');
+    expect(dataText(fullAttrs, 1)).toContain('22.3X');
   });
 
   it('returns dividendRate for signal state 2', () => {
-    expect(dataText(fullAttrs, '2')).toContain('0.88');
+    expect(dataText(fullAttrs, 2)).toContain('0.88');
   });
 
   it('returns volume in M for tens of millions', () => {
-    expect(dataText(fullAttrs, '3')).toContain('50M');
+    expect(dataText(fullAttrs, 3)).toContain('50M');
   });
 
   it('returns volume in G for billions', () => {
-    expect(dataText({ regularMarketVolume: 2000000000 }, '3')).toContain('2G');
+    expect(dataText({ regularMarketVolume: 2000000000 }, 3)).toContain('2G');
   });
 
   it('returns volume in K for sub-million', () => {
-    expect(dataText({ regularMarketVolume: 500000 }, '3')).toContain('500K');
+    expect(dataText({ regularMarketVolume: 500000 }, 3)).toContain('500K');
   });
 
   it('returns empty string for unknown signal state', () => {
-    expect(dataText(fullAttrs, '5')).toBe('');
+    expect(dataText(fullAttrs, 5)).toBe('');
   });
 
   it('returns dash for zero PE', () => {
-    expect(dataText({ trailingPE: 0 }, '0')).toContain('-');
+    expect(dataText({ trailingPE: 0 }, 0)).toContain('-');
   });
 
   it('returns dash for null attrs on PE', () => {
-    expect(dataText(null, '0')).toContain('-');
+    expect(dataText(null, 0)).toContain('-');
   });
 
   it('returns dash for zero volume', () => {
-    expect(dataText({ regularMarketVolume: 0 }, '3')).toContain('-');
+    expect(dataText({ regularMarketVolume: 0 }, 3)).toContain('-');
   });
 
   it('returns dash for null attrs on volume', () => {
-    expect(dataText(null, '3')).toContain('-');
+    expect(dataText(null, 3)).toContain('-');
   });
 
   it('shows seagreen for PE below threshold 50', () => {
-    expect(dataText({ trailingPE: 20 }, '0')).toContain('seagreen');
+    expect(dataText({ trailingPE: 20 }, 0)).toContain('seagreen');
   });
 
   it('shows indianred for PE above threshold 50', () => {
-    expect(dataText({ trailingPE: 60 }, '0')).toContain('indianred');
+    expect(dataText({ trailingPE: 60 }, 0)).toContain('indianred');
   });
 
   it('shows gray color for dividendRate (threshold 0)', () => {
-    expect(dataText({ dividendRate: 0.5 }, '2')).toContain('gray');
+    expect(dataText({ dividendRate: 0.5 }, 2)).toContain('gray');
   });
 
-  it('accepts numeric signal state via coercion', () => {
+  it('accepts numeric signal state', () => {
     expect(dataText(fullAttrs, 0)).toContain('25.5X');
   });
 
   it('returns dash for NaN PE', () => {
-    expect(dataText({ trailingPE: 'invalid' }, '0')).toContain('-');
+    expect(dataText({ trailingPE: NaN }, 0)).toContain('-');
   });
 });

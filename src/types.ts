@@ -1,0 +1,54 @@
+export type MarketState = 'PREPRE' | 'PRE' | 'REGULAR' | 'POST' | 'POSTPOST';
+
+export interface YahooFinanceAttributes {
+  marketState?: MarketState;
+  regularMarketPrice?: number;
+  regularMarketChangePercent?: number;
+  preMarketPrice?: number;
+  preMarketChangePercent?: number;
+  postMarketPrice?: number;
+  postMarketChangePercent?: number;
+  fiftyDayAverageChangePercent?: number;
+  twoHundredDayAverageChangePercent?: number;
+  trailingPE?: number;
+  forwardPE?: number;
+  dividendRate?: number;
+  regularMarketVolume?: number;
+}
+
+export interface StockEntry {
+  symbol: string;
+  name: string;
+  special?: boolean;
+  highlight?: string;
+}
+
+export interface CardConfig {
+  prefix?: string;
+  pinned?: StockEntry[];
+  sorted?: StockEntry[];
+  height?: string | number;
+  debug?: boolean;
+  lazy_refresh?: number;
+  fixed_refresh?: number;
+  data_rotate_every?: number;
+}
+
+export interface HassEvent {
+  data: {
+    entity_id: string;
+  };
+}
+
+export interface HassConnection {
+  subscribeEvents(callback: (event: HassEvent) => void, eventType: string): Promise<() => void>;
+}
+
+export interface HassEntityState {
+  attributes: YahooFinanceAttributes;
+}
+
+export interface Hass {
+  connection: HassConnection;
+  states: Record<string, HassEntityState | undefined>;
+}
