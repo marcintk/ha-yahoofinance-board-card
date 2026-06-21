@@ -65,85 +65,117 @@ describe('stockRowHtml', () => {
   const stock = { symbol: 'aapl', name: 'Apple' };
 
   it('renders a stock row with stock-row class', () => {
-    expect(stockRowHtml(stock, baseAttrs, '0', null)).toContain('stock-row');
+    expect(stockRowHtml(stock, baseAttrs, '0')).toContain('stock-row');
   });
 
   it('renders the stock name', () => {
-    expect(stockRowHtml(stock, baseAttrs, '0', null)).toContain('Apple');
+    expect(stockRowHtml(stock, baseAttrs, '0')).toContain('Apple');
   });
 
-  it('wraps name in -- when special flag is set', () => {
-    const specialStock = { symbol: 'cost', name: 'Costco', special: true };
-    expect(stockRowHtml(specialStock, baseAttrs, '0', null)).toContain('--Costco--');
-  });
-
-  it('does not wrap name when special is false', () => {
-    const html = stockRowHtml(stock, baseAttrs, '0', null);
-    expect(html).not.toContain('--Apple--');
-    expect(html).toContain('>Apple<');
-  });
-
-  it('applies highlight color as row background', () => {
-    const html = stockRowHtml(stock, baseAttrs, '0', 'gold');
+  it('applies mark color as row background', () => {
+    const html = stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, '0');
     expect(html).toContain('class="stock-row" style="background-color:gold;"');
   });
 
-  it('does not apply highlight to the price cell', () => {
-    const html = stockRowHtml(stock, baseAttrs, '0', 'gold');
+  it('does not apply mark to the price cell', () => {
+    const html = stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, '0');
     expect(html).toContain('class="col-price" style="color:dimgray;"');
   });
 
-  it('renders row with no style attribute when highlight is null', () => {
-    const html = stockRowHtml(stock, baseAttrs, '0', null);
+  it('renders plain name with no row style when mark is not set', () => {
+    const html = stockRowHtml(stock, baseAttrs, '0');
+    expect(html).toContain('>Apple<');
     expect(html).toContain('class="stock-row">');
   });
 
+  it('shows auto-detected ◆ icon for futures symbol', () => {
+    const html = stockRowHtml({ symbol: 'gc_f', name: 'Gold' }, null, '0', 'auto');
+    expect(html).toContain('◆ Gold');
+  });
+
+  it('shows auto-detected ¤ icon for FX symbol', () => {
+    const html = stockRowHtml({ symbol: 'usdpln_x', name: 'USD/PLN' }, null, '0', 'auto');
+    expect(html).toContain('¤ USD/PLN');
+  });
+
+  it('shows auto-detected ① icon for index symbol', () => {
+    const html = stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, '0', 'auto');
+    expect(html).toContain('① DOW JONES');
+  });
+
+  it('shows auto-detected ₿ icon for crypto symbol', () => {
+    const html = stockRowHtml({ symbol: 'btc_usd', name: 'Bitcoin' }, null, '0', 'auto');
+    expect(html).toContain('₿ Bitcoin');
+  });
+
+  it('shows no icon for equity symbol in auto mode', () => {
+    const html = stockRowHtml(stock, baseAttrs, '0', 'auto');
+    expect(html).toContain('>Apple<');
+  });
+
+  it('shows no icon in none mode even for index symbol', () => {
+    const html = stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, '0', 'none');
+    expect(html).toContain('>DOW JONES<');
+    expect(html).not.toContain('①');
+  });
+
+  it('uses per-entry icon override over auto-detection', () => {
+    const html = stockRowHtml({ symbol: 'dji', name: 'DOW JONES', icon: '★' }, null, '0', 'auto');
+    expect(html).toContain('★ DOW JONES');
+    expect(html).not.toContain('①');
+  });
+
+  it('shows per-entry icon even when icons mode is none', () => {
+    const html = stockRowHtml({ ...stock, icon: '★' }, baseAttrs, '0', 'none');
+    expect(html).toContain('★ Apple');
+  });
+
   it('renders with null attrs without throwing', () => {
-    const html = stockRowHtml(stock, null, '0', null);
+    const html = stockRowHtml(stock, null, '0');
     expect(html).toContain('stock-row');
     expect(html).toContain('Apple');
   });
 
   it('applies khaki background for PRE market state', () => {
-    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'PRE' }, '0', null);
+    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'PRE' }, '0');
     expect(html).toContain('khaki');
   });
 
   it('applies lightblue background for PREPRE market state', () => {
-    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'PREPRE' }, '0', null);
+    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'PREPRE' }, '0');
     expect(html).toContain('lightblue');
   });
 
   it('applies pink background for POST market state', () => {
-    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'POST' }, '0', null);
+    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'POST' }, '0');
     expect(html).toContain('pink');
   });
 
   it('applies indigo background for POSTPOST market state', () => {
-    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'POSTPOST' }, '0', null);
+    const html = stockRowHtml(stock, { ...baseAttrs, marketState: 'POSTPOST' }, '0');
     expect(html).toContain('indigo');
   });
 
   it('applies lightgray 1d change background for REGULAR market state', () => {
-    const html = stockRowHtml(stock, baseAttrs, '0', null);
+    const html = stockRowHtml(stock, baseAttrs, '0');
     expect(html).toContain('lightgray');
   });
 
   it('escapes stock name to prevent XSS', () => {
     const xssStock = { symbol: 'test', name: '<script>alert(1)</script>' };
-    const html = stockRowHtml(xssStock, null, '0', null);
+    const html = stockRowHtml(xssStock, null, '0');
     expect(html).not.toContain('<script>');
     expect(html).toContain('&lt;script&gt;');
   });
 
-  it('escapes special chars in highlight color', () => {
-    const html = stockRowHtml(stock, baseAttrs, '0', '<evil>');
+  it('escapes special chars in mark color', () => {
+    const html = stockRowHtml({ ...stock, mark: '<evil>' }, baseAttrs, '0');
     expect(html).toContain('&lt;evil&gt;');
     expect(html).not.toContain('<evil>');
   });
 
   it('renders data column via dataText', () => {
-    const html = stockRowHtml(stock, baseAttrs, '1', null);
+    const html = stockRowHtml(stock, baseAttrs, '1');
     expect(html).toContain('col-data');
   });
 });
@@ -177,11 +209,18 @@ describe('pinnedHtml', () => {
     expect(html).toContain('Unknown');
   });
 
-  it('passes highlight color to stock row', () => {
-    const stocks = [{ symbol: 'sabr', name: 'Sabre', highlight: 'gold' }];
+  it('passes mark color to stock row', () => {
+    const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };
     const html = pinnedHtml(stocks, states, prefix, '0');
     expect(html).toContain('background-color:gold');
+  });
+
+  it('propagates iconsMode to stock rows', () => {
+    const stocks = [{ symbol: 'gc_f', name: 'Gold' }];
+    const states = { 'sensor.yahoofinance_gc_f': { attributes: baseAttrs } };
+    const html = pinnedHtml(stocks, states, prefix, '0', 'auto');
+    expect(html).toContain('◆ Gold');
   });
 });
 
@@ -219,10 +258,17 @@ describe('sortedHtml', () => {
     expect(html.indexOf('Known')).toBeLessThan(html.indexOf('Unknown'));
   });
 
-  it('passes highlight to sorted rows', () => {
-    const stocks = [{ symbol: 'sabr', name: 'Sabre', highlight: 'gold' }];
+  it('passes mark color to sorted rows', () => {
+    const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };
     const html = sortedHtml(stocks, states, prefix, '0');
     expect(html).toContain('background-color:gold');
+  });
+
+  it('propagates iconsMode to sorted rows', () => {
+    const stocks = [{ symbol: 'usdpln_x', name: 'USD/PLN' }];
+    const states = { 'sensor.yahoofinance_usdpln_x': { attributes: baseAttrs } };
+    const html = sortedHtml(stocks, states, prefix, '0', 'auto');
+    expect(html).toContain('¤ USD/PLN');
   });
 });

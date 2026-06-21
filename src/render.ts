@@ -1,5 +1,6 @@
 import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from './display.js';
 import { dataText, formatRate, prepostText, priceText } from './format.js';
+import { resolveIcon } from './icons.js';
 import type { HassEntityState, StockEntry, YahooFinanceAttributes } from './types.js';
 import { esc } from './utils.js';
 
@@ -9,9 +10,8 @@ function styleAttr(color: string, bg: string | null): string {
   return ` style="${s}"`;
 }
 
-function displayName(stock: StockEntry): string {
-  if (stock.special) return `--${stock.name}--`;
-  return stock.name;
+function displayName(stock: StockEntry, icon: string): string {
+  return icon ? `${icon} ${stock.name}` : stock.name;
 }
 
 const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
@@ -32,9 +32,10 @@ export function stockRowHtml(
   stock: StockEntry,
   attrs: YahooFinanceAttributes | null,
   signalState: number,
-  highlightColor: string | null
+  iconsMode: 'auto' | 'none' = 'none'
 ): string {
   const ms = attrs?.marketState ?? null;
+  const icon = resolveIcon(stock.symbol, stock.icon, iconsMode);
 
   const nameStyle = styleAttr(nameColor(attrs), null);
   const prepostStyle = styleAttr(prepostColor(attrs), prepostBg(ms));
@@ -45,10 +46,10 @@ export function stockRowHtml(
     null
   );
   const priceStyle = styleAttr('dimgray', null);
-  const rowStyle = highlightColor ? ` style="background-color:${esc(highlightColor)};"` : '';
+  const rowStyle = stock.mark ? ` style="background-color:${esc(stock.mark)};"` : '';
 
   return `<div class="stock-row"${rowStyle}>
-    <div class="col-name"${nameStyle}>${esc(displayName(stock))}</div>
+    <div class="col-name"${nameStyle}>${esc(displayName(stock, icon))}</div>
     <div class="col-prepost"${prepostStyle}>${esc(prepostText(attrs))}</div>
     <div class="col-1d"${change1dStyle}>${esc(formatRate(attrs?.regularMarketChangePercent, 2))}</div>
     <div class="col-50d"${change50dStyle}>${esc(formatRate(attrs?.fiftyDayAverageChangePercent, 1))}</div>
@@ -62,12 +63,13 @@ export function pinnedHtml(
   stocks: StockEntry[],
   states: Record<string, HassEntityState | undefined>,
   prefix: string,
-  signalState: number
+  signalState: number,
+  iconsMode: 'auto' | 'none' = 'none'
 ): string {
   return stocks
     .map((stock) => {
       const entity = states[`${prefix}${stock.symbol}`];
-      return stockRowHtml(stock, entity?.attributes ?? null, signalState, stock.highlight ?? null);
+      return stockRowHtml(stock, entity?.attributes ?? null, signalState, iconsMode);
     })
     .join('');
 }
@@ -76,7 +78,8 @@ export function sortedHtml(
   stocks: StockEntry[],
   states: Record<string, HassEntityState | undefined>,
   prefix: string,
-  signalState: number
+  signalState: number,
+  iconsMode: 'auto' | 'none' = 'none'
 ): string {
   const withChange = stocks.map((stock) => {
     const attrs = states[`${prefix}${stock.symbol}`]?.attributes ?? null;
@@ -86,6 +89,6 @@ export function sortedHtml(
   withChange.sort((a, b) => b.change - a.change);
 
   return withChange
-    .map(({ stock, attrs }) => stockRowHtml(stock, attrs, signalState, stock.highlight ?? null))
+    .map(({ stock, attrs }) => stockRowHtml(stock, attrs, signalState, iconsMode))
     .join('');
 }

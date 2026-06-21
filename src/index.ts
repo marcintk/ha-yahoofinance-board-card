@@ -181,7 +181,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _render(): void {
     try {
       if (!this._config || !this._hass) throw new Error('render called before config/hass set');
-      const { prefix, pinned = [], sorted = [], height, debug } = this._config;
+      const { prefix, pinned = [], sorted = [], height, debug, icons = 'none' } = this._config;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
@@ -193,8 +193,8 @@ class YahooFinanceBoardCard extends HTMLElement {
 
       const body =
         headerHtml(this._dataIndex) +
-        (pinned.length ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex) : '') +
-        (sorted.length ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex) : '');
+        (pinned.length ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex, icons) : '') +
+        (sorted.length ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex, icons) : '');
 
       if (body === this._lastBody) return;
       this._lastBody = body;
