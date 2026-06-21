@@ -1,3 +1,4 @@
+import { html, type TemplateResult } from 'lit';
 import type { YahooFinanceAttributes } from './types.js';
 
 export function formatRate(rate: number | null | undefined, precision: number): string {
@@ -39,12 +40,12 @@ export function prepostText(attrs: YahooFinanceAttributes | null): string {
 export function dataText(
   attrs: YahooFinanceAttributes | null | undefined,
   signalState: number
-): string {
+): TemplateResult {
   if (signalState === 0) return _dataVal(attrs?.trailingPE, 1, 'X', 50);
   if (signalState === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
   if (signalState === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
   if (signalState === 3) return _volumeVal(attrs?.regularMarketVolume);
-  return '';
+  return html``;
 }
 
 function _dataVal(
@@ -52,20 +53,21 @@ function _dataVal(
   precision: number,
   suffix: string,
   threshold: number
-): string {
+): TemplateResult {
   const data = raw ?? NaN;
-  if (Number.isNaN(data) || data === 0) return '<span style="color:gray;">-</span>';
+  if (Number.isNaN(data) || data === 0) return html`<span style="color:gray;">-</span>`;
   let color = 'gray';
   if (threshold > 0 && data > 0) color = 'seagreen';
   if (threshold > 0 && data > threshold) color = 'indianred';
-  return `<span style="color:${color};">${data.toFixed(precision)}${suffix}</span>`;
+  return html`<span style="color:${color};">${data.toFixed(precision)}${suffix}</span>`;
 }
 
-function _volumeVal(raw: number | undefined): string {
+function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
-  if (!data) return '<span style="color:gray;">-</span>';
-  if (data > 1000000000)
-    return `<span style="color:gray;">${(data / 1000000000).toFixed(0)}G</span>`;
-  if (data > 1000000) return `<span style="color:gray;">${(data / 1000000).toFixed(0)}M</span>`;
-  return `<span style="color:gray;">${(data / 1000).toFixed(0)}K</span>`;
+  if (!data) return html`<span style="color:gray;">-</span>`;
+  if (data > 1_000_000_000)
+    return html`<span style="color:gray;">${(data / 1_000_000_000).toFixed(0)}G</span>`;
+  if (data > 1_000_000)
+    return html`<span style="color:gray;">${(data / 1_000_000).toFixed(0)}M</span>`;
+  return html`<span style="color:gray;">${(data / 1_000).toFixed(0)}K</span>`;
 }

@@ -512,13 +512,27 @@ describe('YahooFinanceBoardCard', () => {
       expect(card._debugTimer).toBeNull();
     });
 
-    it('debug timer calls _updateDebugOverlay', () => {
+    it('debug timer calls _render', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
-      const overlaySpy = vi.spyOn(card, '_updateDebugOverlay');
+      card._hass = makeHass({});
+      card._trackedIds = new Set();
+      const renderSpy = vi.spyOn(card, '_render');
       card._startFixedTimer();
       vi.advanceTimersByTime(5000);
-      expect(overlaySpy).toHaveBeenCalled();
+      expect(renderSpy).toHaveBeenCalled();
+      card._stopFixedTimer();
+    });
+
+    it('debug timer does not call _render when hass is null', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, debug: true };
+      card._hass = null;
+      card._trackedIds = new Set();
+      const renderSpy = vi.spyOn(card, '_render');
+      card._startFixedTimer();
+      vi.advanceTimersByTime(5000);
+      expect(renderSpy).not.toHaveBeenCalled();
       card._stopFixedTimer();
     });
   });
@@ -692,7 +706,18 @@ describe('YahooFinanceBoardCard', () => {
       expect(card.shadowRoot.innerHTML).toContain('400px');
     });
 
-    it('skips DOM update when body is identical to last render', () => {
+    it('includes position:relative in height style when debug is also enabled', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, height: '400px', debug: true };
+      card._hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
+      card._trackedIds = new Set();
+      card._render();
+      const haCard = card.shadowRoot.querySelector('ha-card');
+      expect(haCard?.getAttribute('style')).toContain('400px');
+      expect(haCard?.getAttribute('style')).toContain('position:relative');
+    });
+
+    it('produces identical DOM on repeated renders with same data', () => {
       const card = makeCard();
       card._config = baseConfig;
       const stateObj = makeState(baseAttrs);
@@ -749,7 +774,7 @@ describe('YahooFinanceBoardCard', () => {
       card._render();
       expect(card.shadowRoot.innerHTML).toContain('id="yf-debug"');
       expect(card.shadowRoot.innerHTML).toContain('position:relative');
-      expect(card.shadowRoot.innerHTML).toContain('vtest');
+      expect(card.shadowRoot.textContent).toContain('vtest');
     });
 
     it('tracks rendered metric when debug:true', () => {
@@ -763,13 +788,8 @@ describe('YahooFinanceBoardCard', () => {
     });
   });
 
-  describe('_updateDebugOverlay', () => {
-    it('does not throw when debug overlay is absent', () => {
-      const card = makeCard();
-      expect(() => card._updateDebugOverlay()).not.toThrow();
-    });
-
-    it('updates overlay innerHTML when debug overlay is present', () => {
+  describe('debug overlay', () => {
+    it('re-rendering updates the debug overlay content', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
       card._hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
@@ -777,7 +797,6 @@ describe('YahooFinanceBoardCard', () => {
       card._render();
       const overlay = card.shadowRoot.querySelector('#yf-debug');
       expect(overlay).not.toBeNull();
-      card._updateDebugOverlay();
       expect(overlay.innerHTML).toContain('events');
     });
   });

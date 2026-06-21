@@ -1,5 +1,18 @@
+import { render } from 'lit';
 import { describe, expect, it } from 'vitest';
 import { dataText, formatPrice, formatRate, prepostText, priceText } from '../src/format.js';
+
+function doc() {
+  const el = document.createElement('div');
+  render(dataText(undefined, -1), el); // warm up lit
+  return el;
+}
+
+function renderDataText(attrs: Parameters<typeof dataText>[0], state: number): HTMLElement {
+  const el = document.createElement('div');
+  render(dataText(attrs, state), el);
+  return el;
+}
 
 describe('formatRate', () => {
   it('formats positive rate with + prefix', () => {
@@ -142,70 +155,76 @@ describe('dataText', () => {
     trailingPE: 25.5,
     forwardPE: 22.3,
     dividendRate: 0.88,
-    regularMarketVolume: 50000000,
+    regularMarketVolume: 50_000_000,
   };
 
   it('returns trailingPE for signal state 0', () => {
-    expect(dataText(fullAttrs, 0)).toContain('25.5X');
+    expect(renderDataText(fullAttrs, 0).textContent).toContain('25.5X');
   });
 
   it('returns forwardPE for signal state 1', () => {
-    expect(dataText(fullAttrs, 1)).toContain('22.3X');
+    expect(renderDataText(fullAttrs, 1).textContent).toContain('22.3X');
   });
 
   it('returns dividendRate for signal state 2', () => {
-    expect(dataText(fullAttrs, 2)).toContain('0.88');
+    expect(renderDataText(fullAttrs, 2).textContent).toContain('0.88');
   });
 
   it('returns volume in M for tens of millions', () => {
-    expect(dataText(fullAttrs, 3)).toContain('50M');
+    expect(renderDataText(fullAttrs, 3).textContent).toContain('50M');
   });
 
   it('returns volume in G for billions', () => {
-    expect(dataText({ regularMarketVolume: 2000000000 }, 3)).toContain('2G');
+    expect(renderDataText({ regularMarketVolume: 2_000_000_000 }, 3).textContent).toContain('2G');
   });
 
   it('returns volume in K for sub-million', () => {
-    expect(dataText({ regularMarketVolume: 500000 }, 3)).toContain('500K');
+    expect(renderDataText({ regularMarketVolume: 500_000 }, 3).textContent).toContain('500K');
   });
 
-  it('returns empty string for unknown signal state', () => {
-    expect(dataText(fullAttrs, 5)).toBe('');
+  it('renders nothing for unknown signal state', () => {
+    expect(renderDataText(fullAttrs, 5).textContent?.trim()).toBe('');
   });
 
   it('returns dash for zero PE', () => {
-    expect(dataText({ trailingPE: 0 }, 0)).toContain('-');
+    expect(renderDataText({ trailingPE: 0 }, 0).textContent).toContain('-');
   });
 
   it('returns dash for null attrs on PE', () => {
-    expect(dataText(null, 0)).toContain('-');
+    expect(renderDataText(null, 0).textContent).toContain('-');
   });
 
   it('returns dash for zero volume', () => {
-    expect(dataText({ regularMarketVolume: 0 }, 3)).toContain('-');
+    expect(renderDataText({ regularMarketVolume: 0 }, 3).textContent).toContain('-');
   });
 
   it('returns dash for null attrs on volume', () => {
-    expect(dataText(null, 3)).toContain('-');
+    expect(renderDataText(null, 3).textContent).toContain('-');
   });
 
   it('shows seagreen for PE below threshold 50', () => {
-    expect(dataText({ trailingPE: 20 }, 0)).toContain('seagreen');
+    const span = renderDataText({ trailingPE: 20 }, 0).querySelector('span');
+    expect(span?.getAttribute('style')).toContain('seagreen');
   });
 
   it('shows indianred for PE above threshold 50', () => {
-    expect(dataText({ trailingPE: 60 }, 0)).toContain('indianred');
+    const span = renderDataText({ trailingPE: 60 }, 0).querySelector('span');
+    expect(span?.getAttribute('style')).toContain('indianred');
   });
 
   it('shows gray color for dividendRate (threshold 0)', () => {
-    expect(dataText({ dividendRate: 0.5 }, 2)).toContain('gray');
+    const span = renderDataText({ dividendRate: 0.5 }, 2).querySelector('span');
+    expect(span?.getAttribute('style')).toContain('gray');
   });
 
   it('accepts numeric signal state', () => {
-    expect(dataText(fullAttrs, 0)).toContain('25.5X');
+    expect(renderDataText(fullAttrs, 0).textContent).toContain('25.5X');
   });
 
   it('returns dash for NaN PE', () => {
-    expect(dataText({ trailingPE: NaN }, 0)).toContain('-');
+    expect(renderDataText({ trailingPE: NaN }, 0).textContent).toContain('-');
   });
+
+  // suppress unused variable warning
+  void doc;
 });
