@@ -77,17 +77,17 @@ supported symbols.
 
 ### Card options
 
-| Option              | Type             | Default                | Description                                                                                |
-| ------------------- | ---------------- | ---------------------- | ------------------------------------------------------------------------------------------ |
-| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                |
-| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                             |
-| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                             |
-| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons |
-| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                  |
-| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                               |
-| `lazy_refresh`      | number           | `1`                    | Seconds to debounce after a state event; `0` = immediate                                   |
-| `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                             |
-| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)          |
+| Option              | Type             | Default                | Description                                                                                                                         |
+| ------------------- | ---------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                                                         |
+| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                                                                      |
+| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                                                                      |
+| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons                                          |
+| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                                                           |
+| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                                                        |
+| `lazy_refresh`      | number           | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately |
+| `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                      |
+| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)                                                   |
 
 ### Stock entry options
 
