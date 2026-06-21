@@ -78,6 +78,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   }
 
   private get _haCardStyle(): string | undefined {
+    // biome-ignore lint/style/noNonNullAssertion: _render() guards !_config before calling this getter
     const { height, debug } = this._config!;
     if (height)
       return `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`;

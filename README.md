@@ -6,7 +6,7 @@
 [![Maintenance](https://img.shields.io/maintenance/yes/2026)](https://github.com/marcintk/ha-yahoofinance-board-card)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/build-and-test.yml)
 [![CI](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/build-and-test.yml)
-[![Lines of code](https://tokei.rs/b1/github/marcintk/ha-yahoofinance-board-card)](https://github.com/marcintk/ha-yahoofinance-board-card)
+[![Lines of code](<https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.codetabs.com%2Fv1%2Floc%3Fgithub%3Dmarcintk%2Fha-yahoofinance-board-card&query=%24%5B%3F(%40.language%3D%3D%27Total%27)%5D.linesOfCode&label=lines%20of%20code&color=blue>)](https://github.com/marcintk/ha-yahoofinance-board-card)
 
 Home Assistant custom Lovelace card displaying a compact stock market board — price, pre/post market
 change, 1d/50d/200d change percentages, and a rotating data column (PE, Forward PE, Dividend Rate,
