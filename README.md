@@ -143,14 +143,14 @@ Finance ticker:
 | `POST`     | pink                | gray           |
 | `POSTPOST` | indigo              | gray           |
 
-### Data column signal values
+### Data column cycle
 
-| Signal state | Column shows   | Threshold |
-| ------------ | -------------- | --------- |
-| `0`          | Trailing PE    | >50 = red |
-| `1`          | Forward PE     | >50 = red |
-| `2`          | Dividend Rate  | — (gray)  |
-| `3`          | Volume (K/M/G) | — (gray)  |
+| Column shows  | Threshold      |
+| ------------- | -------------- | -------- |
+| Trailing PE   | >50 = red      |
+| Forward PE    | >50 = red      |
+| Dividend Rate | — (gray)       |
+| `3`           | Volume (K/M/G) | — (gray) |
 
 ## Development
 
