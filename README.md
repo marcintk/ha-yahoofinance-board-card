@@ -2,7 +2,7 @@
 
 [![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz)
 [![GitHub Release](https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/releases)
-[![License](https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE)
 [![Maintenance](https://img.shields.io/maintenance/yes/2026)](https://github.com/marcintk/ha-yahoofinance-board-card)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/build-and-test.yml)
 [![CI](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/build-and-test.yml)
