@@ -1,9 +1,12 @@
+import { html, nothing, render } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { DebugMetrics } from './debug.js';
 import { headerHtml, pinnedHtml, sortedHtml } from './render.js';
 import { CARD_STYLES } from './styles.js';
 import { SubscriptionManager } from './subscription.js';
 import type { CardConfig, Hass, StockEntry } from './types.js';
-import { esc } from './utils.js';
+
+const _STYLE_BLOCK = unsafeHTML(`<style>${CARD_STYLES}</style>`);
 
 class YahooFinanceBoardCard extends HTMLElement {
   private readonly _root: ShadowRoot;
@@ -14,7 +17,6 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _debugTimer: ReturnType<typeof setInterval> | null;
   private _renderTimer: ReturnType<typeof setTimeout> | null;
   private _trackedIds: Set<string> | null;
-  private _lastBody: string | null;
   private _dataIndex: number;
   private _subscription: SubscriptionManager;
   private _debug: DebugMetrics;
@@ -29,7 +31,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._debugTimer = null;
     this._renderTimer = null;
     this._trackedIds = null;
-    this._lastBody = null;
     this._dataIndex = 0;
     this._subscription = new SubscriptionManager();
     this._debug = new DebugMetrics();
@@ -39,7 +40,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._config = config;
     this._clearSubscription();
     this._trackedIds = null;
-    this._lastBody = null;
     this._dataIndex = 0;
     this._startFixedTimer();
     this._startDataTimer();
@@ -125,11 +125,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._cancelRenderTimer();
   }
 
-  private _updateDebugOverlay(): void {
-    const overlay = this._root.querySelector('#yf-debug');
-    if (overlay) overlay.innerHTML = this._debug.tableHtml();
-  }
-
   private _startFixedTimer(): void {
     this._stopFixedTimer();
     const fixedMs = (this._config?.fixed_refresh ?? 60) * 1000;
@@ -139,7 +134,9 @@ class YahooFinanceBoardCard extends HTMLElement {
       }, fixedMs);
     }
     if (this._config?.debug) {
-      this._debugTimer = setInterval(() => this._updateDebugOverlay(), 5000);
+      this._debugTimer = setInterval(() => {
+        if (this._hass && this._config) this._render();
+      }, 5000);
     }
   }
 
@@ -191,27 +188,41 @@ class YahooFinanceBoardCard extends HTMLElement {
 
       const resolvedPrefix = prefix ?? 'sensor.yahoofinance_';
 
-      const body =
-        headerHtml(this._dataIndex) +
-        (pinned.length ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex, icons) : '') +
-        (sorted.length ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex, icons) : '');
-
-      if (body === this._lastBody) return;
-      this._lastBody = body;
-
       if (debug) this._debug.track('rendered');
-      const heightStyle = height
-        ? `height:${esc(String(height))};min-height:${esc(String(height))};max-height:${esc(String(height))};`
-        : '';
 
-      this._root.innerHTML = `
-        <style>${CARD_STYLES}</style>
-        <ha-card style="${heightStyle}${debug ? 'position:relative;' : ''}">
-          ${debug ? this._debug.html() : ''}
-          ${debug ? `<div style="position:absolute;top:2px;left:4px;font-family:monospace;font-size:9px;color:#888;pointer-events:none;">v${__CARD_VERSION__}</div>` : ''}
-          ${body}
-        </ha-card>
-      `;
+      const haCardStyle = height
+        ? `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`
+        : debug
+          ? 'position:relative;'
+          : undefined;
+
+      render(
+        html`
+          ${_STYLE_BLOCK}
+          <ha-card style=${haCardStyle ?? nothing}>
+            ${debug ? unsafeHTML(this._debug.html()) : nothing}
+            ${
+              debug
+                ? html`<div
+                  style="position:absolute;top:2px;left:4px;font-family:monospace;font-size:9px;color:#888;pointer-events:none;"
+                >v${__CARD_VERSION__}</div>`
+                : nothing
+            }
+            ${headerHtml(this._dataIndex)}
+            ${
+              pinned.length
+                ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex, icons)
+                : nothing
+            }
+            ${
+              sorted.length
+                ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex, icons)
+                : nothing
+            }
+          </ha-card>
+        `,
+        this._root
+      );
     } catch (e) {
       this._showError((e as Error).message);
       // biome-ignore lint/suspicious/noConsole: intentional render error logging
@@ -220,13 +231,14 @@ class YahooFinanceBoardCard extends HTMLElement {
   }
 
   private _showError(msg: string): void {
-    this._root.innerHTML = `
-      <ha-card>
+    render(
+      html`<ha-card>
         <div style="padding:12px;color:var(--error-color,red);font-size:13px;">
-          <b>ha-yahoofinance-board-card error:</b><br>${esc(msg)}
+          <b>ha-yahoofinance-board-card error:</b><br />${msg}
         </div>
-      </ha-card>
-    `;
+      </ha-card>`,
+      this._root
+    );
   }
 
   getCardSize(): number {
