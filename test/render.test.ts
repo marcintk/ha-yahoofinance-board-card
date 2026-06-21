@@ -98,14 +98,14 @@ describe('stockRowHtml', () => {
     expect(html).toContain('¤ USD/PLN');
   });
 
-  it('shows auto-detected ① icon for index symbol', () => {
+  it('shows auto-detected △ icon for index symbol', () => {
     const html = stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, '0', 'auto');
-    expect(html).toContain('① DOW JONES');
+    expect(html).toContain('△ DOW JONES');
   });
 
-  it('shows auto-detected ₿ icon for crypto symbol', () => {
+  it('shows auto-detected ⬢ icon for crypto symbol', () => {
     const html = stockRowHtml({ symbol: 'btc_usd', name: 'Bitcoin' }, null, '0', 'auto');
-    expect(html).toContain('₿ Bitcoin');
+    expect(html).toContain('⬢ Bitcoin');
   });
 
   it('shows no icon for equity symbol in auto mode', () => {
@@ -116,13 +116,13 @@ describe('stockRowHtml', () => {
   it('shows no icon in none mode even for index symbol', () => {
     const html = stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, '0', 'none');
     expect(html).toContain('>DOW JONES<');
-    expect(html).not.toContain('①');
+    expect(html).not.toContain('△');
   });
 
   it('uses per-entry icon override over auto-detection', () => {
     const html = stockRowHtml({ symbol: 'dji', name: 'DOW JONES', icon: '★' }, null, '0', 'auto');
     expect(html).toContain('★ DOW JONES');
-    expect(html).not.toContain('①');
+    expect(html).not.toContain('△');
   });
 
   it('shows per-entry icon even when icons mode is none', () => {

@@ -36,8 +36,8 @@ const KNOWN_CRYPTO_BASES = new Set([
 export function detectIcon(symbol: string): string {
   if (symbol.endsWith('_f')) return '◆';
   if (symbol.endsWith('_x')) return '¤';
-  if (KNOWN_INDICES.has(symbol)) return '①';
-  if (KNOWN_CRYPTO_BASES.has(symbol.split('_')[0])) return '₿';
+  if (KNOWN_INDICES.has(symbol)) return '△';
+  if (KNOWN_CRYPTO_BASES.has(symbol.split('_')[0])) return '⬢';
   return '';
 }
 
