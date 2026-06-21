@@ -16,19 +16,19 @@ describe('detectIcon', () => {
   });
 
   it('returns ① for known index symbols', () => {
-    expect(detectIcon('dji')).toBe('①');
-    expect(detectIcon('gspc')).toBe('①');
-    expect(detectIcon('ixic')).toBe('①');
-    expect(detectIcon('dax')).toBe('①');
-    expect(detectIcon('n225')).toBe('①');
-    expect(detectIcon('tnx')).toBe('①');
-    expect(detectIcon('vix')).toBe('①');
+    expect(detectIcon('dji')).toBe('△');
+    expect(detectIcon('gspc')).toBe('△');
+    expect(detectIcon('ixic')).toBe('△');
+    expect(detectIcon('dax')).toBe('△');
+    expect(detectIcon('n225')).toBe('△');
+    expect(detectIcon('tnx')).toBe('△');
+    expect(detectIcon('vix')).toBe('△');
   });
 
   it('returns ₿ for known crypto base symbols', () => {
-    expect(detectIcon('btc_usd')).toBe('₿');
-    expect(detectIcon('eth_usd')).toBe('₿');
-    expect(detectIcon('sol_usd')).toBe('₿');
+    expect(detectIcon('btc_usd')).toBe('⬢');
+    expect(detectIcon('eth_usd')).toBe('⬢');
+    expect(detectIcon('sol_usd')).toBe('⬢');
   });
 
   it('returns empty string for equity symbols', () => {
@@ -50,8 +50,8 @@ describe('resolveIcon', () => {
   it('returns auto-detected icon when mode is auto and no stock icon', () => {
     expect(resolveIcon('gc_f', undefined, 'auto')).toBe('◆');
     expect(resolveIcon('usdpln_x', undefined, 'auto')).toBe('¤');
-    expect(resolveIcon('dji', undefined, 'auto')).toBe('①');
-    expect(resolveIcon('btc_usd', undefined, 'auto')).toBe('₿');
+    expect(resolveIcon('dji', undefined, 'auto')).toBe('△');
+    expect(resolveIcon('btc_usd', undefined, 'auto')).toBe('⬢');
   });
 
   it('returns empty string for equity in auto mode', () => {
