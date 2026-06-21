@@ -9,6 +9,10 @@ export class SubscriptionManager {
     this._unsub = null;
   }
 
+  get active(): boolean {
+    return this._unsub !== null;
+  }
+
   subscribe(connection: HassConnection, trackedIds: Set<string> | null, onMatch: () => void): void {
     if (!connection?.subscribeEvents) return;
     const gen = this._gen;

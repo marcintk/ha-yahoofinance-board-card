@@ -123,6 +123,25 @@ describe('YahooFinanceBoardCard', () => {
       card._buildTrackedIds();
       expect(card._trackedIds.has('sensor.yahoofinance_dji')).toBe(true);
     });
+
+    it('builds _rowMeta with display labels for all stocks', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, icons: 'none' };
+      card._buildTrackedIds();
+      expect(card._rowMeta.get('dji')).toBe('DOW JONES');
+      expect(card._rowMeta.get('aapl')).toBe('Apple');
+    });
+
+    it('includes auto-detected icon prefix in _rowMeta when icons is auto', () => {
+      const card = makeCard();
+      card._config = {
+        prefix: 'sensor.yahoofinance_',
+        pinned: [{ symbol: 'dji', name: 'DOW JONES' }],
+        icons: 'auto',
+      };
+      card._buildTrackedIds();
+      expect(card._rowMeta.get('dji')).toBe('△ DOW JONES');
+    });
   });
 
   describe('setConfig', () => {
@@ -656,6 +675,16 @@ describe('YahooFinanceBoardCard', () => {
       expect(card._dataTimer).not.toBeNull();
       card.disconnectedCallback();
       expect(card._dataTimer).toBeNull();
+    });
+
+    it('cancels a pending render timer on disconnect', () => {
+      const card = makeCard();
+      card.setConfig({ ...baseConfig, lazy_refresh: 10 });
+      card.hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
+      card._scheduleRender();
+      expect(card._renderTimer).not.toBeNull();
+      card.disconnectedCallback();
+      expect(card._renderTimer).toBeNull();
     });
   });
 

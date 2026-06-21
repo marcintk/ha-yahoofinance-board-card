@@ -111,4 +111,28 @@ describe('SubscriptionManager', () => {
       expect(mgr._unsub).toBeNull();
     });
   });
+
+  describe('active', () => {
+    it('returns false before subscription', () => {
+      const mgr = new SubscriptionManager();
+      expect(mgr.active).toBe(false);
+    });
+
+    it('returns true after subscription resolves', async () => {
+      const mgr = new SubscriptionManager();
+      const { connection } = makeConnection();
+      mgr.subscribe(connection, new Set(), vi.fn());
+      await Promise.resolve();
+      expect(mgr.active).toBe(true);
+    });
+
+    it('returns false after clear', async () => {
+      const mgr = new SubscriptionManager();
+      const { connection } = makeConnection();
+      mgr.subscribe(connection, new Set(), vi.fn());
+      await Promise.resolve();
+      mgr.clear();
+      expect(mgr.active).toBe(false);
+    });
+  });
 });
