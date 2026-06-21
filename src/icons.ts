@@ -1,10 +1,36 @@
 const KNOWN_INDICES = new Set([
-  'dji', 'gspc', 'ixic', 'dax', 'ftse', 'n225', 'tnx', 'vix', 'rut', 'spx',
-  'stoxx50e', 'asx', 'hsi', 'ks11', 'twii', 'bsesn', 'nsei',
+  'dji',
+  'gspc',
+  'ixic',
+  'dax',
+  'ftse',
+  'n225',
+  'tnx',
+  'vix',
+  'rut',
+  'spx',
+  'stoxx50e',
+  'asx',
+  'hsi',
+  'ks11',
+  'twii',
+  'bsesn',
+  'nsei',
 ]);
 
 const KNOWN_CRYPTO_BASES = new Set([
-  'btc', 'eth', 'sol', 'xrp', 'ada', 'doge', 'bnb', 'avax', 'dot', 'link', 'ltc', 'bch',
+  'btc',
+  'eth',
+  'sol',
+  'xrp',
+  'ada',
+  'doge',
+  'bnb',
+  'avax',
+  'dot',
+  'link',
+  'ltc',
+  'bch',
 ]);
 
 export function detectIcon(symbol: string): string {
