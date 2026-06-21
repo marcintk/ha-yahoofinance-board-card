@@ -11,6 +11,8 @@ Home Assistant custom Lovelace card displaying a compact stock market board — 
 change, 1d/50d/200d change percentages, and a rotating data column (PE, Forward PE, Dividend Rate,
 Volume). Built on top of the [yahoofinance](https://github.com/iprak/yahoofinance) integration.
 
+![Preview](docs/preview.png)
+
 ## Requirements
 
 Requires the [yahoofinance](https://github.com/iprak/yahoofinance) integration (HACS Integration) —
