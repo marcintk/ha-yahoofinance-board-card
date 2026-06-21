@@ -100,13 +100,13 @@ supported symbols.
 
 #### Auto icon detection (`icons: auto`)
 
-| Symbol pattern    | Examples                                                   | Icon | Type              |
-| ----------------- | ---------------------------------------------------------- | ---- | ----------------- |
-| ends `_f`         | `gc_f`, `bz_f`, `cl_f`, `ng_f`                             | `◆`  | Commodity         |
-| ends `_x`         | `usdpln_x`, `usdjpy_x`                                     | `¤`  | FX pair           |
-| known index list  | `dji`, `gspc`, `ixic`, `dax`, `ftse`, `n225`, `tnx`, `vix` | `△`  | Index             |
-| known crypto base | `btc_usd`, `eth_usd`, `sol_usd`                            | `⬢`  | Crypto            |
-| everything else   | `aapl`, `tsla`, `brk_a`                                    | —    | Equity            |
+| Symbol pattern    | Examples                                                   | Icon | Type      |
+| ----------------- | ---------------------------------------------------------- | ---- | --------- |
+| ends `_f`         | `gc_f`, `bz_f`, `cl_f`, `ng_f`                             | `◆`  | Commodity |
+| ends `_x`         | `usdpln_x`, `usdjpy_x`                                     | `¤`  | FX pair   |
+| known index list  | `dji`, `gspc`, `ixic`, `dax`, `ftse`, `n225`, `tnx`, `vix` | `△`  | Index     |
+| known crypto base | `btc_usd`, `eth_usd`, `sol_usd`                            | `⬢`  | Crypto    |
+| everything else   | `aapl`, `tsla`, `brk_a`                                    | —    | Equity    |
 
 ### Symbol naming
 
