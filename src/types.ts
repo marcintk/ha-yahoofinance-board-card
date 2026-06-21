@@ -19,8 +19,8 @@ export interface YahooFinanceAttributes {
 export interface StockEntry {
   symbol: string;
   name: string;
-  special?: boolean;
-  highlight?: string;
+  icon?: string;
+  mark?: string;
 }
 
 export interface CardConfig {
@@ -32,6 +32,7 @@ export interface CardConfig {
   lazy_refresh?: number;
   fixed_refresh?: number;
   data_rotate_every?: number;
+  icons?: 'auto' | 'none';
 }
 
 export interface HassEvent {

@@ -2,11 +2,10 @@
 #
 # Prerequisites:
 #   - yahoofinance integration installed and configured (see homeassistant/configuration.yaml below)
-#   - sensor.stock_refresh_signal helper (input_number with values 0-3, rotated by automation)
 
 type: custom:ha-yahoofinance-board-card
 prefix: sensor.yahoofinance_
-refresh_signal: sensor.stock_refresh_signal
+icons: auto
 pinned:
   - symbol: dji
     name: "DOW JONES"
@@ -23,43 +22,37 @@ pinned:
   - symbol: tnx
     name: "10Y TREASURY"
   - symbol: gc_f
-    name: "+Gold"
+    name: "Gold"
   - symbol: bz_f
-    name: "+Crude Oil (Brent)"
+    name: "Crude Oil (Brent)"
   - symbol: cl_f
-    name: "+Crude Oil (WTI)"
+    name: "Crude Oil (WTI)"
   - symbol: ng_f
-    name: "+Natural Gas"
+    name: "Natural Gas"
   - symbol: usdpln_x
-    name: "=USD/PLN"
+    name: "USD/PLN"
   - symbol: usdcny_x
-    name: "=USD/CNY"
+    name: "USD/CNY"
   - symbol: usdjpy_x
-    name: "=USD/JPY"
+    name: "USD/JPY"
   - symbol: usdrub_x
-    name: "=USD/RUB"
+    name: "USD/RUB"
   - symbol: usdars_x
-    name: "=USD/ARS"
+    name: "USD/ARS"
   - symbol: btc_usd
-    name: "=BTC/USD (Bitcoin)"
+    name: "Bitcoin"
   - symbol: eth_usd
-    name: "=ETH/USD (Etherium)"
-sorted:
-  - symbol: sabr
-    name: "Sabre"
-    highlight: "gold"
-  - symbol: ams_mc
-    name: "Amadeus"
+    name: "Ethereum"
   - symbol: aal
     name: "American Airlines"
+    mark: "gold"
+sorted:
   - symbol: ba
     name: "Boeing"
   - symbol: goog
     name: "Google"
-    special: true
   - symbol: amzn
     name: "Amazon"
-    special: true
   - symbol: aapl
     name: "Apple"
   - symbol: msft
@@ -76,10 +69,8 @@ sorted:
     name: "Intel"
   - symbol: nflx
     name: "Netflix"
-    special: true
   - symbol: cost
     name: "Costco"
-    special: true
   - symbol: wmt
     name: "Walmart"
   - symbol: spcx
