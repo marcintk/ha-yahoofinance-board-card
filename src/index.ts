@@ -1,6 +1,7 @@
 import { html, nothing, render } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { DebugMetrics } from './debug.js';
+import { resolveIcon } from './icons.js';
 import { headerHtml, pinnedHtml, sortedHtml } from './render.js';
 import { CARD_STYLES } from './styles.js';
 import { SubscriptionManager } from './subscription.js';
@@ -17,6 +18,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _debugTimer: ReturnType<typeof setInterval> | null;
   private _renderTimer: ReturnType<typeof setTimeout> | null;
   private _trackedIds: Set<string> | null;
+  private _rowMeta: Map<string, string> | null;
   private _dataIndex: number;
   private _subscription: SubscriptionManager;
   private _debug: DebugMetrics;
@@ -31,6 +33,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._debugTimer = null;
     this._renderTimer = null;
     this._trackedIds = null;
+    this._rowMeta = null;
     this._dataIndex = 0;
     this._subscription = new SubscriptionManager();
     this._debug = new DebugMetrics();
@@ -40,6 +43,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._config = config;
     this._clearSubscription();
     this._trackedIds = null;
+    this._rowMeta = null;
     this._dataIndex = 0;
     this._startFixedTimer();
     this._startDataTimer();
@@ -64,13 +68,21 @@ class YahooFinanceBoardCard extends HTMLElement {
       return;
     }
 
-    if (!this._subscription._unsub && this._hasRelevantChange(hass, prevHass) && this._config) {
+    if (!this._subscription.active && this._hasRelevantChange(hass, prevHass) && this._config) {
       this._scheduleRender();
     }
   }
 
   private _getPrefix(): string {
     return this._config?.prefix ?? 'sensor.yahoofinance_';
+  }
+
+  private get _haCardStyle(): string | undefined {
+    const { height, debug } = this._config!;
+    if (height)
+      return `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`;
+    if (debug) return 'position:relative;';
+    return undefined;
   }
 
   private _buildTrackedIds(): void {
@@ -81,6 +93,14 @@ class YahooFinanceBoardCard extends HTMLElement {
       ...pinned.map((s) => `${prefix}${s.symbol}`),
       ...sorted.map((s) => `${prefix}${s.symbol}`),
     ]);
+    const iconsMode = this._config?.icons ?? 'none';
+    const allStocks = [...pinned, ...sorted];
+    this._rowMeta = new Map(
+      allStocks.map((s) => {
+        const icon = resolveIcon(s.symbol, s.icon, iconsMode);
+        return [s.symbol, icon ? `${icon} ${s.name}` : s.name];
+      })
+    );
   }
 
   private _hasRelevantChange(newHass: Hass, prevHass: Hass | null): boolean {
@@ -178,7 +198,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _render(): void {
     try {
       if (!this._config || !this._hass) throw new Error('render called before config/hass set');
-      const { prefix, pinned = [], sorted = [], height, debug, icons = 'none' } = this._config;
+      const { pinned = [], sorted = [], debug } = this._config;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
@@ -186,20 +206,15 @@ class YahooFinanceBoardCard extends HTMLElement {
         return;
       }
 
-      const resolvedPrefix = prefix ?? 'sensor.yahoofinance_';
+      const prefix = this._getPrefix();
+      const rowMeta = this._rowMeta ?? new Map<string, string>();
 
       if (debug) this._debug.track('rendered');
-
-      const haCardStyle = height
-        ? `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`
-        : debug
-          ? 'position:relative;'
-          : undefined;
 
       render(
         html`
           ${_STYLE_BLOCK}
-          <ha-card style=${haCardStyle ?? nothing}>
+          <ha-card style=${this._haCardStyle ?? nothing}>
             ${debug ? unsafeHTML(this._debug.html()) : nothing}
             ${
               debug
@@ -210,14 +225,10 @@ class YahooFinanceBoardCard extends HTMLElement {
             }
             ${headerHtml(this._dataIndex)}
             ${
-              pinned.length
-                ? pinnedHtml(pinned, states, resolvedPrefix, this._dataIndex, icons)
-                : nothing
+              pinned.length ? pinnedHtml(pinned, states, prefix, this._dataIndex, rowMeta) : nothing
             }
             ${
-              sorted.length
-                ? sortedHtml(sorted, states, resolvedPrefix, this._dataIndex, icons)
-                : nothing
+              sorted.length ? sortedHtml(sorted, states, prefix, this._dataIndex, rowMeta) : nothing
             }
           </ha-card>
         `,

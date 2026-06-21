@@ -1,12 +1,7 @@
 import { html, nothing, type TemplateResult } from 'lit';
 import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from './display.js';
 import { dataText, formatRate, prepostText, priceText } from './format.js';
-import { resolveIcon } from './icons.js';
 import type { HassEntityState, StockEntry, YahooFinanceAttributes } from './types.js';
-
-function displayName(stock: StockEntry, icon: string): string {
-  return icon ? `${icon} ${stock.name}` : stock.name;
-}
 
 const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
 
@@ -26,17 +21,16 @@ export function stockRowHtml(
   stock: StockEntry,
   attrs: YahooFinanceAttributes | null,
   signalState: number,
-  iconsMode: 'auto' | 'none' = 'none'
+  label: string
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
-  const icon = resolveIcon(stock.symbol, stock.icon, iconsMode);
 
   const bg1d = changeBg(ms);
   const bgPrepost = prepostBg(ms);
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
-    <div class="col-name" style="color:${nameColor(attrs)};">${displayName(stock, icon)}</div>
+    <div class="col-name" style="color:${nameColor(attrs)};">${label}</div>
     <div
       class="col-prepost"
       style="color:${prepostColor(attrs)};${bgPrepost ? `background-color:${bgPrepost};` : ''}"
@@ -61,11 +55,12 @@ export function pinnedHtml(
   states: Record<string, HassEntityState | undefined>,
   prefix: string,
   signalState: number,
-  iconsMode: 'auto' | 'none' = 'none'
+  rowMeta: Map<string, string>
 ): TemplateResult {
   return html`${stocks.map((stock) => {
     const entity = states[`${prefix}${stock.symbol}`];
-    return stockRowHtml(stock, entity?.attributes ?? null, signalState, iconsMode);
+    const label = rowMeta.get(stock.symbol) ?? stock.name;
+    return stockRowHtml(stock, entity?.attributes ?? null, signalState, label);
   })}`;
 }
 
@@ -74,7 +69,7 @@ export function sortedHtml(
   states: Record<string, HassEntityState | undefined>,
   prefix: string,
   signalState: number,
-  iconsMode: 'auto' | 'none' = 'none'
+  rowMeta: Map<string, string>
 ): TemplateResult {
   const withChange = stocks.map((stock) => {
     const attrs = states[`${prefix}${stock.symbol}`]?.attributes ?? null;
@@ -83,7 +78,8 @@ export function sortedHtml(
 
   withChange.sort((a, b) => b.change - a.change);
 
-  return html`${withChange.map(({ stock, attrs }) =>
-    stockRowHtml(stock, attrs, signalState, iconsMode)
-  )}`;
+  return html`${withChange.map(({ stock, attrs }) => {
+    const label = rowMeta.get(stock.symbol) ?? stock.name;
+    return stockRowHtml(stock, attrs, signalState, label);
+  })}`;
 }
