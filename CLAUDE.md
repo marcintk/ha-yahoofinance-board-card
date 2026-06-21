@@ -31,13 +31,12 @@ test file. Shared interfaces and types live in `src/types.ts`; global declaratio
 | `src/display.ts`      | `test/display.test.ts`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()`  |
 | `src/format.ts`       | `test/format.test.ts`       | Text formatters: `formatRate()`, `formatPrice()`, `priceText()`, `prepostText()`, `dataText()`   |
 | `src/styles.ts`       | `test/styles.test.ts`       | CSS string exported as `CARD_STYLES`, injected into Shadow DOM on each render                    |
-| `src/utils.ts`        | `test/utils.test.ts`        | `esc()` — HTML escaping, `MARKET_STATES` — valid market state set                                |
+| `src/utils.ts`        | `test/utils.test.ts`        | `MARKET_STATES` — valid market state set                                                         |
 | `src/types.ts`        | _(no test file)_            | Shared TypeScript interfaces: `CardConfig`, `Hass`, `StockEntry`, `YahooFinanceAttributes`, etc. |
 
 ## Architecture Notes
 
-- **Shadow DOM / full replacement**: `_root.innerHTML` (`ShadowRoot` stored at construction) is
-  fully replaced on every render — no diffing. Fast enough for ~40 rows max.
+- **Shadow DOM rendering**: `render()` targets the `ShadowRoot` stored at construction. Only the dynamic parts of the template are patched on each render — static structure is cloned from a cached template.
 - **WebSocket subscription**: card subscribes to `state_changed` events on first `set hass`;
   callback calls `_scheduleRender()`, which arms a debounce timer (`_renderTimer`). Rendering always
   uses `_hass.states`, not the event payload.
@@ -49,7 +48,7 @@ test file. Shared interfaces and types live in `src/types.ts`; global declaratio
   `_dataTimer` that increments `_dataIndex` (0–3) every `data_rotate_every` seconds (default 60).
 - **Market states**: `PREPRE`, `PRE`, `REGULAR`, `POST`, `POSTPOST` — each drives different price
   source, prepost column color/background, and name color.
-- **Security**: all user-supplied strings go through `esc()` before HTML insertion.
+- **Security**: user-supplied values are bound via DOM APIs (attribute sets, text nodes) — not string-concatenated into HTML — so special characters cannot break out of their context regardless of content.
 
 ## Contributing
 
