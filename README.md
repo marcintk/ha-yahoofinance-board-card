@@ -145,12 +145,12 @@ Finance ticker:
 
 ### Data column cycle
 
-| Column shows  | Threshold      |
-| ------------- | -------------- | -------- |
-| Trailing PE   | >50 = red      |
-| Forward PE    | >50 = red      |
-| Dividend Rate | — (gray)       |
-| `3`           | Volume (K/M/G) | — (gray) |
+| Column shows   | Threshold |
+| -------------- | --------- |
+| Trailing PE    | >50 = red |
+| Forward PE     | >50 = red |
+| Dividend Rate  | — (gray)  |
+| Volume (K/M/G) | — (gray)  |
 
 ## Development
 
