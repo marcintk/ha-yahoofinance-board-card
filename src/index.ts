@@ -133,6 +133,11 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
+  private _refreshDebugOverlay(): void {
+    const el = this._root.querySelector('#yf-debug');
+    if (el) el.innerHTML = this._debug.tableHtml();
+  }
+
   private _subscribe(): void {
     if (!this._config || !this._hass?.connection) return;
     this._subscription.subscribe(this._hass.connection, this._trackedIds, () => {
@@ -156,8 +161,8 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
     if (this._config?.debug) {
       this._debugTimer = setInterval(() => {
-        if (this._hass && this._config) this._render();
-      }, 5000);
+        if (this._hass && this._config) this._refreshDebugOverlay();
+      }, 1000);
     }
   }
 

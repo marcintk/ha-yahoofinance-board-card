@@ -531,27 +531,29 @@ describe('YahooFinanceBoardCard', () => {
       expect(card._debugTimer).toBeNull();
     });
 
-    it('debug timer calls _render', () => {
+    it('debug timer calls _refreshDebugOverlay and does not call _render', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
       card._hass = makeHass({});
       card._trackedIds = new Set();
       const renderSpy = vi.spyOn(card, '_render');
+      const refreshSpy = vi.spyOn(card, '_refreshDebugOverlay');
       card._startFixedTimer();
-      vi.advanceTimersByTime(5000);
-      expect(renderSpy).toHaveBeenCalled();
+      vi.advanceTimersByTime(1000);
+      expect(renderSpy).not.toHaveBeenCalled();
+      expect(refreshSpy).toHaveBeenCalled();
       card._stopFixedTimer();
     });
 
-    it('debug timer does not call _render when hass is null', () => {
+    it('debug timer does not call _refreshDebugOverlay when hass is null', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
       card._hass = null;
       card._trackedIds = new Set();
-      const renderSpy = vi.spyOn(card, '_render');
+      const refreshSpy = vi.spyOn(card, '_refreshDebugOverlay');
       card._startFixedTimer();
-      vi.advanceTimersByTime(5000);
-      expect(renderSpy).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(1000);
+      expect(refreshSpy).not.toHaveBeenCalled();
       card._stopFixedTimer();
     });
   });
@@ -827,6 +829,31 @@ describe('YahooFinanceBoardCard', () => {
       const overlay = card.shadowRoot.querySelector('#yf-debug');
       expect(overlay).not.toBeNull();
       expect(overlay.innerHTML).toContain('events');
+    });
+  });
+
+  describe('_refreshDebugOverlay', () => {
+    it('patches #yf-debug innerHTML without invoking _render', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, debug: true };
+      card._hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
+      card._trackedIds = new Set();
+      card._render();
+      const renderSpy = vi.spyOn(card, '_render');
+      const tableSpy = vi.spyOn(card._debug, 'tableHtml');
+      card._refreshDebugOverlay();
+      expect(renderSpy).not.toHaveBeenCalled();
+      expect(tableSpy).toHaveBeenCalled();
+      expect(card.shadowRoot.querySelector('#yf-debug')).not.toBeNull();
+    });
+
+    it('does nothing when #yf-debug is absent', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig };
+      card._hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
+      card._trackedIds = new Set();
+      card._render();
+      expect(() => card._refreshDebugOverlay()).not.toThrow();
     });
   });
 
