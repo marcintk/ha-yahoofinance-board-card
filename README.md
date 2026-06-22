@@ -73,9 +73,6 @@ sorted:
     icon: "★"
 ```
 
-See [docs/configuration-example.yaml](docs/configuration-example.yaml) for a full example with all
-supported symbols.
-
 ### Card options
 
 | Option              | Type             | Default                | Description                                                                                                                         |
