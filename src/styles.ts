@@ -26,6 +26,11 @@ export const CARD_STYLES = `
 
   .stock-row {
     border-bottom: 1px solid rgba(255,255,255,0.04);
+    overflow: hidden;
+  }
+
+  .col-prepost, .col-1d {
+    margin: -1px 0;
   }
 
   .col-name {
