@@ -2,7 +2,7 @@ import { html, nothing, render } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { DebugMetrics } from './debug.js';
 import { resolveIcon } from './icons.js';
-import { headerHtml, pinnedHtml, sortedHtml } from './render.js';
+import { DATA_LABELS, headerHtml, pinnedHtml, sortedHtml } from './render.js';
 import { CARD_STYLES } from './styles.js';
 import { SubscriptionManager } from './subscription.js';
 import type { CardConfig, Hass, StockEntry } from './types.js';
@@ -182,7 +182,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     const intervalMs = (this._config?.data_rotate_every ?? 60) * 1000;
     if (intervalMs > 0) {
       this._dataTimer = setInterval(() => {
-        this._dataIndex = (this._dataIndex + 1) % 4;
+        this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
         if (this._hass && this._config) this._render();
       }, intervalMs);
     }
