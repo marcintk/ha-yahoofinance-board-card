@@ -1,3 +1,9 @@
 import type { MarketState } from './types.js';
 
-export const MARKET_STATES = new Set<MarketState>(['PREPRE', 'PRE', 'REGULAR', 'POST', 'POSTPOST']);
+export function isPreMarket(state: MarketState | null | undefined): boolean {
+  return state === 'PREPRE' || state === 'PRE';
+}
+
+export function isPostMarket(state: MarketState | null | undefined): boolean {
+  return state === 'POST' || state === 'POSTPOST';
+}

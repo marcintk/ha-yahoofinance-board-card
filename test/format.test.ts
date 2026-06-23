@@ -2,12 +2,6 @@ import { render } from 'lit';
 import { describe, expect, it } from 'vitest';
 import { dataText, formatPrice, formatRate, prepostText, priceText } from '../src/format.js';
 
-function doc() {
-  const el = document.createElement('div');
-  render(dataText(undefined, -1), el); // warm up lit
-  return el;
-}
-
 function renderDataText(attrs: Parameters<typeof dataText>[0], state: number): HTMLElement {
   const el = document.createElement('div');
   render(dataText(attrs, state), el);
@@ -182,8 +176,8 @@ describe('dataText', () => {
     expect(renderDataText({ regularMarketVolume: 500_000 }, 3).textContent).toContain('500K');
   });
 
-  it('renders nothing for unknown signal state', () => {
-    expect(renderDataText(fullAttrs, 5).textContent?.trim()).toBe('');
+  it('renders dash for unknown signal state', () => {
+    expect(renderDataText(fullAttrs, 5).textContent?.trim()).toBe('-');
   });
 
   it('returns dash for zero PE', () => {
@@ -224,7 +218,4 @@ describe('dataText', () => {
   it('returns dash for NaN PE', () => {
     expect(renderDataText({ trailingPE: NaN }, 0).textContent).toContain('-');
   });
-
-  // suppress unused variable warning
-  void doc;
 });

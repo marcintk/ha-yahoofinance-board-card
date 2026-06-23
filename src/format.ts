@@ -1,5 +1,8 @@
 import { html, type TemplateResult } from 'lit';
 import type { YahooFinanceAttributes } from './types.js';
+import { isPostMarket, isPreMarket } from './utils.js';
+
+const _DASH = html`<span style="color:gray;">-</span>`;
 
 export function formatRate(rate: number | null | undefined, precision: number): string {
   if (rate === null || rate === undefined || Number.isNaN(rate)) return '-';
@@ -20,20 +23,16 @@ export function formatPrice(price: number | null | undefined, fallback = 0): str
 export function priceText(attrs: YahooFinanceAttributes | null): string {
   if (!attrs) return '-';
   const state = attrs.marketState;
-  if (state === 'PREPRE' || state === 'PRE') {
-    return formatPrice(attrs.preMarketPrice, attrs.regularMarketPrice);
-  }
-  if (state === 'POST' || state === 'POSTPOST') {
-    return formatPrice(attrs.postMarketPrice, attrs.regularMarketPrice);
-  }
+  if (isPreMarket(state)) return formatPrice(attrs.preMarketPrice, attrs.regularMarketPrice);
+  if (isPostMarket(state)) return formatPrice(attrs.postMarketPrice, attrs.regularMarketPrice);
   return formatPrice(attrs.regularMarketPrice);
 }
 
 export function prepostText(attrs: YahooFinanceAttributes | null): string {
   if (!attrs) return '';
   const state = attrs.marketState;
-  if (state === 'PREPRE' || state === 'PRE') return formatRate(attrs.preMarketChangePercent, 2);
-  if (state === 'POST' || state === 'POSTPOST') return formatRate(attrs.postMarketChangePercent, 2);
+  if (isPreMarket(state)) return formatRate(attrs.preMarketChangePercent, 2);
+  if (isPostMarket(state)) return formatRate(attrs.postMarketChangePercent, 2);
   return '';
 }
 
@@ -45,7 +44,7 @@ export function dataText(
   if (signalState === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
   if (signalState === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
   if (signalState === 3) return _volumeVal(attrs?.regularMarketVolume);
-  return html``;
+  return _DASH;
 }
 
 function _dataVal(
@@ -55,7 +54,7 @@ function _dataVal(
   threshold: number
 ): TemplateResult {
   const data = raw ?? NaN;
-  if (Number.isNaN(data) || data === 0) return html`<span style="color:gray;">-</span>`;
+  if (Number.isNaN(data) || data === 0) return _DASH;
   let color = 'gray';
   if (threshold > 0 && data > 0) color = 'seagreen';
   if (threshold > 0 && data > threshold) color = 'indianred';
@@ -64,7 +63,7 @@ function _dataVal(
 
 function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
-  if (!data) return html`<span style="color:gray;">-</span>`;
+  if (!data) return _DASH;
   if (data > 1_000_000_000)
     return html`<span style="color:gray;">${(data / 1_000_000_000).toFixed(0)}G</span>`;
   if (data > 1_000_000)

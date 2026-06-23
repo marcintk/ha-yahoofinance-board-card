@@ -3,7 +3,7 @@ import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from './displ
 import { dataText, formatRate, prepostText, priceText } from './format.js';
 import type { HassEntityState, StockEntry, YahooFinanceAttributes } from './types.js';
 
-const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
+export const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
 
 export function headerHtml(dataIndex = 0): TemplateResult {
   return html`<div class="stock-header">

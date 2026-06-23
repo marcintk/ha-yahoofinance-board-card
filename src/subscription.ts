@@ -2,7 +2,7 @@ import type { HassConnection } from './types.js';
 
 export class SubscriptionManager {
   private _gen: number;
-  _unsub: (() => void) | null;
+  private _unsub: (() => void) | null;
 
   constructor() {
     this._gen = 0;
