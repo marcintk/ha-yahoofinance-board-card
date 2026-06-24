@@ -263,7 +263,9 @@ class YahooFinanceBoardCard extends HTMLElement {
       const { pinned = [], sorted = [], debug, height } = this._config;
       const haCardStyle = height
         ? `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`
-        : debug ? 'position:relative;' : undefined;
+        : debug
+          ? 'position:relative;'
+          : undefined;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
@@ -290,10 +292,14 @@ class YahooFinanceBoardCard extends HTMLElement {
             }
             ${headerHtml(this._dataIndex)}
             ${
-              pinned.length ? stockSectionHtml(pinned, states, prefix, this._dataIndex, rowMeta) : nothing
+              pinned.length
+                ? stockSectionHtml(pinned, states, prefix, this._dataIndex, rowMeta)
+                : nothing
             }
             ${
-              sorted.length ? stockSectionHtml(sorted, states, prefix, this._dataIndex, rowMeta, true) : nothing
+              sorted.length
+                ? stockSectionHtml(sorted, states, prefix, this._dataIndex, rowMeta, true)
+                : nothing
             }
           </ha-card>
         `,

@@ -142,5 +142,4 @@ describe('DebugMetrics', () => {
       expect(d.html()).toContain('position:absolute');
     });
   });
-
 });

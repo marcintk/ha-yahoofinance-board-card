@@ -65,8 +65,10 @@ function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
   if (!data) return _DASH;
   const [n, s]: [number, string] =
-    data > 1_000_000_000 ? [data / 1_000_000_000, 'G'] :
-    data > 1_000_000 ? [data / 1_000_000, 'M'] :
-    [data / 1_000, 'K'];
+    data > 1_000_000_000
+      ? [data / 1_000_000_000, 'G']
+      : data > 1_000_000
+        ? [data / 1_000_000, 'M']
+        : [data / 1_000, 'K'];
   return html`<span style="color:gray;">${n.toFixed(0)}${s}</span>`;
 }

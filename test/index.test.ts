@@ -514,7 +514,6 @@ describe('YahooFinanceBoardCard', () => {
       expect(card._fixedTimer).not.toBe(firstTimer);
       card._stopFixedTimer();
     });
-
   });
 
   describe('_startDebugTimer / _stopDebugTimer', () => {

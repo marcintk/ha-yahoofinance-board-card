@@ -298,7 +298,9 @@ describe('stockSectionHtml (sorted, sort=true)', () => {
   it('renders pre-computed icon label in sorted rows', () => {
     const stocks = [{ symbol: 'usdpln_x', name: 'USD/PLN' }];
     const states = { 'sensor.yahoofinance_usdpln_x': { attributes: baseAttrs } };
-    const el = doc(stockSectionHtml(stocks, states, prefix, 0, new Map([['usdpln_x', '¤ USD/PLN']]), true));
+    const el = doc(
+      stockSectionHtml(stocks, states, prefix, 0, new Map([['usdpln_x', '¤ USD/PLN']]), true)
+    );
     expect(el.querySelector('.col-name')?.textContent).toContain('¤ USD/PLN');
   });
 });
