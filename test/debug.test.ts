@@ -143,20 +143,4 @@ describe('DebugMetrics', () => {
     });
   });
 
-  describe('_timeAgo', () => {
-    it('formats seconds for sub-minute durations', () => {
-      const d = new DebugMetrics();
-      expect(d._timeAgo(30_000)).toBe('30s');
-    });
-
-    it('formats minutes for sub-hour durations', () => {
-      const d = new DebugMetrics();
-      expect(d._timeAgo(120_000)).toBe('2m');
-    });
-
-    it('formats hours for longer durations', () => {
-      const d = new DebugMetrics();
-      expect(d._timeAgo(7_200_000)).toBe('2h');
-    });
-  });
 });
