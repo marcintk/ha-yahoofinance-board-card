@@ -141,8 +141,10 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   private _clearSubscription(): void {
     this._subscription.clear();
-    clearTimeout(this._renderTimer);
-    this._renderTimer = null;
+    if (this._renderTimer) {
+      clearTimeout(this._renderTimer);
+      this._renderTimer = null;
+    }
   }
 
   private _startFixedTimer(): void {
