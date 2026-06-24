@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isPostMarket, isPreMarket } from '../src/utils.js';
+import { isPostMarket, isPreMarket, timeAgo } from '../src/utils.js';
 
 describe('isPreMarket', () => {
   it('returns true for PREPRE', () => {
@@ -58,5 +58,19 @@ describe('isPostMarket', () => {
 
   it('returns false for undefined', () => {
     expect(isPostMarket(undefined)).toBe(false);
+  });
+});
+
+describe('timeAgo', () => {
+  it('formats seconds for sub-minute durations', () => {
+    expect(timeAgo(30_000)).toBe('30s');
+  });
+
+  it('formats minutes for sub-hour durations', () => {
+    expect(timeAgo(120_000)).toBe('2m');
+  });
+
+  it('formats hours for longer durations', () => {
+    expect(timeAgo(7_200_000)).toBe('2h');
   });
 });

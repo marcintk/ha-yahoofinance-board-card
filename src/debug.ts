@@ -1,3 +1,5 @@
+import { timeAgo } from './utils.js';
+
 type MetricKey = 'events' | 'filtered' | 'rendered';
 
 export class DebugMetrics {
@@ -32,17 +34,11 @@ export class DebugMetrics {
     for (let i = arr.length - 1; i >= 0; i--) {
       const age = now - arr[i];
       if (age > 3_600_000) break;
-      for (let w = 0; w < 5; w++) {
+      for (let w = 0; w < windows.length; w++) {
         if (age <= windows[w]) c[w]++;
       }
     }
     return { min1: c[0], min5: c[1], min15: c[2], min30: c[3], hour1: c[4], hour3: arr.length };
-  }
-
-  private _timeAgo(ms: number): string {
-    if (ms < 60_000) return `${Math.floor(ms / 1_000)}s`;
-    if (ms < 3_600_000) return `${Math.floor(ms / 60_000)}m`;
-    return `${Math.floor(ms / 3_600_000)}h`;
   }
 
   tableHtml(): string {
@@ -60,7 +56,7 @@ export class DebugMetrics {
           const last = rendered[rendered.length - 1];
           const d = new Date(last);
           const time = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`;
-          const ago = this._timeAgo(Date.now() - last);
+          const ago = timeAgo(Date.now() - last);
           return `${time} (${ago} ago)`;
         })()
       : '--';
