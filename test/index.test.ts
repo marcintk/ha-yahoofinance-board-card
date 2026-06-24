@@ -515,19 +515,30 @@ describe('YahooFinanceBoardCard', () => {
       card._stopFixedTimer();
     });
 
+  });
+
+  describe('_startDebugTimer / _stopDebugTimer', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     it('starts debug timer when debug:true', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
-      card._startFixedTimer();
+      card._startDebugTimer();
       expect(card._debugTimer).not.toBeNull();
-      card._stopFixedTimer();
+      card._stopDebugTimer();
     });
 
-    it('clears debug timer on _stopFixedTimer', () => {
+    it('clears debug timer on _stopDebugTimer', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
-      card._startFixedTimer();
-      card._stopFixedTimer();
+      card._startDebugTimer();
+      card._stopDebugTimer();
       expect(card._debugTimer).toBeNull();
     });
 
@@ -538,11 +549,11 @@ describe('YahooFinanceBoardCard', () => {
       card._trackedIds = new Set();
       const renderSpy = vi.spyOn(card, '_render');
       const refreshSpy = vi.spyOn(card, '_refreshDebugOverlay');
-      card._startFixedTimer();
+      card._startDebugTimer();
       vi.advanceTimersByTime(1000);
       expect(renderSpy).not.toHaveBeenCalled();
       expect(refreshSpy).toHaveBeenCalled();
-      card._stopFixedTimer();
+      card._stopDebugTimer();
     });
 
     it('debug timer does not call _refreshDebugOverlay when hass is null', () => {
@@ -551,10 +562,10 @@ describe('YahooFinanceBoardCard', () => {
       card._hass = null;
       card._trackedIds = new Set();
       const refreshSpy = vi.spyOn(card, '_refreshDebugOverlay');
-      card._startFixedTimer();
+      card._startDebugTimer();
       vi.advanceTimersByTime(1000);
       expect(refreshSpy).not.toHaveBeenCalled();
-      card._stopFixedTimer();
+      card._stopDebugTimer();
     });
   });
 

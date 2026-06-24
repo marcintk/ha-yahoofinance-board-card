@@ -33,7 +33,7 @@ const _PREPOST_BG: Partial<Record<MarketState, string>> = {
 };
 
 export function prepostBg(marketState: MarketState | null | undefined): string | null {
-  return (marketState ? _PREPOST_BG[marketState] : null) ?? null;
+  return marketState ? (_PREPOST_BG[marketState] ?? null) : null;
 }
 
 export function changeBg(marketState: MarketState | null | undefined): string | null {

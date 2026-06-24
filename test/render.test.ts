@@ -1,6 +1,6 @@
 import { render, type TemplateResult } from 'lit';
 import { describe, expect, it } from 'vitest';
-import { headerHtml, pinnedHtml, sortedHtml, stockRowHtml } from '../src/render.js';
+import { headerHtml, stockRowHtml, stockSectionHtml } from '../src/render.js';
 
 function doc(template: TemplateResult): HTMLElement {
   const el = document.createElement('div');
@@ -195,7 +195,7 @@ describe('stockRowHtml', () => {
   });
 });
 
-describe('pinnedHtml', () => {
+describe('stockSectionHtml (pinned, no sort)', () => {
   const prefix = 'sensor.yahoofinance_';
 
   it('renders stocks in configured order', () => {
@@ -215,7 +215,7 @@ describe('pinnedHtml', () => {
       ['dji', 'DOW JONES'],
       ['gspc', 'S&P 500'],
     ]);
-    const el = doc(pinnedHtml(stocks, states, prefix, 0, rowMeta));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, rowMeta));
     const rows = el.querySelectorAll('.stock-row');
     expect(rows[0].querySelector('.col-name')?.textContent).toContain('DOW JONES');
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('S&P 500');
@@ -223,26 +223,26 @@ describe('pinnedHtml', () => {
 
   it('renders gracefully when entity is missing', () => {
     const stocks = [{ symbol: 'unknown', name: 'Unknown' }];
-    const el = doc(pinnedHtml(stocks, {}, prefix, 0, new Map([['unknown', 'Unknown']])));
+    const el = doc(stockSectionHtml(stocks, {}, prefix, 0, new Map([['unknown', 'Unknown']])));
     expect(el.querySelector('.col-name')?.textContent).toContain('Unknown');
   });
 
   it('passes mark color to stock row', () => {
     const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };
-    const el = doc(pinnedHtml(stocks, states, prefix, 0, new Map([['sabr', 'Sabre']])));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, new Map([['sabr', 'Sabre']])));
     expect(el.querySelector('.stock-row')?.getAttribute('style')).toContain('gold');
   });
 
   it('renders pre-computed icon label', () => {
     const stocks = [{ symbol: 'gc_f', name: 'Gold' }];
     const states = { 'sensor.yahoofinance_gc_f': { attributes: baseAttrs } };
-    const el = doc(pinnedHtml(stocks, states, prefix, 0, new Map([['gc_f', '◆ Gold']])));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, new Map([['gc_f', '◆ Gold']])));
     expect(el.querySelector('.col-name')?.textContent).toContain('◆ Gold');
   });
 });
 
-describe('sortedHtml', () => {
+describe('stockSectionHtml (sorted, sort=true)', () => {
   const prefix = 'sensor.yahoofinance_';
 
   it('sorts stocks by 1d change descending', () => {
@@ -262,7 +262,7 @@ describe('sortedHtml', () => {
       ['low', 'LowChange'],
       ['high', 'HighChange'],
     ]);
-    const el = doc(sortedHtml(stocks, states, prefix, 0, rowMeta));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, rowMeta, true));
     const rows = el.querySelectorAll('.stock-row');
     expect(rows[0].querySelector('.col-name')?.textContent).toContain('HighChange');
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('LowChange');
@@ -282,7 +282,7 @@ describe('sortedHtml', () => {
       ['known', 'Known'],
       ['unknown', 'Unknown'],
     ]);
-    const el = doc(sortedHtml(stocks, states, prefix, 0, rowMeta));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, rowMeta, true));
     const rows = el.querySelectorAll('.stock-row');
     expect(rows[0].querySelector('.col-name')?.textContent).toContain('Known');
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('Unknown');
@@ -291,14 +291,14 @@ describe('sortedHtml', () => {
   it('passes mark color to sorted rows', () => {
     const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };
-    const el = doc(sortedHtml(stocks, states, prefix, 0, new Map([['sabr', 'Sabre']])));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, new Map([['sabr', 'Sabre']]), true));
     expect(el.querySelector('.stock-row')?.getAttribute('style')).toContain('gold');
   });
 
   it('renders pre-computed icon label in sorted rows', () => {
     const stocks = [{ symbol: 'usdpln_x', name: 'USD/PLN' }];
     const states = { 'sensor.yahoofinance_usdpln_x': { attributes: baseAttrs } };
-    const el = doc(sortedHtml(stocks, states, prefix, 0, new Map([['usdpln_x', '¤ USD/PLN']])));
+    const el = doc(stockSectionHtml(stocks, states, prefix, 0, new Map([['usdpln_x', '¤ USD/PLN']]), true));
     expect(el.querySelector('.col-name')?.textContent).toContain('¤ USD/PLN');
   });
 });

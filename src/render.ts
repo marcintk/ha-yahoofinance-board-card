@@ -50,35 +50,20 @@ export function stockRowHtml(
   </div>`;
 }
 
-export function pinnedHtml(
+export function stockSectionHtml(
   stocks: StockEntry[],
   states: Record<string, HassEntityState | undefined>,
   prefix: string,
   signalState: number,
-  rowMeta: Map<string, string>
+  rowMeta: Map<string, string>,
+  sort = false
 ): TemplateResult {
-  return html`${stocks.map((stock) => {
-    const entity = states[`${prefix}${stock.symbol}`];
-    const label = rowMeta.get(stock.symbol) ?? stock.name;
-    return stockRowHtml(stock, entity?.attributes ?? null, signalState, label);
-  })}`;
-}
-
-export function sortedHtml(
-  stocks: StockEntry[],
-  states: Record<string, HassEntityState | undefined>,
-  prefix: string,
-  signalState: number,
-  rowMeta: Map<string, string>
-): TemplateResult {
-  const withChange = stocks.map((stock) => {
+  const entries = stocks.map((stock) => {
     const attrs = states[`${prefix}${stock.symbol}`]?.attributes ?? null;
     return { stock, attrs, change: attrs?.regularMarketChangePercent ?? 0 };
   });
-
-  withChange.sort((a, b) => b.change - a.change);
-
-  return html`${withChange.map(({ stock, attrs }) => {
+  if (sort) entries.sort((a, b) => b.change - a.change);
+  return html`${entries.map(({ stock, attrs }) => {
     const label = rowMeta.get(stock.symbol) ?? stock.name;
     return stockRowHtml(stock, attrs, signalState, label);
   })}`;

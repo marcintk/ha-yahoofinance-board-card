@@ -21,12 +21,12 @@ describe('SubscriptionManager', () => {
       );
     });
 
-    it('stores the unsub handle after the promise resolves', async () => {
+    it('is active after the promise resolves', async () => {
       const mgr = new SubscriptionManager();
-      const { connection, unsub } = makeConnection();
+      const { connection } = makeConnection();
       mgr.subscribe(connection, new Set(['sensor.a']), vi.fn());
       await Promise.resolve();
-      expect(mgr._unsub).toBe(unsub);
+      expect(mgr.active).toBe(true);
     });
 
     it('fires onMatch when the event entity is in trackedIds', async () => {
@@ -54,13 +54,13 @@ describe('SubscriptionManager', () => {
     it('does nothing when connection has no subscribeEvents', () => {
       const mgr = new SubscriptionManager();
       expect(() => mgr.subscribe({}, new Set(), vi.fn())).not.toThrow();
-      expect(mgr._unsub).toBeNull();
+      expect(mgr.active).toBe(false);
     });
 
     it('does nothing when connection is null', () => {
       const mgr = new SubscriptionManager();
       expect(() => mgr.subscribe(null, new Set(), vi.fn())).not.toThrow();
-      expect(mgr._unsub).toBeNull();
+      expect(mgr.active).toBe(false);
     });
 
     it('silently ignores subscribeEvents rejection', async () => {
@@ -74,14 +74,14 @@ describe('SubscriptionManager', () => {
   });
 
   describe('clear', () => {
-    it('calls unsub and nulls the handle', async () => {
+    it('calls unsub and deactivates', async () => {
       const mgr = new SubscriptionManager();
       const { connection, unsub } = makeConnection();
       mgr.subscribe(connection, new Set(), vi.fn());
       await Promise.resolve();
       mgr.clear();
       expect(unsub).toHaveBeenCalledTimes(1);
-      expect(mgr._unsub).toBeNull();
+      expect(mgr.active).toBe(false);
     });
 
     it('does not throw when called before any subscription', () => {
@@ -108,7 +108,7 @@ describe('SubscriptionManager', () => {
       mgr.clear();
       await Promise.resolve();
       expect(unsub).toHaveBeenCalledTimes(1);
-      expect(mgr._unsub).toBeNull();
+      expect(mgr.active).toBe(false);
     });
   });
 

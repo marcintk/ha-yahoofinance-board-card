@@ -2,7 +2,7 @@ import { html, nothing, render } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { DebugMetrics } from './debug.js';
 import { resolveIcon } from './icons.js';
-import { DATA_LABELS, headerHtml, pinnedHtml, sortedHtml } from './render.js';
+import { DATA_LABELS, headerHtml, stockSectionHtml } from './render.js';
 import { SubscriptionManager } from './subscription.js';
 import type { CardConfig, Hass, StockEntry } from './types.js';
 
@@ -107,6 +107,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._dataIndex = 0;
     this._startFixedTimer();
     this._startDataTimer();
+    this._startDebugTimer();
     if (this._hass) {
       this._buildTrackedIds();
       this._render();
@@ -135,15 +136,6 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   private _getPrefix(): string {
     return this._config?.prefix ?? 'sensor.yahoofinance_';
-  }
-
-  private get _haCardStyle(): string | undefined {
-    // biome-ignore lint/style/noNonNullAssertion: _render() guards !_config before calling this getter
-    const { height, debug } = this._config!;
-    if (height)
-      return `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`;
-    if (debug) return 'position:relative;';
-    return undefined;
   }
 
   private _buildTrackedIds(): void {
@@ -215,11 +207,6 @@ class YahooFinanceBoardCard extends HTMLElement {
         if (this._hass && this._config) this._render();
       }, fixedMs);
     }
-    if (this._config?.debug) {
-      this._debugTimer = setInterval(() => {
-        if (this._hass && this._config) this._refreshDebugOverlay();
-      }, 1000);
-    }
   }
 
   private _stopFixedTimer(): void {
@@ -227,6 +214,18 @@ class YahooFinanceBoardCard extends HTMLElement {
       clearInterval(this._fixedTimer);
       this._fixedTimer = null;
     }
+  }
+
+  private _startDebugTimer(): void {
+    this._stopDebugTimer();
+    if (this._config?.debug) {
+      this._debugTimer = setInterval(() => {
+        if (this._hass && this._config) this._refreshDebugOverlay();
+      }, 1000);
+    }
+  }
+
+  private _stopDebugTimer(): void {
     if (this._debugTimer) {
       clearInterval(this._debugTimer);
       this._debugTimer = null;
@@ -254,13 +253,17 @@ class YahooFinanceBoardCard extends HTMLElement {
   disconnectedCallback(): void {
     this._stopFixedTimer();
     this._stopDataTimer();
+    this._stopDebugTimer();
     this._clearSubscription();
   }
 
   private _render(): void {
     try {
       if (!this._config || !this._hass) throw new Error('render called before config/hass set');
-      const { pinned = [], sorted = [], debug } = this._config;
+      const { pinned = [], sorted = [], debug, height } = this._config;
+      const haCardStyle = height
+        ? `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`
+        : debug ? 'position:relative;' : undefined;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
@@ -276,7 +279,7 @@ class YahooFinanceBoardCard extends HTMLElement {
       render(
         html`
           ${_STYLE_BLOCK}
-          <ha-card style=${this._haCardStyle ?? nothing}>
+          <ha-card style=${haCardStyle ?? nothing}>
             ${debug ? unsafeHTML(this._debug.html()) : nothing}
             ${
               debug
@@ -287,10 +290,10 @@ class YahooFinanceBoardCard extends HTMLElement {
             }
             ${headerHtml(this._dataIndex)}
             ${
-              pinned.length ? pinnedHtml(pinned, states, prefix, this._dataIndex, rowMeta) : nothing
+              pinned.length ? stockSectionHtml(pinned, states, prefix, this._dataIndex, rowMeta) : nothing
             }
             ${
-              sorted.length ? sortedHtml(sorted, states, prefix, this._dataIndex, rowMeta) : nothing
+              sorted.length ? stockSectionHtml(sorted, states, prefix, this._dataIndex, rowMeta, true) : nothing
             }
           </ha-card>
         `,
