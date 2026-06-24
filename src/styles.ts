@@ -60,9 +60,4 @@ export const CARD_STYLES = `
     padding: 0 1px;
   }
 
-  .empty {
-    padding: 12px 4px;
-    font-size: 13px;
-    color: var(--secondary-text-color, gray);
-  }
 `;
