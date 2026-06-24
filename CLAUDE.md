@@ -1,5 +1,4 @@
-@package.json
-@TODO.md
+@package.json @TODO.md
 
 # Development
 
@@ -83,6 +82,9 @@ coverage drops below that.
   merge a PR unless the user explicitly asks.
 - **Verify docs before every PR.** Check that `README.md` and `CLAUDE.md` reflect any behavior
   changes — updated option defaults, new config keys, changed architecture.
+- **Always wait for GHA before closing a topic.** After a PR is merged (or a tag is pushed), run
+  `gh run list --limit 5` and wait for all triggered workflows to complete. Do not declare a task
+  done or move on until every run shows `✓`. If a run fails, investigate and fix before closing.
 - **Release cadence.** After three to five merged PRs, recommend cutting a release. Never trigger
   the release workflow autonomously.
 
@@ -93,12 +95,21 @@ implement the fix/feature until it passes.
 
 ## Releasing
 
-Push a semver tag — the release workflow fires automatically:
+Before tagging a release, verify `main` CI is green:
+
+```bash
+gh run list --branch main --limit 5   # all runs must show ✓
+```
+
+Then push a semver tag — the release workflow fires automatically:
 
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
+
+After pushing the tag, wait for the `Publish Release` workflow to complete before declaring the
+release done (`gh run list --limit 5`).
 
 The workflow runs `npm test`, builds `dist/card.js` with the version injected from the tag, and
 publishes a GitHub Release with `dist/card.js` as an asset that HACS downloads.
