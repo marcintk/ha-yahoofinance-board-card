@@ -415,7 +415,7 @@ describe('YahooFinanceBoardCard', () => {
     });
   });
 
-  describe('_cancelRenderTimer', () => {
+  describe('_clearSubscription (timer cancellation)', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -431,7 +431,7 @@ describe('YahooFinanceBoardCard', () => {
       card._trackedIds = new Set();
       const renderSpy = vi.spyOn(card, '_render');
       card._scheduleRender();
-      card._cancelRenderTimer();
+      card._clearSubscription();
       vi.runAllTimers();
       expect(renderSpy).not.toHaveBeenCalled();
       expect(card._renderTimer).toBeNull();
@@ -439,7 +439,7 @@ describe('YahooFinanceBoardCard', () => {
 
     it('does not throw when no timer is pending', () => {
       const card = makeCard();
-      expect(() => card._cancelRenderTimer()).not.toThrow();
+      expect(() => card._clearSubscription()).not.toThrow();
     });
   });
 

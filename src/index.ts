@@ -126,13 +126,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     }, lazyMs);
   }
 
-  private _cancelRenderTimer(): void {
-    if (this._renderTimer) {
-      clearTimeout(this._renderTimer);
-      this._renderTimer = null;
-    }
-  }
-
   private _refreshDebugOverlay(): void {
     const el = this._root.querySelector('#yf-debug');
     if (el) el.innerHTML = this._debug.tableHtml();
@@ -148,7 +141,10 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   private _clearSubscription(): void {
     this._subscription.clear();
-    this._cancelRenderTimer();
+    if (this._renderTimer) {
+      clearTimeout(this._renderTimer);
+      this._renderTimer = null;
+    }
   }
 
   private _startFixedTimer(): void {

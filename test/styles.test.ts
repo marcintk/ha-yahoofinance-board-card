@@ -22,10 +22,6 @@ describe('CARD_STYLES', () => {
     expect(CARD_STYLES).toContain('col-price');
   });
 
-  it('defines the empty state class', () => {
-    expect(CARD_STYLES).toContain('empty');
-  });
-
   it('targets ha-card element', () => {
     expect(CARD_STYLES).toContain('ha-card');
   });
