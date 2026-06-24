@@ -25,15 +25,17 @@ export function prepostColor(attrs: YahooFinanceAttributes | null): string {
   return 'gray';
 }
 
+const _PREPOST_BG: Partial<Record<MarketState, string>> = {
+  PREPRE: 'lightblue',
+  PRE: 'khaki',
+  POST: 'pink',
+  POSTPOST: 'indigo',
+};
+
 export function prepostBg(marketState: MarketState | null | undefined): string | null {
-  if (marketState === 'PREPRE') return 'lightblue';
-  if (marketState === 'PRE') return 'khaki';
-  if (marketState === 'POST') return 'pink';
-  if (marketState === 'POSTPOST') return 'indigo';
-  return null;
+  return (marketState ? _PREPOST_BG[marketState] : null) ?? null;
 }
 
 export function changeBg(marketState: MarketState | null | undefined): string | null {
-  if (marketState === 'REGULAR') return 'lightgray';
-  return null;
+  return marketState === 'REGULAR' ? 'lightgray' : null;
 }

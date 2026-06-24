@@ -64,9 +64,9 @@ function _dataVal(
 function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
   if (!data) return _DASH;
-  if (data > 1_000_000_000)
-    return html`<span style="color:gray;">${(data / 1_000_000_000).toFixed(0)}G</span>`;
-  if (data > 1_000_000)
-    return html`<span style="color:gray;">${(data / 1_000_000).toFixed(0)}M</span>`;
-  return html`<span style="color:gray;">${(data / 1_000).toFixed(0)}K</span>`;
+  const [n, s]: [number, string] =
+    data > 1_000_000_000 ? [data / 1_000_000_000, 'G'] :
+    data > 1_000_000 ? [data / 1_000_000, 'M'] :
+    [data / 1_000, 'K'];
+  return html`<span style="color:gray;">${n.toFixed(0)}${s}</span>`;
 }

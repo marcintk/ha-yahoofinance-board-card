@@ -32,7 +32,6 @@ test file. Shared interfaces and types live in `src/types.ts`; global declaratio
 | `src/render.ts`       | `test/render.test.ts`       | `headerHtml()`, `stockRowHtml()`, `pinnedHtml()`, `sortedHtml()` — HTML generation               |
 | `src/display.ts`      | `test/display.test.ts`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()`  |
 | `src/format.ts`       | `test/format.test.ts`       | Text formatters: `formatRate()`, `formatPrice()`, `priceText()`, `prepostText()`, `dataText()`   |
-| `src/styles.ts`       | `test/styles.test.ts`       | CSS string exported as `CARD_STYLES`, injected into Shadow DOM on each render                    |
 | `src/utils.ts`        | `test/utils.test.ts`        | `MARKET_STATES` — valid market state set                                                         |
 | `src/types.ts`        | _(no test file)_            | Shared TypeScript interfaces: `CardConfig`, `Hass`, `StockEntry`, `YahooFinanceAttributes`, etc. |
 
