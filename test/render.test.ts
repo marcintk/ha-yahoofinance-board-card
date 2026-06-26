@@ -90,7 +90,7 @@ describe('stockRowHtml', () => {
 
   it('does not apply mark to the price cell', () => {
     const el = doc(stockRowHtml({ ...stock, mark: 'gold' }, baseAttrs, 0, 'Apple'));
-    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('dimgray');
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('gray');
     expect(el.querySelector('.col-price')?.getAttribute('style')).not.toContain('gold');
   });
 
@@ -169,28 +169,29 @@ describe('stockRowHtml', () => {
     expect(el.querySelector('.col-prepost')?.getAttribute('style')).toContain('indigo');
   });
 
-  it('applies khaki background to price cell for PRE market state', () => {
+  it('colors price cell with prepost rate color for PRE market state', () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'PRE' }, 0, 'Apple'));
-    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('khaki');
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('seagreen');
   });
 
-  it('applies pink background to price cell for POST market state', () => {
+  it('colors price cell with prepost rate color for POST market state', () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POST' }, 0, 'Apple'));
-    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('pink');
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('indianred');
   });
 
-  it('applies lightblue background to price cell for PREPRE market state', () => {
+  it('colors price cell with prepost rate color for PREPRE market state', () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'PREPRE' }, 0, 'Apple'));
-    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('lightblue');
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('seagreen');
   });
 
-  it('applies indigo background to price cell for POSTPOST market state', () => {
+  it('colors price cell with prepost rate color for POSTPOST market state', () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POSTPOST' }, 0, 'Apple'));
-    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('indigo');
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('indianred');
   });
 
-  it('does not apply prepost background to price cell during REGULAR market state', () => {
+  it('colors price cell gray during REGULAR market state', () => {
     const el = doc(stockRowHtml(stock, baseAttrs, 0, 'Apple'));
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('gray');
     expect(el.querySelector('.col-price')?.getAttribute('style')).not.toContain('background-color');
   });
 
