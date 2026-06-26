@@ -36,18 +36,15 @@ export function prepostText(attrs: YahooFinanceAttributes | null): string {
   return '';
 }
 
-const _DATA_FNS: ((attrs: YahooFinanceAttributes | null | undefined) => TemplateResult)[] = [
-  (a) => _dataVal(a?.trailingPE, 1, 'X', 50),
-  (a) => _dataVal(a?.forwardPE, 1, 'X', 50),
-  (a) => _dataVal(a?.dividendRate, 2, '', 0),
-  (a) => _volumeVal(a?.regularMarketVolume),
-];
-
 export function dataText(
   attrs: YahooFinanceAttributes | null | undefined,
   dataIndex: number
 ): TemplateResult {
-  return _DATA_FNS[dataIndex]?.(attrs) ?? _DASH;
+  if (dataIndex === 0) return _dataVal(attrs?.trailingPE, 1, 'X', 50);
+  if (dataIndex === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
+  if (dataIndex === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
+  if (dataIndex === 3) return _volumeVal(attrs?.regularMarketVolume);
+  return _DASH;
 }
 
 function _dataVal(

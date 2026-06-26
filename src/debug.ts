@@ -1,14 +1,6 @@
 import { timeAgo } from './utils.js';
 
 type MetricKey = 'events' | 'filtered' | 'rendered';
-type WindowCounts = {
-  min1: number;
-  min5: number;
-  min15: number;
-  min30: number;
-  hour1: number;
-  hour3: number;
-};
 
 export class DebugMetrics {
   private _data: Record<MetricKey, number[]>;
@@ -23,7 +15,14 @@ export class DebugMetrics {
     this._data[key] = this._data[key].filter((t) => t > now - 10_800_000);
   }
 
-  counts(key: MetricKey): WindowCounts {
+  counts(key: MetricKey): {
+    min1: number;
+    min5: number;
+    min15: number;
+    min30: number;
+    hour1: number;
+    hour3: number;
+  } {
     const now = Date.now();
     const arr = this._data[key];
     const r = { min1: 0, min5: 0, min15: 0, min30: 0, hour1: 0, hour3: arr.length };
