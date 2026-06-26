@@ -36,7 +36,10 @@ export interface CardConfig {
 }
 
 export interface HassConnection {
-  subscribeEvents(callback: (event: { data: { entity_id: string } }) => void, eventType: string): Promise<() => void>;
+  subscribeEvents(
+    callback: (event: { data: { entity_id: string } }) => void,
+    eventType: string
+  ): Promise<() => void>;
 }
 
 export interface HassEntityState {
