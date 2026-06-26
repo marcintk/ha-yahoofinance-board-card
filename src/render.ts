@@ -10,6 +10,14 @@ const _PREPOST_BG: Partial<Record<MarketState, string>> = {
   POSTPOST: 'indigo',
 };
 
+const _PRICE_COLOR: Record<MarketState, string> = {
+  PREPRE: 'lightblue',
+  PRE: 'khaki',
+  REGULAR: 'white',
+  POST: 'pink',
+  POSTPOST: 'mediumpurple',
+};
+
 export const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
 
 export function headerHtml(dataIndex = 0): TemplateResult {
@@ -34,6 +42,7 @@ export function stockRowHtml(
 
   const bg1d = ms === 'REGULAR' ? 'lightgray' : null;
   const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
+  const priceColor = ms ? _PRICE_COLOR[ms] : 'gray';
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
@@ -53,7 +62,7 @@ export function stockRowHtml(
       style="color:${rateColor(attrs?.twoHundredDayAverageChangePercent ?? 0, 30)};"
     >${formatRate(attrs?.twoHundredDayAverageChangePercent, 1)}</div>
     <div class="col-data">${dataText(attrs, dataIndex)}</div>
-    <div class="col-price" style="color:${prepostColor(attrs)};">${priceText(attrs)}</div>
+    <div class="col-price" style="color:${priceColor};">${priceText(attrs)}</div>
   </div>`;
 }
 
