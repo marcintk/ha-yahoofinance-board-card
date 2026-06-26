@@ -5,7 +5,7 @@ import { isPostMarket, isPreMarket } from './utils.js';
 const _DASH = html`<span style="color:gray;">-</span>`;
 
 export function formatRate(rate: number | null | undefined, precision: number): string {
-  if (rate === null || rate === undefined || Number.isNaN(rate)) return '-';
+  if (rate == null || Number.isNaN(rate)) return '-';
   const abs = Math.abs(rate).toFixed(precision);
   if (rate > 0) return `+${abs}`;
   if (rate < 0) return `-${abs}`;

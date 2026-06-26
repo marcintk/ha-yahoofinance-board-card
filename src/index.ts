@@ -78,7 +78,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _debugTimer: ReturnType<typeof setInterval> | null;
   private _renderTimer: ReturnType<typeof setTimeout> | null;
   private _trackedIds: Set<string> | null;
-  private _rowMeta: Map<string, string> | null;
+  private _rowMeta: Map<string, string>;
   private _dataIndex: number;
   private _subscription: SubscriptionManager;
   private _debug: DebugMetrics;
@@ -93,7 +93,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._debugTimer = null;
     this._renderTimer = null;
     this._trackedIds = null;
-    this._rowMeta = null;
+    this._rowMeta = new Map();
     this._dataIndex = 0;
     this._subscription = new SubscriptionManager();
     this._debug = new DebugMetrics();
@@ -103,7 +103,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._config = config;
     this._clearSubscription();
     this._trackedIds = null;
-    this._rowMeta = null;
     this._dataIndex = 0;
     this._startFixedTimer();
     this._startDataTimer();
@@ -157,7 +156,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   }
 
   private _hasRelevantChange(newHass: Hass, prevHass: Hass | null): boolean {
-    if (!prevHass || !this._config || !this._trackedIds) return true;
+    if (!prevHass || !this._trackedIds) return true;
     for (const id of this._trackedIds) {
       if (newHass.states[id] !== prevHass.states[id]) return true;
     }
@@ -258,7 +257,7 @@ class YahooFinanceBoardCard extends HTMLElement {
       }
 
       const prefix = this._getPrefix();
-      const rowMeta = this._rowMeta ?? new Map<string, string>();
+      const rowMeta = this._rowMeta;
 
       if (debug) this._debug.track('rendered');
 

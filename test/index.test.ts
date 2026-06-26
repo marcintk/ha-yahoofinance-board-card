@@ -299,14 +299,6 @@ describe('YahooFinanceBoardCard', () => {
       expect(card._hasRelevantChange(makeHass({}), null)).toBe(true);
     });
 
-    it('returns true when config is null', () => {
-      const card = makeCard();
-      card._config = null;
-      card._trackedIds = new Set(['sensor.yahoofinance_dji']);
-      const hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
-      expect(card._hasRelevantChange(hass, hass)).toBe(true);
-    });
-
     it('returns true when a tracked entity changed', () => {
       const card = makeCard();
       card._config = baseConfig;

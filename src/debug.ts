@@ -2,6 +2,8 @@ import { timeAgo } from './utils.js';
 
 type MetricKey = 'events' | 'filtered' | 'rendered';
 
+const _WINDOWS = [60_000, 300_000, 900_000, 1_800_000, 3_600_000];
+
 export class DebugMetrics {
   private _data: Record<MetricKey, number[]>;
 
@@ -29,13 +31,12 @@ export class DebugMetrics {
   } {
     const now = Date.now();
     const arr = this._data[key];
-    const windows = [60_000, 300_000, 900_000, 1_800_000, 3_600_000];
     const c = [0, 0, 0, 0, 0];
     for (let i = arr.length - 1; i >= 0; i--) {
       const age = now - arr[i];
       if (age > 3_600_000) break;
-      for (let w = 0; w < windows.length; w++) {
-        if (age <= windows[w]) c[w]++;
+      for (let w = 0; w < _WINDOWS.length; w++) {
+        if (age <= _WINDOWS[w]) c[w]++;
       }
     }
     return { min1: c[0], min5: c[1], min15: c[2], min30: c[3], hour1: c[4], hour3: arr.length };
