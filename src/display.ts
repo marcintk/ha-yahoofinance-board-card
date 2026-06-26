@@ -1,4 +1,4 @@
-import type { MarketState, YahooFinanceAttributes } from './types.js';
+import type { YahooFinanceAttributes } from './types.js';
 import { isPostMarket, isPreMarket } from './utils.js';
 
 export function rateColor(rate: number, threshold = 10.0): string {
@@ -23,19 +23,4 @@ export function prepostColor(attrs: YahooFinanceAttributes | null): string {
   if (isPreMarket(state)) return rateColor(attrs.preMarketChangePercent ?? 0);
   if (isPostMarket(state)) return rateColor(attrs.postMarketChangePercent ?? 0);
   return 'gray';
-}
-
-const _PREPOST_BG: Partial<Record<MarketState, string>> = {
-  PREPRE: 'lightblue',
-  PRE: 'khaki',
-  POST: 'pink',
-  POSTPOST: 'indigo',
-};
-
-export function prepostBg(marketState: MarketState | null | undefined): string | null {
-  return marketState ? (_PREPOST_BG[marketState] ?? null) : null;
-}
-
-export function changeBg(marketState: MarketState | null | undefined): string | null {
-  return marketState === 'REGULAR' ? 'lightgray' : null;
 }

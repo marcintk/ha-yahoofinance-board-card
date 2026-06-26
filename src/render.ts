@@ -1,7 +1,14 @@
 import { html, nothing, type TemplateResult } from 'lit';
-import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from './display.js';
+import { nameColor, prepostColor, rateColor } from './display.js';
 import { dataText, formatRate, prepostText, priceText } from './format.js';
-import type { StockEntry, YahooFinanceAttributes } from './types.js';
+import type { MarketState, StockEntry, YahooFinanceAttributes } from './types.js';
+
+const _PREPOST_BG: Partial<Record<MarketState, string>> = {
+  PREPRE: 'lightblue',
+  PRE: 'khaki',
+  POST: 'pink',
+  POSTPOST: 'indigo',
+};
 
 export const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
 
@@ -25,8 +32,8 @@ export function stockRowHtml(
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
 
-  const bg1d = changeBg(ms);
-  const bgPrepost = prepostBg(ms);
+  const bg1d = ms === 'REGULAR' ? 'lightgray' : null;
+  const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
