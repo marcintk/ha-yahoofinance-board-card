@@ -192,38 +192,41 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _mkInterval(
-    old: ReturnType<typeof setInterval> | null,
-    ms: number,
-    cb: () => void
-  ): ReturnType<typeof setInterval> | null {
-    if (old) clearInterval(old);
-    return ms > 0 ? setInterval(cb, ms) : null;
-  }
-
   private _startFixedTimer(): void {
+    if (this._fixedTimer) clearInterval(this._fixedTimer);
     const ms = (this._config?.fixed_refresh ?? 60) * 1000;
-    this._fixedTimer = this._mkInterval(this._fixedTimer, ms, () => {
-      if (this._hass && this._config) this._render();
-    });
+    this._fixedTimer =
+      ms > 0
+        ? setInterval(() => {
+            if (this._hass && this._config) this._render();
+          }, ms)
+        : null;
   }
 
   private _startDebugTimer(): void {
+    if (this._debugTimer) clearInterval(this._debugTimer);
     const ms = this._config?.debug ? 1000 : 0;
-    this._debugTimer = this._mkInterval(this._debugTimer, ms, () => {
-      if (this._hass && this._config) {
-        const el = this._root.querySelector('#yf-debug');
-        if (el) el.innerHTML = this._debug.tableHtml();
-      }
-    });
+    this._debugTimer =
+      ms > 0
+        ? setInterval(() => {
+            if (this._hass && this._config) {
+              const el = this._root.querySelector('#yf-debug');
+              if (el) el.innerHTML = this._debug.tableHtml();
+            }
+          }, ms)
+        : null;
   }
 
   private _startDataTimer(): void {
+    if (this._dataTimer) clearInterval(this._dataTimer);
     const ms = (this._config?.data_rotate_every ?? 60) * 1000;
-    this._dataTimer = this._mkInterval(this._dataTimer, ms, () => {
-      this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
-      if (this._hass && this._config) this._render();
-    });
+    this._dataTimer =
+      ms > 0
+        ? setInterval(() => {
+            this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
+            if (this._hass && this._config) this._render();
+          }, ms)
+        : null;
   }
 
   disconnectedCallback(): void {
@@ -238,13 +241,9 @@ class YahooFinanceBoardCard extends HTMLElement {
     try {
       if (!this._config || !this._hass) throw new Error('render called before config/hass set');
       const { pinned = [], sorted = [], debug, height } = this._config;
-      let haCardStyle: string | undefined;
-      if (height) {
-        haCardStyle = `height:${height};min-height:${height};max-height:${height};`;
-        if (debug) haCardStyle += 'position:relative;';
-      } else if (debug) {
-        haCardStyle = 'position:relative;';
-      }
+      const haCardStyle =
+        (height ? `height:${height};min-height:${height};max-height:${height};` : '') +
+          (debug ? 'position:relative;' : '') || undefined;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {

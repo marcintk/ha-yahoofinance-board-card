@@ -21,19 +21,8 @@ built by CI on every release and attached as a GitHub Release asset that HACS do
 
 Every `src/*.ts` module has a corresponding `test/*.test.ts`. New source files must ship with their
 test file. Shared interfaces and types live in `src/types.ts`; global declarations
-(`__CARD_VERSION__`, `Window.customCards`) are in `src/global.d.ts`.
-
-| Source file           | Test file                   | Responsibility                                                                                   |
-| --------------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
-| `src/index.ts`        | `test/index.test.ts`        | Custom element class, HA lifecycle hooks, entity cache, render orchestration                     |
-| `src/debug.ts`        | `test/debug.test.ts`        | `DebugMetrics` — event/filter/render counters with time-window bucketing; debug overlay HTML     |
-| `src/subscription.ts` | `test/subscription.test.ts` | `SubscriptionManager` — WebSocket subscribe/unsubscribe with stale-gen guard                     |
-| `src/icons.ts`        | `test/icons.test.ts`        | `detectIcon()`, `resolveIcon()` — auto-detect stock type icon from slug; per-entry override      |
-| `src/render.ts`       | `test/render.test.ts`       | `DATA_LABELS`, `headerHtml()`, `stockRowHtml()`, `stockSectionHtml()` — HTML generation          |
-| `src/display.ts`      | `test/display.test.ts`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()`  |
-| `src/format.ts`       | `test/format.test.ts`       | Text formatters: `formatRate()`, `formatPrice()`, `priceText()`, `prepostText()`, `dataText()`   |
-| `src/utils.ts`        | `test/utils.test.ts`        | `isPreMarket()`, `isPostMarket()`, `timeAgo()` — market state helpers and time formatting        |
-| `src/types.ts`        | _(no test file)_            | Shared TypeScript interfaces: `CardConfig`, `Hass`, `StockEntry`, `YahooFinanceAttributes`, etc. |
+(`__CARD_VERSION__`, `Window.customCards`) are in `src/global.d.ts`. `src/types.ts` is the one
+exception — it has no test file.
 
 ## Architecture Notes
 

@@ -288,6 +288,19 @@ describe('stockSectionHtml (sorted, sort=true)', () => {
     expect(rows[1].querySelector('.col-name')?.textContent).toContain('Unknown');
   });
 
+  it('sorts two missing stocks without error (both attrs null, ?? 0 for both sides)', () => {
+    const stocks = [
+      { symbol: 'a', name: 'A' },
+      { symbol: 'b', name: 'B' },
+    ];
+    const rowMeta = new Map([
+      ['a', 'A'],
+      ['b', 'B'],
+    ]);
+    const el = doc(stockSectionHtml(stocks, {}, prefix, 0, rowMeta, true));
+    expect(el.querySelectorAll('.stock-row').length).toBe(2);
+  });
+
   it('passes mark color to sorted rows', () => {
     const stocks = [{ symbol: 'sabr', name: 'Sabre', mark: 'gold' }];
     const states = { 'sensor.yahoofinance_sabr': { attributes: baseAttrs } };

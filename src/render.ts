@@ -58,11 +58,15 @@ export function stockSectionHtml(
   rowMeta: Map<string, string>,
   sort = false
 ): TemplateResult {
-  const entries = stocks.map((stock) => {
-    const attrs = states[`${prefix}${stock.symbol}`]?.attributes ?? null;
-    return { stock, attrs, change: attrs?.regularMarketChangePercent ?? 0 };
-  });
-  if (sort) entries.sort((a, b) => b.change - a.change);
+  const entries = stocks.map((stock) => ({
+    stock,
+    attrs: states[`${prefix}${stock.symbol}`]?.attributes ?? null,
+  }));
+  if (sort)
+    entries.sort(
+      (a, b) =>
+        (b.attrs?.regularMarketChangePercent ?? 0) - (a.attrs?.regularMarketChangePercent ?? 0)
+    );
   return html`${entries.map(({ stock, attrs }) => {
     const label = rowMeta.get(stock.symbol) ?? stock.name;
     return stockRowHtml(stock, attrs, dataIndex, label);
