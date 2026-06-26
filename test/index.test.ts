@@ -1,6 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import '../src/index.js';
-import { withFakeTimers } from './helpers.js';
 
 const makeHass = (states = {}) => ({ states });
 const makeState = (attrs = {}) => ({ attributes: attrs });
@@ -322,7 +321,8 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_scheduleRender', () => {
-    withFakeTimers();
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     it('renders immediately when lazy_refresh is 0', () => {
       const card = makeCard();
@@ -403,7 +403,8 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_clearSubscription (timer cancellation)', () => {
-    withFakeTimers();
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     it('cancels a pending render timer', () => {
       const card = makeCard();
@@ -425,7 +426,8 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_startFixedTimer', () => {
-    withFakeTimers();
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     it('fires a render on each fixed interval', () => {
       const card = makeCard();
@@ -487,7 +489,8 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_startDebugTimer', () => {
-    withFakeTimers();
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     it('starts debug timer when debug:true', () => {
       const card = makeCard();
@@ -555,7 +558,8 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_startDataTimer', () => {
-    withFakeTimers();
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     it('starts a timer with default interval of 60s', () => {
       const card = makeCard();
@@ -815,7 +819,8 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('debug overlay timer', () => {
-    withFakeTimers();
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     it('patches #yf-debug innerHTML without invoking _render', () => {
       const card = makeCard();

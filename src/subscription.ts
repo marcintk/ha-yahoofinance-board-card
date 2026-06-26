@@ -1,5 +1,3 @@
-import type { HassConnection } from './types.js';
-
 export class SubscriptionManager {
   private _gen: number;
   private _unsub: (() => void) | null;
@@ -13,7 +11,16 @@ export class SubscriptionManager {
     return this._unsub !== null;
   }
 
-  subscribe(connection: HassConnection, trackedIds: Set<string> | null, onMatch: () => void): void {
+  subscribe(
+    connection: {
+      subscribeEvents(
+        cb: (e: { data: { entity_id: string } }) => void,
+        type: string
+      ): Promise<() => void>;
+    },
+    trackedIds: Set<string> | null,
+    onMatch: () => void
+  ): void {
     if (!connection?.subscribeEvents) return;
     const gen = this._gen;
     connection

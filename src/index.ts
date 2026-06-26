@@ -193,38 +193,41 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _restartInterval(
-    existing: ReturnType<typeof setInterval> | null,
-    ms: number,
-    cb: () => void
-  ): ReturnType<typeof setInterval> | null {
-    if (existing) clearInterval(existing);
-    return ms > 0 ? setInterval(cb, ms) : null;
-  }
-
   private _startFixedTimer(): void {
     const ms = (this._config?.fixed_refresh ?? 60) * 1000;
-    this._fixedTimer = this._restartInterval(this._fixedTimer, ms, () => {
-      if (this._hass && this._config) this._render();
-    });
+    if (this._fixedTimer) clearInterval(this._fixedTimer);
+    this._fixedTimer =
+      ms > 0
+        ? setInterval(() => {
+            if (this._hass && this._config) this._render();
+          }, ms)
+        : null;
   }
 
   private _startDebugTimer(): void {
     const ms = this._config?.debug ? 1000 : 0;
-    this._debugTimer = this._restartInterval(this._debugTimer, ms, () => {
-      if (this._hass && this._config) {
-        const el = this._root.querySelector('#yf-debug');
-        if (el) el.innerHTML = this._debug.tableHtml();
-      }
-    });
+    if (this._debugTimer) clearInterval(this._debugTimer);
+    this._debugTimer =
+      ms > 0
+        ? setInterval(() => {
+            if (this._hass && this._config) {
+              const el = this._root.querySelector('#yf-debug');
+              if (el) el.innerHTML = this._debug.tableHtml();
+            }
+          }, ms)
+        : null;
   }
 
   private _startDataTimer(): void {
     const ms = (this._config?.data_rotate_every ?? 60) * 1000;
-    this._dataTimer = this._restartInterval(this._dataTimer, ms, () => {
-      this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
-      if (this._hass && this._config) this._render();
-    });
+    if (this._dataTimer) clearInterval(this._dataTimer);
+    this._dataTimer =
+      ms > 0
+        ? setInterval(() => {
+            this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
+            if (this._hass && this._config) this._render();
+          }, ms)
+        : null;
   }
 
   disconnectedCallback(): void {

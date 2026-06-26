@@ -1,7 +1,7 @@
 import { html, nothing, type TemplateResult } from 'lit';
 import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from './display.js';
 import { dataText, formatRate, prepostText, priceText } from './format.js';
-import type { HassEntityState, StockEntry, YahooFinanceAttributes } from './types.js';
+import type { StockEntry, YahooFinanceAttributes } from './types.js';
 
 export const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
 
@@ -52,7 +52,7 @@ export function stockRowHtml(
 
 export function stockSectionHtml(
   stocks: StockEntry[],
-  states: Record<string, HassEntityState | undefined>,
+  states: Record<string, { attributes: YahooFinanceAttributes } | undefined>,
   prefix: string,
   dataIndex: number,
   rowMeta: Map<string, string>,

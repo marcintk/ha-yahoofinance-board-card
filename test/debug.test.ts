@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DebugMetrics } from '../src/debug.js';
-import { withFakeTimers } from './helpers.js';
 
 describe('DebugMetrics', () => {
-  withFakeTimers();
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
 
   describe('track', () => {
     it('records timestamps for valid keys', () => {
