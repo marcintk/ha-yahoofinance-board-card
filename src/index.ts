@@ -238,11 +238,13 @@ class YahooFinanceBoardCard extends HTMLElement {
     try {
       if (!this._config || !this._hass) throw new Error('render called before config/hass set');
       const { pinned = [], sorted = [], debug, height } = this._config;
-      const haCardStyle = height
-        ? `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`
-        : debug
-          ? 'position:relative;'
-          : undefined;
+      let haCardStyle: string | undefined;
+      if (height) {
+        haCardStyle = `height:${height};min-height:${height};max-height:${height};`;
+        if (debug) haCardStyle += 'position:relative;';
+      } else if (debug) {
+        haCardStyle = 'position:relative;';
+      }
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
