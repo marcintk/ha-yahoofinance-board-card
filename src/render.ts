@@ -14,7 +14,7 @@ const _PRICE_COLOR: Record<MarketState, string> = {
   PREPRE: 'lightblue',
   PRE: 'khaki',
   REGULAR: 'white',
-  POST: 'pink',
+  POST: 'palevioletred',
   POSTPOST: 'mediumpurple',
 };
 

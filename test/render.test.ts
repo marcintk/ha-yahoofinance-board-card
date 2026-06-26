@@ -174,9 +174,9 @@ describe('stockRowHtml', () => {
     expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('khaki');
   });
 
-  it('colors price cell pink for POST market state', () => {
+  it('colors price cell palevioletred for POST market state', () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: 'POST' }, 0, 'Apple'));
-    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('pink');
+    expect(el.querySelector('.col-price')?.getAttribute('style')).toContain('palevioletred');
   });
 
   it('colors price cell lightblue for PREPRE market state', () => {
