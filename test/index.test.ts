@@ -542,6 +542,16 @@ describe('YahooFinanceBoardCard', () => {
       expect(card.shadowRoot.querySelector('#yf-debug')).toBeNull();
       card.disconnectedCallback();
     });
+
+    it('stops any existing debug timer first', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, debug: true };
+      card._startDebugTimer();
+      const firstTimer = card._debugTimer;
+      card._startDebugTimer();
+      expect(card._debugTimer).not.toBe(firstTimer);
+      card.disconnectedCallback();
+    });
   });
 
   describe('_startDataTimer', () => {
@@ -618,6 +628,16 @@ describe('YahooFinanceBoardCard', () => {
       card._dataIndex = 2;
       card.setConfig(baseConfig);
       expect(card._dataIndex).toBe(0);
+    });
+
+    it('stops any existing data timer first', () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, data_rotate_every: 10 };
+      card._startDataTimer();
+      const firstTimer = card._dataTimer;
+      card._startDataTimer();
+      expect(card._dataTimer).not.toBe(firstTimer);
+      card.disconnectedCallback();
     });
   });
 
