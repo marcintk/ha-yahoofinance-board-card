@@ -1,5 +1,4 @@
 import { html, nothing, render } from 'lit';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { DebugMetrics } from './debug.js';
 import { resolveIcon } from './icons.js';
 import { DATA_LABELS, headerHtml, stockSectionHtml } from './render.js';
@@ -193,41 +192,38 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
+  private _mkInterval(
+    old: ReturnType<typeof setInterval> | null,
+    ms: number,
+    cb: () => void
+  ): ReturnType<typeof setInterval> | null {
+    if (old) clearInterval(old);
+    return ms > 0 ? setInterval(cb, ms) : null;
+  }
+
   private _startFixedTimer(): void {
     const ms = (this._config?.fixed_refresh ?? 60) * 1000;
-    if (this._fixedTimer) clearInterval(this._fixedTimer);
-    this._fixedTimer =
-      ms > 0
-        ? setInterval(() => {
-            if (this._hass && this._config) this._render();
-          }, ms)
-        : null;
+    this._fixedTimer = this._mkInterval(this._fixedTimer, ms, () => {
+      if (this._hass && this._config) this._render();
+    });
   }
 
   private _startDebugTimer(): void {
     const ms = this._config?.debug ? 1000 : 0;
-    if (this._debugTimer) clearInterval(this._debugTimer);
-    this._debugTimer =
-      ms > 0
-        ? setInterval(() => {
-            if (this._hass && this._config) {
-              const el = this._root.querySelector('#yf-debug');
-              if (el) el.innerHTML = this._debug.tableHtml();
-            }
-          }, ms)
-        : null;
+    this._debugTimer = this._mkInterval(this._debugTimer, ms, () => {
+      if (this._hass && this._config) {
+        const el = this._root.querySelector('#yf-debug');
+        if (el) el.innerHTML = this._debug.tableHtml();
+      }
+    });
   }
 
   private _startDataTimer(): void {
     const ms = (this._config?.data_rotate_every ?? 60) * 1000;
-    if (this._dataTimer) clearInterval(this._dataTimer);
-    this._dataTimer =
-      ms > 0
-        ? setInterval(() => {
-            this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
-            if (this._hass && this._config) this._render();
-          }, ms)
-        : null;
+    this._dataTimer = this._mkInterval(this._dataTimer, ms, () => {
+      this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
+      if (this._hass && this._config) this._render();
+    });
   }
 
   disconnectedCallback(): void {
@@ -268,12 +264,8 @@ class YahooFinanceBoardCard extends HTMLElement {
                 ? html`<div
                   id="yf-debug"
                   style="position:absolute;bottom:0;left:0;right:0;z-index:10;background:rgba(0,0,0,0.5);color:#00e676;font-family:monospace;font-size:11px;line-height:1;padding:2px 6px;pointer-events:none;"
-                >${unsafeHTML(this._debug.tableHtml())}</div>`
-                : nothing
-            }
-            ${
-              debug
-                ? html`<div
+                ></div>
+                <div
                   style="position:absolute;top:2px;left:4px;font-family:monospace;font-size:9px;color:#888;pointer-events:none;"
                 >v${__CARD_VERSION__}</div>`
                 : nothing
@@ -293,6 +285,10 @@ class YahooFinanceBoardCard extends HTMLElement {
         `,
         this._root
       );
+      if (debug) {
+        // biome-ignore lint/style/noNonNullAssertion: Lit just rendered #yf-debug above
+        this._root.querySelector('#yf-debug')!.innerHTML = this._debug.tableHtml();
+      }
     } catch (e) {
       this._showError((e as Error).message);
       // biome-ignore lint/suspicious/noConsole: intentional render error logging
