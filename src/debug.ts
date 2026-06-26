@@ -2,8 +2,6 @@ import { timeAgo } from './utils.js';
 
 type MetricKey = 'events' | 'filtered' | 'rendered';
 
-const _WINDOWS = [60_000, 300_000, 900_000, 1_800_000, 3_600_000];
-
 export class DebugMetrics {
   private _data: Record<MetricKey, number[]>;
 
@@ -29,14 +27,15 @@ export class DebugMetrics {
     hour1: number;
     hour3: number;
   } {
+    const windows = [60_000, 300_000, 900_000, 1_800_000, 3_600_000];
     const now = Date.now();
     const arr = this._data[key];
     const c = [0, 0, 0, 0, 0];
     for (let i = arr.length - 1; i >= 0; i--) {
       const age = now - arr[i];
       if (age > 3_600_000) break;
-      for (let w = 0; w < _WINDOWS.length; w++) {
-        if (age <= _WINDOWS[w]) c[w]++;
+      for (let w = 0; w < windows.length; w++) {
+        if (age <= windows[w]) c[w]++;
       }
     }
     return { min1: c[0], min5: c[1], min15: c[2], min30: c[3], hour1: c[4], hour3: arr.length };
@@ -52,15 +51,13 @@ export class DebugMetrics {
     };
     const rendered = this._data.rendered;
     const pad = (n: number, w = 2) => String(n).padStart(w, '0');
-    const ts = rendered.length
-      ? (() => {
-          const last = rendered[rendered.length - 1];
-          const d = new Date(last);
-          const time = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`;
-          const ago = timeAgo(Date.now() - last);
-          return `${time} (${ago} ago)`;
-        })()
-      : '--';
+    const last = rendered.at(-1);
+    let ts = '--';
+    if (last !== undefined) {
+      const d = new Date(last);
+      const time = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`;
+      ts = `${time} (${timeAgo(Date.now() - last)} ago)`;
+    }
     const footer = `<tr style="font-size:10px"><td style="padding-right:10px;color:indianred">${ts}</td>${hcell('1m')}${hcell('5m')}${hcell('15m')}${hcell('30m')}${hcell('1h')}${hcell('3h')}</tr>`;
     return `<table style="border-collapse:collapse;width:100%">${row('events', 'events')}${row('filtered', 'filtered')}${row('rendered', 'rendered')}${footer}</table>`;
   }
