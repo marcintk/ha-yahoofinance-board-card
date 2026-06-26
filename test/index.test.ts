@@ -800,12 +800,7 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('debug overlay timer', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    withFakeTimers();
 
     it('patches #yf-debug innerHTML without invoking _render', () => {
       const card = makeCard();

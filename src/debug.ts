@@ -29,15 +29,16 @@ export class DebugMetrics {
   } {
     const now = Date.now();
     const arr = this._data[key];
-    const since = (ms: number) => arr.filter((t) => now - t <= ms).length;
-    return {
-      min1: since(60_000),
-      min5: since(300_000),
-      min15: since(900_000),
-      min30: since(1_800_000),
-      hour1: since(3_600_000),
-      hour3: arr.length,
-    };
+    const r = { min1: 0, min5: 0, min15: 0, min30: 0, hour1: 0, hour3: arr.length };
+    for (const t of arr) {
+      const age = now - t;
+      if (age <= 60_000) r.min1++;
+      if (age <= 300_000) r.min5++;
+      if (age <= 900_000) r.min15++;
+      if (age <= 1_800_000) r.min30++;
+      if (age <= 3_600_000) r.hour1++;
+    }
+    return r;
   }
 
   tableHtml(): string {
