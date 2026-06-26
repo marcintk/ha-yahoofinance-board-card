@@ -53,7 +53,7 @@ export function stockRowHtml(
       style="color:${rateColor(attrs?.twoHundredDayAverageChangePercent ?? 0, 30)};"
     >${formatRate(attrs?.twoHundredDayAverageChangePercent, 1)}</div>
     <div class="col-data">${dataText(attrs, dataIndex)}</div>
-    <div class="col-price" style="color:dimgray;">${priceText(attrs)}</div>
+    <div class="col-price" style="color:dimgray;${bgPrepost ? `background-color:${bgPrepost};` : ''}">${priceText(attrs)}</div>
   </div>`;
 }
 
