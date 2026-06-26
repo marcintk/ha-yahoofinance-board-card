@@ -6,7 +6,7 @@ import { DATA_LABELS, headerHtml, stockSectionHtml } from './render.js';
 import { SubscriptionManager } from './subscription.js';
 import type { CardConfig, Hass, StockEntry } from './types.js';
 
-const _STYLE_BLOCK = unsafeHTML(`<style>
+const _STYLE_BLOCK = html`<style>
   :host { display: block; }
 
   ha-card {
@@ -67,7 +67,7 @@ const _STYLE_BLOCK = unsafeHTML(`<style>
   .col-price {
     padding: 0 1px;
   }
-</style>`);
+</style>`;
 
 class YahooFinanceBoardCard extends HTMLElement {
   private readonly _root: ShadowRoot;
@@ -177,11 +177,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     }, lazyMs);
   }
 
-  private _refreshDebugOverlay(): void {
-    const el = this._root.querySelector('#yf-debug');
-    if (el) el.innerHTML = this._debug.tableHtml();
-  }
-
   private _subscribe(): void {
     if (!this._config || !this._hass?.connection) return;
     this._subscription.subscribe(this._hass.connection, this._trackedIds, () => {
@@ -217,7 +212,10 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._debugTimer = this._stopInterval(this._debugTimer);
     if (this._config?.debug) {
       this._debugTimer = setInterval(() => {
-        if (this._hass && this._config) this._refreshDebugOverlay();
+        if (this._hass && this._config) {
+          const el = this._root.querySelector('#yf-debug');
+          if (el) el.innerHTML = this._debug.tableHtml();
+        }
       }, 1000);
     }
   }
