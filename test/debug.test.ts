@@ -120,21 +120,4 @@ describe('DebugMetrics', () => {
     });
   });
 
-  describe('html', () => {
-    it('returns overlay div with yf-debug id', () => {
-      const d = new DebugMetrics();
-      const html = d.html();
-      expect(html).toContain('id="yf-debug"');
-    });
-
-    it('contains tableHtml output', () => {
-      const d = new DebugMetrics();
-      expect(d.html()).toContain(d.tableHtml());
-    });
-
-    it('has position:absolute styling', () => {
-      const d = new DebugMetrics();
-      expect(d.html()).toContain('position:absolute');
-    });
-  });
 });

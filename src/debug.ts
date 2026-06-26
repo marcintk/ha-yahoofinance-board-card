@@ -1,6 +1,7 @@
 import { timeAgo } from './utils.js';
 
 type MetricKey = 'events' | 'filtered' | 'rendered';
+type WindowCounts = { min1: number; min5: number; min15: number; min30: number; hour1: number; hour3: number };
 
 export class DebugMetrics {
   private _data: Record<MetricKey, number[]>;
@@ -11,22 +12,11 @@ export class DebugMetrics {
 
   track(key: MetricKey): void {
     const now = Date.now();
-    const arr = this._data[key];
-    arr.push(now);
-    const cutoff = now - 10_800_000;
-    let i = 0;
-    while (i < arr.length && arr[i] < cutoff) i++;
-    if (i) arr.splice(0, i);
+    this._data[key].push(now);
+    this._data[key] = this._data[key].filter((t) => t > now - 10_800_000);
   }
 
-  counts(key: MetricKey): {
-    min1: number;
-    min5: number;
-    min15: number;
-    min30: number;
-    hour1: number;
-    hour3: number;
-  } {
+  counts(key: MetricKey): WindowCounts {
     const now = Date.now();
     const arr = this._data[key];
     const r = { min1: 0, min5: 0, min15: 0, min30: 0, hour1: 0, hour3: arr.length };
@@ -60,9 +50,5 @@ export class DebugMetrics {
     }
     const footer = `<tr style="font-size:10px"><td style="padding-right:10px;color:indianred">${ts}</td>${hcell('1m')}${hcell('5m')}${hcell('15m')}${hcell('30m')}${hcell('1h')}${hcell('3h')}</tr>`;
     return `<table style="border-collapse:collapse;width:100%">${row('events', 'events')}${row('filtered', 'filtered')}${row('rendered', 'rendered')}${footer}</table>`;
-  }
-
-  html(): string {
-    return `<div id="yf-debug" style="position:absolute;bottom:0;left:0;right:0;z-index:10;background:rgba(0,0,0,0.5);color:#00e676;font-family:monospace;font-size:11px;line-height:1;padding:2px 6px;pointer-events:none;">${this.tableHtml()}</div>`;
   }
 }

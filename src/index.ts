@@ -133,12 +133,8 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private get _prefix(): string {
-    return this._config?.prefix ?? 'sensor.yahoofinance_';
-  }
-
   private _buildTrackedIds(): void {
-    const prefix = this._prefix;
+    const prefix = this._config?.prefix ?? 'sensor.yahoofinance_';
     const pinned: StockEntry[] = this._config?.pinned ?? [];
     const sorted: StockEntry[] = this._config?.sorted ?? [];
     this._trackedIds = new Set([
@@ -193,48 +189,52 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _stopInterval(timer: ReturnType<typeof setInterval> | null): null {
-    if (timer) clearInterval(timer);
-    return null;
+  private _startInterval(
+    old: ReturnType<typeof setInterval> | null,
+    ms: number,
+    cb: () => void
+  ): ReturnType<typeof setInterval> | null {
+    if (old) clearInterval(old);
+    return ms > 0 ? setInterval(cb, ms) : null;
   }
 
   private _startFixedTimer(): void {
-    this._fixedTimer = this._stopInterval(this._fixedTimer);
-    const fixedMs = (this._config?.fixed_refresh ?? 60) * 1000;
-    if (fixedMs > 0) {
-      this._fixedTimer = setInterval(() => {
-        if (this._hass && this._config) this._render();
-      }, fixedMs);
-    }
+    this._fixedTimer = this._startInterval(
+      this._fixedTimer,
+      (this._config?.fixed_refresh ?? 60) * 1000,
+      () => { if (this._hass && this._config) this._render(); }
+    );
   }
 
   private _startDebugTimer(): void {
-    this._debugTimer = this._stopInterval(this._debugTimer);
-    if (this._config?.debug) {
-      this._debugTimer = setInterval(() => {
+    this._debugTimer = this._startInterval(
+      this._debugTimer,
+      this._config?.debug ? 1000 : 0,
+      () => {
         if (this._hass && this._config) {
           const el = this._root.querySelector('#yf-debug');
           if (el) el.innerHTML = this._debug.tableHtml();
         }
-      }, 1000);
-    }
+      }
+    );
   }
 
   private _startDataTimer(): void {
-    this._dataTimer = this._stopInterval(this._dataTimer);
-    const intervalMs = (this._config?.data_rotate_every ?? 60) * 1000;
-    if (intervalMs > 0) {
-      this._dataTimer = setInterval(() => {
+    this._dataTimer = this._startInterval(
+      this._dataTimer,
+      (this._config?.data_rotate_every ?? 60) * 1000,
+      () => {
         this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
         if (this._hass && this._config) this._render();
-      }, intervalMs);
-    }
+      }
+    );
   }
 
   disconnectedCallback(): void {
-    this._fixedTimer = this._stopInterval(this._fixedTimer);
-    this._dataTimer = this._stopInterval(this._dataTimer);
-    this._debugTimer = this._stopInterval(this._debugTimer);
+    if (this._fixedTimer) clearInterval(this._fixedTimer);
+    if (this._dataTimer) clearInterval(this._dataTimer);
+    if (this._debugTimer) clearInterval(this._debugTimer);
+    this._fixedTimer = this._dataTimer = this._debugTimer = null;
     this._clearSubscription();
   }
 
@@ -254,7 +254,7 @@ class YahooFinanceBoardCard extends HTMLElement {
         return;
       }
 
-      const prefix = this._prefix;
+      const prefix = this._config?.prefix ?? 'sensor.yahoofinance_';
       const rowMeta = this._rowMeta;
 
       if (debug) this._debug.track('rendered');
@@ -263,7 +263,12 @@ class YahooFinanceBoardCard extends HTMLElement {
         html`
           ${_STYLE_BLOCK}
           <ha-card style=${haCardStyle ?? nothing}>
-            ${debug ? unsafeHTML(this._debug.html()) : nothing}
+            ${debug
+              ? html`<div
+                  id="yf-debug"
+                  style="position:absolute;bottom:0;left:0;right:0;z-index:10;background:rgba(0,0,0,0.5);color:#00e676;font-family:monospace;font-size:11px;line-height:1;padding:2px 6px;pointer-events:none;"
+                >${unsafeHTML(this._debug.tableHtml())}</div>`
+              : nothing}
             ${
               debug
                 ? html`<div
