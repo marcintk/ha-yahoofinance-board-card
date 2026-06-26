@@ -443,7 +443,7 @@ describe('YahooFinanceBoardCard', () => {
     });
   });
 
-  describe('_startFixedTimer / _stopFixedTimer', () => {
+  describe('_startFixedTimer', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -463,7 +463,7 @@ describe('YahooFinanceBoardCard', () => {
       expect(renderSpy).toHaveBeenCalledTimes(1);
       vi.advanceTimersByTime(1000);
       expect(renderSpy).toHaveBeenCalledTimes(2);
-      card._stopFixedTimer();
+      card.disconnectedCallback();
     });
 
     it('does not start a timer when fixed_refresh is 0', () => {
@@ -482,25 +482,20 @@ describe('YahooFinanceBoardCard', () => {
       card._startFixedTimer();
       vi.advanceTimersByTime(1000);
       expect(renderSpy).not.toHaveBeenCalled();
-      card._stopFixedTimer();
+      card.disconnectedCallback();
     });
 
-    it('stops the timer on _stopFixedTimer', () => {
+    it('stops the timer when disconnected', () => {
       const card = makeCard();
       card._config = { ...baseConfig, fixed_refresh: 1 };
       card._hass = makeHass({ 'sensor.yahoofinance_dji': makeState(baseAttrs) });
       card._trackedIds = new Set();
       const renderSpy = vi.spyOn(card, '_render');
       card._startFixedTimer();
-      card._stopFixedTimer();
+      card.disconnectedCallback();
       vi.advanceTimersByTime(2000);
       expect(renderSpy).not.toHaveBeenCalled();
       expect(card._fixedTimer).toBeNull();
-    });
-
-    it('_stopFixedTimer does not throw when no timer is running', () => {
-      const card = makeCard();
-      expect(() => card._stopFixedTimer()).not.toThrow();
     });
 
     it('_startFixedTimer stops any existing timer first', () => {
@@ -512,11 +507,11 @@ describe('YahooFinanceBoardCard', () => {
       const firstTimer = card._fixedTimer;
       card._startFixedTimer();
       expect(card._fixedTimer).not.toBe(firstTimer);
-      card._stopFixedTimer();
+      card.disconnectedCallback();
     });
   });
 
-  describe('_startDebugTimer / _stopDebugTimer', () => {
+  describe('_startDebugTimer', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -530,14 +525,14 @@ describe('YahooFinanceBoardCard', () => {
       card._config = { ...baseConfig, debug: true };
       card._startDebugTimer();
       expect(card._debugTimer).not.toBeNull();
-      card._stopDebugTimer();
+      card.disconnectedCallback();
     });
 
-    it('clears debug timer on _stopDebugTimer', () => {
+    it('clears debug timer on disconnectedCallback', () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
       card._startDebugTimer();
-      card._stopDebugTimer();
+      card.disconnectedCallback();
       expect(card._debugTimer).toBeNull();
     });
 
@@ -552,7 +547,7 @@ describe('YahooFinanceBoardCard', () => {
       vi.advanceTimersByTime(1000);
       expect(renderSpy).not.toHaveBeenCalled();
       expect(refreshSpy).toHaveBeenCalled();
-      card._stopDebugTimer();
+      card.disconnectedCallback();
     });
 
     it('debug timer does not call _refreshDebugOverlay when hass is null', () => {
@@ -564,11 +559,11 @@ describe('YahooFinanceBoardCard', () => {
       card._startDebugTimer();
       vi.advanceTimersByTime(1000);
       expect(refreshSpy).not.toHaveBeenCalled();
-      card._stopDebugTimer();
+      card.disconnectedCallback();
     });
   });
 
-  describe('_startDataTimer / _stopDataTimer', () => {
+  describe('_startDataTimer', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -582,7 +577,7 @@ describe('YahooFinanceBoardCard', () => {
       card._config = { ...baseConfig };
       card._startDataTimer();
       expect(card._dataTimer).not.toBeNull();
-      card._stopDataTimer();
+      card.disconnectedCallback();
     });
 
     it('does not start a timer when data_rotate_every is 0', () => {
@@ -603,7 +598,7 @@ describe('YahooFinanceBoardCard', () => {
       vi.advanceTimersByTime(10_000);
       expect(card._dataIndex).toBe(1);
       expect(renderSpy).toHaveBeenCalled();
-      card._stopDataTimer();
+      card.disconnectedCallback();
     });
 
     it('wraps _dataIndex back to 0 after 3', () => {
@@ -615,25 +610,7 @@ describe('YahooFinanceBoardCard', () => {
       card._startDataTimer();
       vi.advanceTimersByTime(10_000);
       expect(card._dataIndex).toBe(0);
-      card._stopDataTimer();
-    });
-
-    it('stops the timer on _stopDataTimer', () => {
-      const card = makeCard();
-      card._config = { ...baseConfig, data_rotate_every: 10 };
-      card._hass = makeHass({});
-      card._trackedIds = new Set();
-      const renderSpy = vi.spyOn(card, '_render');
-      card._startDataTimer();
-      card._stopDataTimer();
-      vi.advanceTimersByTime(10_000);
-      expect(renderSpy).not.toHaveBeenCalled();
-      expect(card._dataTimer).toBeNull();
-    });
-
-    it('_stopDataTimer does not throw when no timer is running', () => {
-      const card = makeCard();
-      expect(() => card._stopDataTimer()).not.toThrow();
+      card.disconnectedCallback();
     });
 
     it('does not render when hass is null on tick', () => {
@@ -645,7 +622,7 @@ describe('YahooFinanceBoardCard', () => {
       card._startDataTimer();
       vi.advanceTimersByTime(10_000);
       expect(renderSpy).not.toHaveBeenCalled();
-      card._stopDataTimer();
+      card.disconnectedCallback();
     });
 
     it('does not render when config is null on tick', () => {
@@ -658,7 +635,7 @@ describe('YahooFinanceBoardCard', () => {
       card._config = null;
       vi.advanceTimersByTime(10_000);
       expect(renderSpy).not.toHaveBeenCalled();
-      card._stopDataTimer();
+      card.disconnectedCallback();
     });
 
     it('setConfig resets _dataIndex to 0', () => {

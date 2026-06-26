@@ -29,10 +29,10 @@ test file. Shared interfaces and types live in `src/types.ts`; global declaratio
 | `src/debug.ts`        | `test/debug.test.ts`        | `DebugMetrics` — event/filter/render counters with time-window bucketing; debug overlay HTML     |
 | `src/subscription.ts` | `test/subscription.test.ts` | `SubscriptionManager` — WebSocket subscribe/unsubscribe with stale-gen guard                     |
 | `src/icons.ts`        | `test/icons.test.ts`        | `detectIcon()`, `resolveIcon()` — auto-detect stock type icon from slug; per-entry override      |
-| `src/render.ts`       | `test/render.test.ts`       | `headerHtml()`, `stockRowHtml()`, `pinnedHtml()`, `sortedHtml()` — HTML generation               |
+| `src/render.ts`       | `test/render.test.ts`       | `DATA_LABELS`, `headerHtml()`, `stockRowHtml()`, `stockSectionHtml()` — HTML generation          |
 | `src/display.ts`      | `test/display.test.ts`      | Pure color helpers: `rateColor()`, `nameColor()`, `prepostColor()`, `prepostBg()`, `changeBg()`  |
 | `src/format.ts`       | `test/format.test.ts`       | Text formatters: `formatRate()`, `formatPrice()`, `priceText()`, `prepostText()`, `dataText()`   |
-| `src/utils.ts`        | `test/utils.test.ts`        | `MARKET_STATES` — valid market state set                                                         |
+| `src/utils.ts`        | `test/utils.test.ts`        | `isPreMarket()`, `isPostMarket()`, `timeAgo()` — market state helpers and time formatting        |
 | `src/types.ts`        | _(no test file)_            | Shared TypeScript interfaces: `CardConfig`, `Hass`, `StockEntry`, `YahooFinanceAttributes`, etc. |
 
 ## Architecture Notes

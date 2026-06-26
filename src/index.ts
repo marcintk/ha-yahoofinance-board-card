@@ -199,8 +199,13 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
+  private _stopInterval(timer: ReturnType<typeof setInterval> | null): null {
+    if (timer) clearInterval(timer);
+    return null;
+  }
+
   private _startFixedTimer(): void {
-    this._stopFixedTimer();
+    this._fixedTimer = this._stopInterval(this._fixedTimer);
     const fixedMs = (this._config?.fixed_refresh ?? 60) * 1000;
     if (fixedMs > 0) {
       this._fixedTimer = setInterval(() => {
@@ -209,15 +214,8 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _stopFixedTimer(): void {
-    if (this._fixedTimer) {
-      clearInterval(this._fixedTimer);
-      this._fixedTimer = null;
-    }
-  }
-
   private _startDebugTimer(): void {
-    this._stopDebugTimer();
+    this._debugTimer = this._stopInterval(this._debugTimer);
     if (this._config?.debug) {
       this._debugTimer = setInterval(() => {
         if (this._hass && this._config) this._refreshDebugOverlay();
@@ -225,15 +223,8 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _stopDebugTimer(): void {
-    if (this._debugTimer) {
-      clearInterval(this._debugTimer);
-      this._debugTimer = null;
-    }
-  }
-
   private _startDataTimer(): void {
-    this._stopDataTimer();
+    this._dataTimer = this._stopInterval(this._dataTimer);
     const intervalMs = (this._config?.data_rotate_every ?? 60) * 1000;
     if (intervalMs > 0) {
       this._dataTimer = setInterval(() => {
@@ -243,17 +234,10 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _stopDataTimer(): void {
-    if (this._dataTimer) {
-      clearInterval(this._dataTimer);
-      this._dataTimer = null;
-    }
-  }
-
   disconnectedCallback(): void {
-    this._stopFixedTimer();
-    this._stopDataTimer();
-    this._stopDebugTimer();
+    this._fixedTimer = this._stopInterval(this._fixedTimer);
+    this._dataTimer = this._stopInterval(this._dataTimer);
+    this._debugTimer = this._stopInterval(this._debugTimer);
     this._clearSubscription();
   }
 

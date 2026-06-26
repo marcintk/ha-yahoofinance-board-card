@@ -69,7 +69,7 @@ describe('SubscriptionManager', () => {
       mgr.subscribe(connection, new Set(), vi.fn());
       await Promise.resolve();
       await Promise.resolve();
-      expect(mgr._unsub).toBeNull();
+      expect(mgr.active).toBe(false);
     });
   });
 
