@@ -20,7 +20,7 @@ export function headerHtml(dataIndex = 0): TemplateResult {
 export function stockRowHtml(
   stock: StockEntry,
   attrs: YahooFinanceAttributes | null,
-  signalState: number,
+  dataIndex: number,
   label: string
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
@@ -45,7 +45,7 @@ export function stockRowHtml(
       class="col-200d"
       style="color:${rateColor(attrs?.twoHundredDayAverageChangePercent ?? 0, 30)};"
     >${formatRate(attrs?.twoHundredDayAverageChangePercent, 1)}</div>
-    <div class="col-data">${dataText(attrs, signalState)}</div>
+    <div class="col-data">${dataText(attrs, dataIndex)}</div>
     <div class="col-price" style="color:dimgray;">${priceText(attrs)}</div>
   </div>`;
 }
@@ -54,7 +54,7 @@ export function stockSectionHtml(
   stocks: StockEntry[],
   states: Record<string, HassEntityState | undefined>,
   prefix: string,
-  signalState: number,
+  dataIndex: number,
   rowMeta: Map<string, string>,
   sort = false
 ): TemplateResult {
@@ -65,6 +65,6 @@ export function stockSectionHtml(
   if (sort) entries.sort((a, b) => b.change - a.change);
   return html`${entries.map(({ stock, attrs }) => {
     const label = rowMeta.get(stock.symbol) ?? stock.name;
-    return stockRowHtml(stock, attrs, signalState, label);
+    return stockRowHtml(stock, attrs, dataIndex, label);
   })}`;
 }

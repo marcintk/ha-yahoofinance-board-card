@@ -36,15 +36,18 @@ export function prepostText(attrs: YahooFinanceAttributes | null): string {
   return '';
 }
 
+const _DATA_FNS: ((attrs: YahooFinanceAttributes | null | undefined) => TemplateResult)[] = [
+  (a) => _dataVal(a?.trailingPE, 1, 'X', 50),
+  (a) => _dataVal(a?.forwardPE, 1, 'X', 50),
+  (a) => _dataVal(a?.dividendRate, 2, '', 0),
+  (a) => _volumeVal(a?.regularMarketVolume),
+];
+
 export function dataText(
   attrs: YahooFinanceAttributes | null | undefined,
-  signalState: number
+  dataIndex: number
 ): TemplateResult {
-  if (signalState === 0) return _dataVal(attrs?.trailingPE, 1, 'X', 50);
-  if (signalState === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
-  if (signalState === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
-  if (signalState === 3) return _volumeVal(attrs?.regularMarketVolume);
-  return _DASH;
+  return _DATA_FNS[dataIndex]?.(attrs) ?? _DASH;
 }
 
 function _dataVal(
@@ -65,10 +68,6 @@ function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
   if (!data) return _DASH;
   const [n, s] =
-    data > 1_000_000_000
-      ? [data / 1_000_000_000, 'G']
-      : data > 1_000_000
-        ? [data / 1_000_000, 'M']
-        : [data / 1_000, 'K'];
+    data > 1e9 ? [data / 1e9, 'G'] : data > 1e6 ? [data / 1e6, 'M'] : [data / 1e3, 'K'];
   return html`<span style="color:gray;">${n.toFixed(0)}${s}</span>`;
 }
