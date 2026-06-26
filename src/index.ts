@@ -19,7 +19,7 @@ const _STYLE_BLOCK = html`<style>
 
   .stock-header, .stock-row {
     display: grid;
-    grid-template-columns: 1fr 50px 50px 45px 50px 50px 56px;
+    grid-template-columns: 1fr 50px 50px 45px 50px 53px 56px;
     grid-template-rows: 1fr;
     align-items: stretch;
     line-height: 1;

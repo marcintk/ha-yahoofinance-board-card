@@ -15,6 +15,8 @@ export function formatRate(rate: number | null | undefined, precision: number): 
 export function formatPrice(price: number | null | undefined, fallback = 0): string {
   const data = price || fallback;
   if (!data) return '-';
+  if (data >= 1e6) return `${(data / 1e6).toFixed(1)}M`;
+  if (data >= 10000) return `${(data / 1000).toFixed(0)}K`;
   if (data > 1000) return data.toFixed(0);
   if (data > 10) return data.toFixed(1);
   return data.toFixed(2);

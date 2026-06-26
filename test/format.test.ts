@@ -39,8 +39,17 @@ describe('formatRate', () => {
 });
 
 describe('formatPrice', () => {
-  it('uses zero decimal places for values above 1000', () => {
+  it('uses zero decimal places for values between 1000 and 10000', () => {
     expect(formatPrice(1500.5)).toBe('1501');
+  });
+
+  it('abbreviates values >= 10000 as K', () => {
+    expect(formatPrice(746598)).toBe('747K');
+    expect(formatPrice(10000)).toBe('10K');
+  });
+
+  it('abbreviates values >= 1000000 as M', () => {
+    expect(formatPrice(1_500_000)).toBe('1.5M');
   });
 
   it('uses one decimal place for values above 10', () => {
