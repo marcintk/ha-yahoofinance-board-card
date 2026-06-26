@@ -64,7 +64,7 @@ function _dataVal(
 function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
   if (!data) return _DASH;
-  const [n, s]: [number, string] =
+  const [n, s] =
     data > 1_000_000_000
       ? [data / 1_000_000_000, 'G']
       : data > 1_000_000

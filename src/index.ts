@@ -133,8 +133,12 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
+  private get _prefix(): string {
+    return this._config?.prefix ?? 'sensor.yahoofinance_';
+  }
+
   private _buildTrackedIds(): void {
-    const prefix = this._config?.prefix ?? 'sensor.yahoofinance_';
+    const prefix = this._prefix;
     const pinned: StockEntry[] = this._config?.pinned ?? [];
     const sorted: StockEntry[] = this._config?.sorted ?? [];
     this._trackedIds = new Set([
@@ -250,7 +254,7 @@ class YahooFinanceBoardCard extends HTMLElement {
         return;
       }
 
-      const prefix = this._config?.prefix ?? 'sensor.yahoofinance_';
+      const prefix = this._prefix;
       const rowMeta = this._rowMeta;
 
       if (debug) this._debug.track('rendered');

@@ -1,11 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-function withFakeTimers() {
-  beforeEach(() => vi.useFakeTimers());
-  afterEach(() => vi.useRealTimers());
-}
-
+import { describe, expect, it, vi } from 'vitest';
 import '../src/index.js';
+import { withFakeTimers } from './helpers.js';
 
 const makeHass = (states = {}) => ({ states });
 const makeState = (attrs = {}) => ({ attributes: attrs });
