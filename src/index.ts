@@ -196,31 +196,38 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _startFixedTimer(): void {
     if (this._fixedTimer) clearInterval(this._fixedTimer);
     const ms = (this._config?.fixed_refresh ?? 60) * 1000;
-    this._fixedTimer = ms > 0 ? setInterval(() => { if (this._hass && this._config) this._render(); }, ms) : null;
+    this._fixedTimer =
+      ms > 0
+        ? setInterval(() => {
+            if (this._hass && this._config) this._render();
+          }, ms)
+        : null;
   }
 
   private _startDebugTimer(): void {
     if (this._debugTimer) clearInterval(this._debugTimer);
     const ms = this._config?.debug ? 1000 : 0;
-    this._debugTimer = ms > 0
-      ? setInterval(() => {
-          if (this._hass && this._config) {
-            const el = this._root.querySelector('#yf-debug');
-            if (el) el.innerHTML = this._debug.tableHtml();
-          }
-        }, ms)
-      : null;
+    this._debugTimer =
+      ms > 0
+        ? setInterval(() => {
+            if (this._hass && this._config) {
+              const el = this._root.querySelector('#yf-debug');
+              if (el) el.innerHTML = this._debug.tableHtml();
+            }
+          }, ms)
+        : null;
   }
 
   private _startDataTimer(): void {
     if (this._dataTimer) clearInterval(this._dataTimer);
     const ms = (this._config?.data_rotate_every ?? 60) * 1000;
-    this._dataTimer = ms > 0
-      ? setInterval(() => {
-          this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
-          if (this._hass && this._config) this._render();
-        }, ms)
-      : null;
+    this._dataTimer =
+      ms > 0
+        ? setInterval(() => {
+            this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
+            if (this._hass && this._config) this._render();
+          }, ms)
+        : null;
   }
 
   disconnectedCallback(): void {
@@ -256,12 +263,14 @@ class YahooFinanceBoardCard extends HTMLElement {
         html`
           ${_STYLE_BLOCK}
           <ha-card style=${haCardStyle ?? nothing}>
-            ${debug
-              ? html`<div
+            ${
+              debug
+                ? html`<div
                   id="yf-debug"
                   style="position:absolute;bottom:0;left:0;right:0;z-index:10;background:rgba(0,0,0,0.5);color:#00e676;font-family:monospace;font-size:11px;line-height:1;padding:2px 6px;pointer-events:none;"
                 >${unsafeHTML(this._debug.tableHtml())}</div>`
-              : nothing}
+                : nothing
+            }
             ${
               debug
                 ? html`<div

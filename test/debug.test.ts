@@ -119,5 +119,4 @@ describe('DebugMetrics', () => {
       expect(html).toContain('ago');
     });
   });
-
 });

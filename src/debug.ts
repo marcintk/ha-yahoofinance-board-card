@@ -1,7 +1,14 @@
 import { timeAgo } from './utils.js';
 
 type MetricKey = 'events' | 'filtered' | 'rendered';
-type WindowCounts = { min1: number; min5: number; min15: number; min30: number; hour1: number; hour3: number };
+type WindowCounts = {
+  min1: number;
+  min5: number;
+  min15: number;
+  min30: number;
+  hour1: number;
+  hour3: number;
+};
 
 export class DebugMetrics {
   private _data: Record<MetricKey, number[]>;
