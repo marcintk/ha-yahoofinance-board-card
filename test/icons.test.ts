@@ -15,7 +15,7 @@ describe('detectIcon', () => {
     expect(detectIcon('usdcny_x')).toBe('¤');
   });
 
-  it('returns ① for known index symbols', () => {
+  it('returns △ for known index symbols', () => {
     expect(detectIcon('dji')).toBe('△');
     expect(detectIcon('gspc')).toBe('△');
     expect(detectIcon('ixic')).toBe('△');
@@ -25,7 +25,7 @@ describe('detectIcon', () => {
     expect(detectIcon('vix')).toBe('△');
   });
 
-  it('returns ₿ for known crypto base symbols', () => {
+  it('returns ⬢ for known crypto base symbols', () => {
     expect(detectIcon('btc_usd')).toBe('⬢');
     expect(detectIcon('eth_usd')).toBe('⬢');
     expect(detectIcon('sol_usd')).toBe('⬢');

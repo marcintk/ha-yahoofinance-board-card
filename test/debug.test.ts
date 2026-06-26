@@ -2,13 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DebugMetrics } from '../src/debug.js';
 
 describe('DebugMetrics', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
 
   describe('track', () => {
     it('records timestamps for valid keys', () => {
@@ -122,24 +117,6 @@ describe('DebugMetrics', () => {
       const html = d.tableHtml();
       expect(html).not.toContain('--');
       expect(html).toContain('ago');
-    });
-  });
-
-  describe('html', () => {
-    it('returns overlay div with yf-debug id', () => {
-      const d = new DebugMetrics();
-      const html = d.html();
-      expect(html).toContain('id="yf-debug"');
-    });
-
-    it('contains tableHtml output', () => {
-      const d = new DebugMetrics();
-      expect(d.html()).toContain(d.tableHtml());
-    });
-
-    it('has position:absolute styling', () => {
-      const d = new DebugMetrics();
-      expect(d.html()).toContain('position:absolute');
     });
   });
 });

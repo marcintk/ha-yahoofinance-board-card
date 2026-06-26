@@ -5,7 +5,7 @@ import { isPostMarket, isPreMarket } from './utils.js';
 const _DASH = html`<span style="color:gray;">-</span>`;
 
 export function formatRate(rate: number | null | undefined, precision: number): string {
-  if (rate === null || rate === undefined || Number.isNaN(rate)) return '-';
+  if (rate == null || Number.isNaN(rate)) return '-';
   const abs = Math.abs(rate).toFixed(precision);
   if (rate > 0) return `+${abs}`;
   if (rate < 0) return `-${abs}`;
@@ -38,12 +38,12 @@ export function prepostText(attrs: YahooFinanceAttributes | null): string {
 
 export function dataText(
   attrs: YahooFinanceAttributes | null | undefined,
-  signalState: number
+  dataIndex: number
 ): TemplateResult {
-  if (signalState === 0) return _dataVal(attrs?.trailingPE, 1, 'X', 50);
-  if (signalState === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
-  if (signalState === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
-  if (signalState === 3) return _volumeVal(attrs?.regularMarketVolume);
+  if (dataIndex === 0) return _dataVal(attrs?.trailingPE, 1, 'X', 50);
+  if (dataIndex === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
+  if (dataIndex === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
+  if (dataIndex === 3) return _volumeVal(attrs?.regularMarketVolume);
   return _DASH;
 }
 
@@ -64,11 +64,7 @@ function _dataVal(
 function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
   if (!data) return _DASH;
-  const [n, s]: [number, string] =
-    data > 1_000_000_000
-      ? [data / 1_000_000_000, 'G']
-      : data > 1_000_000
-        ? [data / 1_000_000, 'M']
-        : [data / 1_000, 'K'];
+  const [n, s] =
+    data > 1e9 ? [data / 1e9, 'G'] : data > 1e6 ? [data / 1e6, 'M'] : [data / 1e3, 'K'];
   return html`<span style="color:gray;">${n.toFixed(0)}${s}</span>`;
 }

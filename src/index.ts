@@ -1,12 +1,11 @@
 import { html, nothing, render } from 'lit';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { DebugMetrics } from './debug.js';
 import { resolveIcon } from './icons.js';
 import { DATA_LABELS, headerHtml, stockSectionHtml } from './render.js';
 import { SubscriptionManager } from './subscription.js';
 import type { CardConfig, Hass, StockEntry } from './types.js';
 
-const _STYLE_BLOCK = unsafeHTML(`<style>
+const _STYLE_BLOCK = html`<style>
   :host { display: block; }
 
   ha-card {
@@ -67,7 +66,7 @@ const _STYLE_BLOCK = unsafeHTML(`<style>
   .col-price {
     padding: 0 1px;
   }
-</style>`);
+</style>`;
 
 class YahooFinanceBoardCard extends HTMLElement {
   private readonly _root: ShadowRoot;
@@ -78,7 +77,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _debugTimer: ReturnType<typeof setInterval> | null;
   private _renderTimer: ReturnType<typeof setTimeout> | null;
   private _trackedIds: Set<string> | null;
-  private _rowMeta: Map<string, string> | null;
+  private _rowMeta: Map<string, string>;
   private _dataIndex: number;
   private _subscription: SubscriptionManager;
   private _debug: DebugMetrics;
@@ -93,7 +92,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._debugTimer = null;
     this._renderTimer = null;
     this._trackedIds = null;
-    this._rowMeta = null;
+    this._rowMeta = new Map();
     this._dataIndex = 0;
     this._subscription = new SubscriptionManager();
     this._debug = new DebugMetrics();
@@ -103,7 +102,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._config = config;
     this._clearSubscription();
     this._trackedIds = null;
-    this._rowMeta = null;
     this._dataIndex = 0;
     this._startFixedTimer();
     this._startDataTimer();
@@ -134,12 +132,12 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _getPrefix(): string {
+  private get _prefix(): string {
     return this._config?.prefix ?? 'sensor.yahoofinance_';
   }
 
   private _buildTrackedIds(): void {
-    const prefix = this._getPrefix();
+    const prefix = this._prefix;
     const pinned: StockEntry[] = this._config?.pinned ?? [];
     const sorted: StockEntry[] = this._config?.sorted ?? [];
     this._trackedIds = new Set([
@@ -157,7 +155,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   }
 
   private _hasRelevantChange(newHass: Hass, prevHass: Hass | null): boolean {
-    if (!prevHass || !this._config || !this._trackedIds) return true;
+    if (!prevHass || !this._trackedIds) return true;
     for (const id of this._trackedIds) {
       if (newHass.states[id] !== prevHass.states[id]) return true;
     }
@@ -178,11 +176,6 @@ class YahooFinanceBoardCard extends HTMLElement {
     }, lazyMs);
   }
 
-  private _refreshDebugOverlay(): void {
-    const el = this._root.querySelector('#yf-debug');
-    if (el) el.innerHTML = this._debug.tableHtml();
-  }
-
   private _subscribe(): void {
     if (!this._config || !this._hass?.connection) return;
     this._subscription.subscribe(this._hass.connection, this._trackedIds, () => {
@@ -199,61 +192,44 @@ class YahooFinanceBoardCard extends HTMLElement {
     }
   }
 
-  private _startFixedTimer(): void {
-    this._stopFixedTimer();
-    const fixedMs = (this._config?.fixed_refresh ?? 60) * 1000;
-    if (fixedMs > 0) {
-      this._fixedTimer = setInterval(() => {
-        if (this._hass && this._config) this._render();
-      }, fixedMs);
-    }
+  private _resetInterval(
+    handle: ReturnType<typeof setInterval> | null,
+    ms: number,
+    fn?: () => void
+  ): ReturnType<typeof setInterval> | null {
+    if (handle) clearInterval(handle);
+    return ms > 0 && fn ? setInterval(fn, ms) : null;
   }
 
-  private _stopFixedTimer(): void {
-    if (this._fixedTimer) {
-      clearInterval(this._fixedTimer);
-      this._fixedTimer = null;
-    }
+  private _startFixedTimer(): void {
+    const ms = (this._config?.fixed_refresh ?? 60) * 1000;
+    this._fixedTimer = this._resetInterval(this._fixedTimer, ms, () => {
+      if (this._hass && this._config) this._render();
+    });
   }
 
   private _startDebugTimer(): void {
-    this._stopDebugTimer();
-    if (this._config?.debug) {
-      this._debugTimer = setInterval(() => {
-        if (this._hass && this._config) this._refreshDebugOverlay();
-      }, 1000);
-    }
-  }
-
-  private _stopDebugTimer(): void {
-    if (this._debugTimer) {
-      clearInterval(this._debugTimer);
-      this._debugTimer = null;
-    }
+    const ms = this._config?.debug ? 1000 : 0;
+    this._debugTimer = this._resetInterval(this._debugTimer, ms, () => {
+      if (this._hass && this._config) {
+        const el = this._root.querySelector('#yf-debug');
+        if (el) el.innerHTML = this._debug.tableHtml();
+      }
+    });
   }
 
   private _startDataTimer(): void {
-    this._stopDataTimer();
-    const intervalMs = (this._config?.data_rotate_every ?? 60) * 1000;
-    if (intervalMs > 0) {
-      this._dataTimer = setInterval(() => {
-        this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
-        if (this._hass && this._config) this._render();
-      }, intervalMs);
-    }
-  }
-
-  private _stopDataTimer(): void {
-    if (this._dataTimer) {
-      clearInterval(this._dataTimer);
-      this._dataTimer = null;
-    }
+    const ms = (this._config?.data_rotate_every ?? 60) * 1000;
+    this._dataTimer = this._resetInterval(this._dataTimer, ms, () => {
+      this._dataIndex = (this._dataIndex + 1) % DATA_LABELS.length;
+      if (this._hass && this._config) this._render();
+    });
   }
 
   disconnectedCallback(): void {
-    this._stopFixedTimer();
-    this._stopDataTimer();
-    this._stopDebugTimer();
+    this._fixedTimer = this._resetInterval(this._fixedTimer, 0);
+    this._dataTimer = this._resetInterval(this._dataTimer, 0);
+    this._debugTimer = this._resetInterval(this._debugTimer, 0);
     this._clearSubscription();
   }
 
@@ -261,11 +237,9 @@ class YahooFinanceBoardCard extends HTMLElement {
     try {
       if (!this._config || !this._hass) throw new Error('render called before config/hass set');
       const { pinned = [], sorted = [], debug, height } = this._config;
-      const haCardStyle = height
-        ? `height:${height};min-height:${height};max-height:${height};${debug ? 'position:relative;' : ''}`
-        : debug
-          ? 'position:relative;'
-          : undefined;
+      const haCardStyle =
+        (height ? `height:${height};min-height:${height};max-height:${height};` : '') +
+          (debug ? 'position:relative;' : '') || undefined;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
@@ -273,8 +247,8 @@ class YahooFinanceBoardCard extends HTMLElement {
         return;
       }
 
-      const prefix = this._getPrefix();
-      const rowMeta = this._rowMeta ?? new Map<string, string>();
+      const prefix = this._prefix;
+      const rowMeta = this._rowMeta;
 
       if (debug) this._debug.track('rendered');
 
@@ -282,10 +256,13 @@ class YahooFinanceBoardCard extends HTMLElement {
         html`
           ${_STYLE_BLOCK}
           <ha-card style=${haCardStyle ?? nothing}>
-            ${debug ? unsafeHTML(this._debug.html()) : nothing}
             ${
               debug
                 ? html`<div
+                  id="yf-debug"
+                  style="position:absolute;bottom:0;left:0;right:0;z-index:10;background:rgba(0,0,0,0.5);color:#00e676;font-family:monospace;font-size:11px;line-height:1;padding:2px 6px;pointer-events:none;"
+                ></div>
+                <div
                   style="position:absolute;top:2px;left:4px;font-family:monospace;font-size:9px;color:#888;pointer-events:none;"
                 >v${__CARD_VERSION__}</div>`
                 : nothing
@@ -305,6 +282,10 @@ class YahooFinanceBoardCard extends HTMLElement {
         `,
         this._root
       );
+      if (debug) {
+        // biome-ignore lint/style/noNonNullAssertion: Lit just rendered #yf-debug above
+        this._root.querySelector('#yf-debug')!.innerHTML = this._debug.tableHtml();
+      }
     } catch (e) {
       this._showError((e as Error).message);
       // biome-ignore lint/suspicious/noConsole: intentional render error logging

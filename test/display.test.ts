@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { changeBg, nameColor, prepostBg, prepostColor, rateColor } from '../src/display.js';
+import { nameColor, prepostColor, rateColor } from '../src/display.js';
 
 describe('rateColor', () => {
   it('returns lightseagreen above default threshold', () => {
@@ -98,53 +98,5 @@ describe('prepostColor', () => {
 
   it('defaults postMarketChangePercent to 0 when absent', () => {
     expect(prepostColor({ marketState: 'POST' })).toBe('gray');
-  });
-});
-
-describe('prepostBg', () => {
-  it('returns lightblue for PREPRE', () => {
-    expect(prepostBg('PREPRE')).toBe('lightblue');
-  });
-
-  it('returns khaki for PRE', () => {
-    expect(prepostBg('PRE')).toBe('khaki');
-  });
-
-  it('returns pink for POST', () => {
-    expect(prepostBg('POST')).toBe('pink');
-  });
-
-  it('returns indigo for POSTPOST', () => {
-    expect(prepostBg('POSTPOST')).toBe('indigo');
-  });
-
-  it('returns null for REGULAR', () => {
-    expect(prepostBg('REGULAR')).toBeNull();
-  });
-
-  it('returns null for unknown state', () => {
-    expect(prepostBg('UNKNOWN')).toBeNull();
-  });
-
-  it('returns null for null', () => {
-    expect(prepostBg(null)).toBeNull();
-  });
-});
-
-describe('changeBg', () => {
-  it('returns lightgray for REGULAR', () => {
-    expect(changeBg('REGULAR')).toBe('lightgray');
-  });
-
-  it('returns null for PRE', () => {
-    expect(changeBg('PRE')).toBeNull();
-  });
-
-  it('returns null for POST', () => {
-    expect(changeBg('POST')).toBeNull();
-  });
-
-  it('returns null for null', () => {
-    expect(changeBg(null)).toBeNull();
   });
 });
