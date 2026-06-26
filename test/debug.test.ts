@@ -1,14 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DebugMetrics } from '../src/debug.js';
 
-describe('DebugMetrics', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+function withFakeTimers() {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+}
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+describe('DebugMetrics', () => {
+  withFakeTimers();
 
   describe('track', () => {
     it('records timestamps for valid keys', () => {

@@ -27,18 +27,17 @@ export class DebugMetrics {
     hour1: number;
     hour3: number;
   } {
-    const windows = [60_000, 300_000, 900_000, 1_800_000, 3_600_000];
     const now = Date.now();
     const arr = this._data[key];
-    const c = [0, 0, 0, 0, 0];
-    for (let i = arr.length - 1; i >= 0; i--) {
-      const age = now - arr[i];
-      if (age > 3_600_000) break;
-      for (let w = 0; w < windows.length; w++) {
-        if (age <= windows[w]) c[w]++;
-      }
-    }
-    return { min1: c[0], min5: c[1], min15: c[2], min30: c[3], hour1: c[4], hour3: arr.length };
+    const since = (ms: number) => arr.filter((t) => now - t <= ms).length;
+    return {
+      min1: since(60_000),
+      min5: since(300_000),
+      min15: since(900_000),
+      min30: since(1_800_000),
+      hour1: since(3_600_000),
+      hour3: arr.length,
+    };
   }
 
   tableHtml(): string {

@@ -1,4 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+function withFakeTimers() {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+}
+
 import '../src/index.js';
 
 const makeHass = (states = {}) => ({ states });
@@ -321,13 +327,7 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_scheduleRender', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    withFakeTimers();
 
     it('renders immediately when lazy_refresh is 0', () => {
       const card = makeCard();
@@ -408,13 +408,7 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_clearSubscription (timer cancellation)', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    withFakeTimers();
 
     it('cancels a pending render timer', () => {
       const card = makeCard();
@@ -436,13 +430,7 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_startFixedTimer', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    withFakeTimers();
 
     it('fires a render on each fixed interval', () => {
       const card = makeCard();
@@ -504,13 +492,7 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_startDebugTimer', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    withFakeTimers();
 
     it('starts debug timer when debug:true', () => {
       const card = makeCard();
@@ -568,13 +550,7 @@ describe('YahooFinanceBoardCard', () => {
   });
 
   describe('_startDataTimer', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    withFakeTimers();
 
     it('starts a timer with default interval of 60s', () => {
       const card = makeCard();
