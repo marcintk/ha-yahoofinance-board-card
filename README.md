@@ -137,7 +137,7 @@ Finance ticker:
 The card uses one color per market state, applied as the **Price** text color and — during pre/post
 sessions — as the **Pre/Post** column background.
 
-| State      | When                       | Color                            |
+| State      | When                       | Default                          |
 | ---------- | -------------------------- | -------------------------------- |
 | `UNKNOWN`  | Market closed, data static | `--secondary-text-color` (theme) |
 | `REGULAR`  | Normal trading hours       | `--primary-text-color` (theme)   |
@@ -153,15 +153,6 @@ colors:
   PRE: "#d4af37"
   POSTPOST: indigo
 ```
-
-### Data column cycle
-
-| Column shows   | Threshold |
-| -------------- | --------- |
-| Trailing PE    | >50 = red |
-| Forward PE     | >50 = red |
-| Dividend Rate  | — (theme) |
-| Volume (K/M/G) | — (theme) |
 
 ## Development
 
