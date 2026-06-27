@@ -2,7 +2,7 @@
 import { html, nothing, render } from "lit";
 import { DebugMetrics } from "./debug.js";
 import { resolveIcon } from "./icons.js";
-import { DATA_LABELS, headerHtml, stockSectionHtml } from "./render.js";
+import { DATA_LABELS, DEFAULT_STATE_COLORS, headerHtml, stockSectionHtml } from "./render.js";
 import { SubscriptionManager } from "./subscription.js";
 import type { CardConfig, Hass, StockEntry } from "./types.js";
 
@@ -250,6 +250,7 @@ class YahooFinanceBoardCard extends HTMLElement {
 
       const prefix = this._prefix;
       const rowMeta = this._rowMeta;
+      const colors = { ...DEFAULT_STATE_COLORS, ...this._config.colors };
 
       if (debug) this._debug.track("rendered");
 
@@ -271,12 +272,12 @@ class YahooFinanceBoardCard extends HTMLElement {
             ${headerHtml(this._dataIndex)}
             ${
               pinned.length
-                ? stockSectionHtml(pinned, states, prefix, this._dataIndex, rowMeta)
+                ? stockSectionHtml(pinned, states, prefix, this._dataIndex, rowMeta, false, colors)
                 : nothing
             }
             ${
               sorted.length
-                ? stockSectionHtml(sorted, states, prefix, this._dataIndex, rowMeta, true)
+                ? stockSectionHtml(sorted, states, prefix, this._dataIndex, rowMeta, true, colors)
                 : nothing
             }
           </ha-card>

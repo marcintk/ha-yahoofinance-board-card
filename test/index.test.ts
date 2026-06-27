@@ -184,6 +184,25 @@ describe("YahooFinanceBoardCard", () => {
     });
   });
 
+  describe("state colors", () => {
+    it("renders default theme colors for REGULAR state", () => {
+      const card = makeCard();
+      card.setConfig(baseConfig);
+      card.hass = makeHass({ "sensor.yahoofinance_dji": makeState(baseAttrs) });
+      expect(card.shadowRoot.innerHTML).toContain("var(--primary-text-color)");
+    });
+
+    it("applies user color override from config", () => {
+      const card = makeCard();
+      card.setConfig({ ...baseConfig, colors: { REGULAR: "rebeccapurple" } });
+      card.hass = makeHass({ "sensor.yahoofinance_dji": makeState(baseAttrs) });
+      const html = card.shadowRoot.innerHTML;
+      expect(html).toContain("rebeccapurple");
+      // unspecified states keep their defaults
+      expect(html).toContain("var(--secondary-text-color)");
+    });
+  });
+
   describe("set hass", () => {
     it("renders on first hass assignment when config is set", () => {
       const card = makeCard();
