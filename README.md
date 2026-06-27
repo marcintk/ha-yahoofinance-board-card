@@ -123,7 +123,7 @@ Finance ticker:
 
 | Column   | Shows                                                                                     |
 | -------- | ----------------------------------------------------------------------------------------- |
-| Name     | Stock name; colored by 1d change during `REGULAR` session, gray otherwise                 |
+| Name     | Stock name; colored by 1d change during `REGULAR` session, theme text color otherwise     |
 | Pre/Post | Pre or post market change %; background color indicates session type                      |
 | 1d%      | Regular market change %; highlighted gray background during `REGULAR` session             |
 | 50d%     | 50-day average change % (±30% threshold for color)                                        |
@@ -135,11 +135,14 @@ Finance ticker:
 
 | State      | Pre/Post background | Name color     |
 | ---------- | ------------------- | -------------- |
-| `PREPRE`   | lightblue           | gray           |
-| `PRE`      | khaki               | gray           |
+| `PREPRE`   | lightblue           | theme text     |
+| `PRE`      | khaki               | theme text     |
 | `REGULAR`  | — (none)            | by 1d change % |
-| `POST`     | pink                | gray           |
-| `POSTPOST` | indigo              | gray           |
+| `POST`     | pink                | theme text     |
+| `POSTPOST` | indigo              | theme text     |
+
+Neutral text (name/price outside `REGULAR`, dashes, and the Dividend/Volume data cells) follows
+`--secondary-text-color` from the active Home Assistant theme, falling back to gray.
 
 ### Data column cycle
 
@@ -147,8 +150,8 @@ Finance ticker:
 | -------------- | --------- |
 | Trailing PE    | >50 = red |
 | Forward PE     | >50 = red |
-| Dividend Rate  | — (gray)  |
-| Volume (K/M/G) | — (gray)  |
+| Dividend Rate  | — (theme) |
+| Volume (K/M/G) | — (theme) |
 
 ## Development
 
