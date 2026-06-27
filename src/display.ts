@@ -9,12 +9,9 @@ export function rateColor(rate: number, threshold = 10.0): string {
   return "gray";
 }
 
-export function nameColor(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return "gray";
-  if (attrs.marketState === "REGULAR") {
-    return rateColor(attrs.regularMarketChangePercent ?? 0);
-  }
-  return "gray";
+export function nameColor(attrs: YahooFinanceAttributes | null): string | null {
+  if (!attrs || attrs.marketState !== "REGULAR") return null;
+  return rateColor(attrs.regularMarketChangePercent ?? 0);
 }
 
 export function prepostColor(attrs: YahooFinanceAttributes | null): string {

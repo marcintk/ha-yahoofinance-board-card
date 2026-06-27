@@ -36,16 +36,16 @@ describe("rateColor", () => {
 });
 
 describe("nameColor", () => {
-  it("returns gray for null attrs", () => {
-    expect(nameColor(null)).toBe("gray");
+  it("returns null for null attrs", () => {
+    expect(nameColor(null)).toBeNull();
   });
 
-  it("returns gray for PRE state", () => {
-    expect(nameColor({ marketState: "PRE", regularMarketChangePercent: 5 })).toBe("gray");
+  it("returns null for PRE state", () => {
+    expect(nameColor({ marketState: "PRE", regularMarketChangePercent: 5 })).toBeNull();
   });
 
-  it("returns gray for POST state", () => {
-    expect(nameColor({ marketState: "POST", regularMarketChangePercent: 5 })).toBe("gray");
+  it("returns null for POST state", () => {
+    expect(nameColor({ marketState: "POST", regularMarketChangePercent: 5 })).toBeNull();
   });
 
   it("returns seagreen for REGULAR with positive change", () => {
