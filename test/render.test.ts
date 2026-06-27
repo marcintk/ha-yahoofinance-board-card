@@ -1,6 +1,6 @@
 import { render, type TemplateResult } from "lit";
 import { describe, expect, it } from "vitest";
-import { headerHtml, stockRowHtml, stockSectionHtml } from "../src/render.js";
+import { DEFAULT_STATE_COLORS, headerHtml, stockRowHtml, stockSectionHtml } from "../src/render.js";
 
 function doc(template: TemplateResult): HTMLElement {
   const el = document.createElement("div");
@@ -90,7 +90,9 @@ describe("stockRowHtml", () => {
 
   it("does not apply mark to the price cell", () => {
     const el = doc(stockRowHtml({ ...stock, mark: "gold" }, baseAttrs, 0, "Apple"));
-    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("white");
+    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain(
+      "var(--primary-text-color)"
+    );
     expect(el.querySelector(".col-price")?.getAttribute("style")).not.toContain("gold");
   });
 
@@ -159,14 +161,28 @@ describe("stockRowHtml", () => {
     expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("lightblue");
   });
 
-  it("applies pink background for POST market state", () => {
+  it("applies palevioletred background for POST market state", () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: "POST" }, 0, "Apple"));
-    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("pink");
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("palevioletred");
   });
 
-  it("applies indigo background for POSTPOST market state", () => {
+  it("applies mediumpurple background for POSTPOST market state", () => {
     const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: "POSTPOST" }, 0, "Apple"));
-    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("indigo");
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("mediumpurple");
+  });
+
+  it("applies primary-text-color prepost background for REGULAR market state", () => {
+    const el = doc(stockRowHtml(stock, baseAttrs, 0, "Apple"));
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain(
+      "background-color:var(--primary-text-color)"
+    );
+  });
+
+  it("applies secondary-text-color prepost background when state is unknown", () => {
+    const el = doc(stockRowHtml(stock, null, 0, "Apple"));
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain(
+      "background-color:var(--secondary-text-color)"
+    );
   });
 
   it("colors price cell khaki for PRE market state", () => {
@@ -189,14 +205,25 @@ describe("stockRowHtml", () => {
     expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("mediumpurple");
   });
 
-  it("colors price cell white during REGULAR market state", () => {
+  it("colors price cell with primary-text-color during REGULAR market state", () => {
     const el = doc(stockRowHtml(stock, baseAttrs, 0, "Apple"));
-    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("white");
+    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain(
+      "color:var(--primary-text-color)"
+    );
   });
 
-  it("has no inline color on price cell when attrs are null", () => {
+  it("colors price cell with secondary-text-color when state is unknown", () => {
     const el = doc(stockRowHtml(stock, null, 0, "Apple"));
-    expect(el.querySelector(".col-price")?.getAttribute("style") ?? "").toBe("");
+    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain(
+      "color:var(--secondary-text-color)"
+    );
+  });
+
+  it("applies user color override to price and prepost cells", () => {
+    const colors = { ...DEFAULT_STATE_COLORS, REGULAR: "rebeccapurple" };
+    const el = doc(stockRowHtml(stock, baseAttrs, 0, "Apple", colors));
+    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("rebeccapurple");
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("rebeccapurple");
   });
 
   it("applies lightgray 1d change background for REGULAR market state", () => {

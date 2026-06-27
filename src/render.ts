@@ -1,19 +1,14 @@
 import { html, nothing, type TemplateResult } from "lit";
 import { nameColor, prepostColor, rateColor } from "./display.js";
 import { dataText, formatRate, prepostText, priceText } from "./format.js";
-import type { MarketState, StockEntry, YahooFinanceAttributes } from "./types.js";
+import type { StateColors, StockEntry, YahooFinanceAttributes } from "./types.js";
 
-const _PREPOST_BG: Partial<Record<MarketState, string>> = {
+/** One color per market state, used as price text and prepost background. User-overridable. */
+export const DEFAULT_STATE_COLORS: StateColors = {
+  UNKNOWN: "var(--secondary-text-color)",
+  REGULAR: "var(--primary-text-color)",
   PREPRE: "lightblue",
   PRE: "khaki",
-  POST: "pink",
-  POSTPOST: "indigo",
-};
-
-const _PRICE_COLOR: Record<MarketState, string> = {
-  PREPRE: "lightblue",
-  PRE: "khaki",
-  REGULAR: "white",
   POST: "palevioletred",
   POSTPOST: "mediumpurple",
 };
@@ -36,13 +31,13 @@ export function stockRowHtml(
   stock: StockEntry,
   attrs: YahooFinanceAttributes | null,
   dataIndex: number,
-  label: string
+  label: string,
+  colors: StateColors = DEFAULT_STATE_COLORS
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
 
   const bg1d = ms === "REGULAR" ? "lightgray" : null;
-  const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
-  const priceColor = ms ? _PRICE_COLOR[ms] : null;
+  const stateColor = colors[ms ?? "UNKNOWN"];
   const nc = nameColor(attrs);
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
@@ -50,7 +45,7 @@ export function stockRowHtml(
     <div class="col-name" style=${nc ? `color:${nc};` : nothing}>${label}</div>
     <div
       class="col-prepost"
-      style="color:${prepostColor(attrs)};${bgPrepost ? `background-color:${bgPrepost};` : ""}"
+      style="color:${prepostColor(attrs)};background-color:${stateColor};"
     >${prepostText(attrs)}</div>
     <div
       class="col-1d"
@@ -63,7 +58,7 @@ export function stockRowHtml(
       style="color:${rateColor(attrs?.twoHundredDayAverageChangePercent ?? 0, 30)};"
     >${formatRate(attrs?.twoHundredDayAverageChangePercent, 1)}</div>
     <div class="col-data">${dataText(attrs, dataIndex)}</div>
-    <div class="col-price" style=${priceColor ? `color:${priceColor};` : nothing}>${priceText(attrs)}</div>
+    <div class="col-price" style="color:${stateColor};">${priceText(attrs)}</div>
   </div>`;
 }
 
@@ -73,7 +68,8 @@ export function stockSectionHtml(
   prefix: string,
   dataIndex: number,
   rowMeta: Map<string, string>,
-  sort = false
+  sort = false,
+  colors: StateColors = DEFAULT_STATE_COLORS
 ): TemplateResult {
   const entries = stocks.map((stock) => ({
     stock,
@@ -86,6 +82,6 @@ export function stockSectionHtml(
     );
   return html`${entries.map(({ stock, attrs }) => {
     const label = rowMeta.get(stock.symbol) ?? stock.name;
-    return stockRowHtml(stock, attrs, dataIndex, label);
+    return stockRowHtml(stock, attrs, dataIndex, label, colors);
   })}`;
 }

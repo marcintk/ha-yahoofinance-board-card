@@ -1,5 +1,8 @@
 export type MarketState = "PREPRE" | "PRE" | "REGULAR" | "POST" | "POSTPOST";
 
+/** Per-state color. Shown as price text and prepost background; "UNKNOWN" covers missing state. */
+export type StateColors = Record<MarketState | "UNKNOWN", string>;
+
 export interface YahooFinanceAttributes {
   marketState?: MarketState;
   regularMarketPrice?: number;
@@ -33,6 +36,7 @@ export interface CardConfig {
   fixed_refresh?: number;
   data_rotate_every?: number;
   icons?: "auto" | "none";
+  colors?: Partial<StateColors>;
 }
 
 export interface Hass {
