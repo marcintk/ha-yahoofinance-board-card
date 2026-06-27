@@ -43,10 +43,11 @@ export function stockRowHtml(
   const bg1d = ms === "REGULAR" ? "lightgray" : null;
   const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
   const priceColor = ms ? _PRICE_COLOR[ms] : null;
+  const nc = nameColor(attrs);
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
-    <div class="col-name" style="color:${nameColor(attrs)};">${label}</div>
+    <div class="col-name" style=${nc ? `color:${nc};` : nothing}>${label}</div>
     <div
       class="col-prepost"
       style="color:${prepostColor(attrs)};${bgPrepost ? `background-color:${bgPrepost};` : ""}"
