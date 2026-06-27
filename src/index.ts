@@ -1,9 +1,9 @@
-import { html, nothing, render } from 'lit';
-import { DebugMetrics } from './debug.js';
-import { resolveIcon } from './icons.js';
-import { DATA_LABELS, headerHtml, stockSectionHtml } from './render.js';
-import { SubscriptionManager } from './subscription.js';
-import type { CardConfig, Hass, StockEntry } from './types.js';
+import { html, nothing, render } from "lit";
+import { DebugMetrics } from "./debug.js";
+import { resolveIcon } from "./icons.js";
+import { DATA_LABELS, headerHtml, stockSectionHtml } from "./render.js";
+import { SubscriptionManager } from "./subscription.js";
+import type { CardConfig, Hass, StockEntry } from "./types.js";
 
 const _STYLE_BLOCK = html`<style>
   :host { display: block; }
@@ -84,7 +84,7 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   constructor() {
     super();
-    this._root = this.attachShadow({ mode: 'open' });
+    this._root = this.attachShadow({ mode: "open" });
     this._config = null;
     this._hass = null;
     this._fixedTimer = null;
@@ -133,7 +133,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   }
 
   private get _prefix(): string {
-    return this._config?.prefix ?? 'sensor.yahoofinance_';
+    return this._config?.prefix ?? "sensor.yahoofinance_";
   }
 
   private _buildTrackedIds(): void {
@@ -144,7 +144,7 @@ class YahooFinanceBoardCard extends HTMLElement {
       ...pinned.map((s) => `${prefix}${s.symbol}`),
       ...sorted.map((s) => `${prefix}${s.symbol}`),
     ]);
-    const iconsMode = this._config?.icons ?? 'none';
+    const iconsMode = this._config?.icons ?? "none";
     const allStocks = [...pinned, ...sorted];
     this._rowMeta = new Map(
       allStocks.map((s) => {
@@ -164,7 +164,7 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   private _scheduleRender(): void {
     if (this._renderTimer) return;
-    if (this._config?.debug) this._debug.track('filtered');
+    if (this._config?.debug) this._debug.track("filtered");
     const lazyMs = (this._config?.lazy_refresh ?? 1) * 1000;
     if (lazyMs === 0) {
       this._render();
@@ -179,7 +179,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   private _subscribe(): void {
     if (!this._config || !this._hass?.connection) return;
     this._subscription.subscribe(this._hass.connection, this._trackedIds, () => {
-      if (this._config?.debug) this._debug.track('events');
+      if (this._config?.debug) this._debug.track("events");
       this._scheduleRender();
     });
   }
@@ -212,7 +212,7 @@ class YahooFinanceBoardCard extends HTMLElement {
     const ms = this._config?.debug ? 1000 : 0;
     this._debugTimer = this._resetInterval(this._debugTimer, ms, () => {
       if (this._hass && this._config) {
-        const el = this._root.querySelector('#yf-debug');
+        const el = this._root.querySelector("#yf-debug");
         if (el) el.innerHTML = this._debug.tableHtml();
       }
     });
@@ -235,22 +235,22 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   private _render(): void {
     try {
-      if (!this._config || !this._hass) throw new Error('render called before config/hass set');
+      if (!this._config || !this._hass) throw new Error("render called before config/hass set");
       const { pinned = [], sorted = [], debug, height } = this._config;
       const haCardStyle =
-        (height ? `height:${height};min-height:${height};max-height:${height};` : '') +
-          (debug ? 'position:relative;' : '') || undefined;
+        (height ? `height:${height};min-height:${height};max-height:${height};` : "") +
+          (debug ? "position:relative;" : "") || undefined;
       const states = this._hass.states;
 
       if (!pinned.length && !sorted.length) {
-        this._showError('Add at least one stock to pinned or sorted in your card config.');
+        this._showError("Add at least one stock to pinned or sorted in your card config.");
         return;
       }
 
       const prefix = this._prefix;
       const rowMeta = this._rowMeta;
 
-      if (debug) this._debug.track('rendered');
+      if (debug) this._debug.track("rendered");
 
       render(
         html`
@@ -284,12 +284,12 @@ class YahooFinanceBoardCard extends HTMLElement {
       );
       if (debug) {
         // biome-ignore lint/style/noNonNullAssertion: Lit just rendered #yf-debug above
-        this._root.querySelector('#yf-debug')!.innerHTML = this._debug.tableHtml();
+        this._root.querySelector("#yf-debug")!.innerHTML = this._debug.tableHtml();
       }
     } catch (e) {
       this._showError((e as Error).message);
       // biome-ignore lint/suspicious/noConsole: intentional render error logging
-      console.error('ha-yahoofinance-board-card render error:', e);
+      console.error("ha-yahoofinance-board-card render error:", e);
     }
   }
 
@@ -317,27 +317,27 @@ class YahooFinanceBoardCard extends HTMLElement {
 
   static getStubConfig(): CardConfig {
     return {
-      prefix: 'sensor.yahoofinance_',
+      prefix: "sensor.yahoofinance_",
       pinned: [
-        { symbol: 'dji', name: 'DOW JONES' },
-        { symbol: 'gspc', name: 'S&P 500' },
-        { symbol: 'ixic', name: 'NASDAQ' },
+        { symbol: "dji", name: "DOW JONES" },
+        { symbol: "gspc", name: "S&P 500" },
+        { symbol: "ixic", name: "NASDAQ" },
       ],
       sorted: [
-        { symbol: 'aapl', name: 'Apple' },
-        { symbol: 'msft', name: 'Microsoft' },
-        { symbol: 'nvda', name: 'NVidia' },
+        { symbol: "aapl", name: "Apple" },
+        { symbol: "msft", name: "Microsoft" },
+        { symbol: "nvda", name: "NVidia" },
       ],
     };
   }
 }
 
-customElements.define('ha-yahoofinance-board-card', YahooFinanceBoardCard);
+customElements.define("ha-yahoofinance-board-card", YahooFinanceBoardCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: 'ha-yahoofinance-board-card',
-  name: 'Yahoo Finance Board Card',
-  description: 'Compact stock market board powered by Yahoo Finance integration',
+  type: "ha-yahoofinance-board-card",
+  name: "Yahoo Finance Board Card",
+  description: "Compact stock market board powered by Yahoo Finance integration",
   preview: false,
 });

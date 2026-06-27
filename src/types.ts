@@ -1,4 +1,4 @@
-export type MarketState = 'PREPRE' | 'PRE' | 'REGULAR' | 'POST' | 'POSTPOST';
+export type MarketState = "PREPRE" | "PRE" | "REGULAR" | "POST" | "POSTPOST";
 
 export interface YahooFinanceAttributes {
   marketState?: MarketState;
@@ -32,7 +32,7 @@ export interface CardConfig {
   lazy_refresh?: number;
   fixed_refresh?: number;
   data_rotate_every?: number;
-  icons?: 'auto' | 'none';
+  icons?: "auto" | "none";
 }
 
 export interface Hass {

@@ -1,26 +1,26 @@
-import type { YahooFinanceAttributes } from './types.js';
-import { isPostMarket, isPreMarket } from './utils.js';
+import type { YahooFinanceAttributes } from "./types.js";
+import { isPostMarket, isPreMarket } from "./utils.js";
 
 export function rateColor(rate: number, threshold = 10.0): string {
-  if (rate > threshold) return 'lightseagreen';
-  if (rate > 0) return 'seagreen';
-  if (rate < -threshold) return 'darkorange';
-  if (rate < 0) return 'indianred';
-  return 'gray';
+  if (rate > threshold) return "lightseagreen";
+  if (rate > 0) return "seagreen";
+  if (rate < -threshold) return "darkorange";
+  if (rate < 0) return "indianred";
+  return "gray";
 }
 
 export function nameColor(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return 'gray';
-  if (attrs.marketState === 'REGULAR') {
+  if (!attrs) return "gray";
+  if (attrs.marketState === "REGULAR") {
     return rateColor(attrs.regularMarketChangePercent ?? 0);
   }
-  return 'gray';
+  return "gray";
 }
 
 export function prepostColor(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return 'gray';
+  if (!attrs) return "gray";
   const state = attrs.marketState;
   if (isPreMarket(state)) return rateColor(attrs.preMarketChangePercent ?? 0);
   if (isPostMarket(state)) return rateColor(attrs.postMarketChangePercent ?? 0);
-  return 'gray';
+  return "gray";
 }
