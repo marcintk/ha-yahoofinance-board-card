@@ -6,7 +6,7 @@ import { DATA_LABELS, DEFAULT_STATE_COLORS, headerHtml, stockSectionHtml } from 
 import { SubscriptionManager } from "./subscription.js";
 import type { CardConfig, Hass, StockEntry } from "./types.js";
 
-const _STYLE_BLOCK = html`<style>
+export const CARD_STYLES = `
   :host { display: block; }
 
   ha-card {
@@ -20,7 +20,7 @@ const _STYLE_BLOCK = html`<style>
 
   .stock-header, .stock-row {
     display: grid;
-    grid-template-columns: 1fr 50px 50px 45px 50px 53px 56px;
+    grid-template-columns: 1fr 50px 50px 50px 50px 55px 50px;
     grid-template-rows: 1fr;
     align-items: stretch;
     line-height: 1;
@@ -67,7 +67,9 @@ const _STYLE_BLOCK = html`<style>
   .col-price {
     padding: 0 1px;
   }
-</style>`;
+`;
+
+const _STYLE_BLOCK = html`<style>${CARD_STYLES}</style>`;
 
 class YahooFinanceBoardCard extends HTMLElement {
   private readonly _root: ShadowRoot;
