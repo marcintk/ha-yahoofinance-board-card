@@ -2,7 +2,8 @@ import { html, type TemplateResult } from "lit";
 import type { YahooFinanceAttributes } from "./types.js";
 import { isPostMarket, isPreMarket } from "./utils.js";
 
-const _DASH = html`<span style="color:gray;">-</span>`;
+const _NEUTRAL = "var(--secondary-text-color, gray)";
+const _DASH = html`<span style="color:${_NEUTRAL};">-</span>`;
 
 export function formatRate(rate: number | null | undefined, precision: number): string {
   if (rate == null || Number.isNaN(rate)) return "-";
@@ -57,7 +58,7 @@ function _dataVal(
 ): TemplateResult {
   const data = raw ?? NaN;
   if (Number.isNaN(data) || data === 0) return _DASH;
-  let color = "gray";
+  let color = _NEUTRAL;
   if (threshold > 0 && data > 0) color = "seagreen";
   if (threshold > 0 && data > threshold) color = "indianred";
   return html`<span style="color:${color};">${data.toFixed(precision)}${suffix}</span>`;
@@ -68,5 +69,5 @@ function _volumeVal(raw: number | undefined): TemplateResult {
   if (!data) return _DASH;
   const [n, s] =
     data > 1e9 ? [data / 1e9, "G"] : data > 1e6 ? [data / 1e6, "M"] : [data / 1e3, "K"];
-  return html`<span style="color:gray;">${n.toFixed(0)}${s}</span>`;
+  return html`<span style="color:${_NEUTRAL};">${n.toFixed(0)}${s}</span>`;
 }

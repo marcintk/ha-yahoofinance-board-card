@@ -13,7 +13,7 @@ const _STYLE_BLOCK = html`<style>
     padding: 4px 2px;
     box-sizing: border-box;
     font-family: var(--paper-font-body1_-_font-family, sans-serif);
-    color: darkgray;
+    color: var(--secondary-text-color, darkgray);
     font-size: 13px;
     overflow: hidden;
   }
