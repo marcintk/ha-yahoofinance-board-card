@@ -1,14 +1,5 @@
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch", "version-update:semver-minor", "version-update:semver-major"]
-    allow:
-      - dependency-name: ha-card-shared
   - package-ecosystem: github-actions
     directory: /
     schedule:
