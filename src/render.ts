@@ -42,7 +42,7 @@ export function stockRowHtml(
 
   const bg1d = ms === "REGULAR" ? "lightgray" : null;
   const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
-  const priceColor = ms ? _PRICE_COLOR[ms] : "gray";
+  const priceColor = ms ? _PRICE_COLOR[ms] : null;
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
@@ -62,7 +62,7 @@ export function stockRowHtml(
       style="color:${rateColor(attrs?.twoHundredDayAverageChangePercent ?? 0, 30)};"
     >${formatRate(attrs?.twoHundredDayAverageChangePercent, 1)}</div>
     <div class="col-data">${dataText(attrs, dataIndex)}</div>
-    <div class="col-price" style="color:${priceColor};">${priceText(attrs)}</div>
+    <div class="col-price" style=${priceColor ? `color:${priceColor};` : nothing}>${priceText(attrs)}</div>
   </div>`;
 }
 

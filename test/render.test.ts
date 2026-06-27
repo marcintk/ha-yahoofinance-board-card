@@ -194,9 +194,9 @@ describe("stockRowHtml", () => {
     expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("white");
   });
 
-  it("colors price cell gray when attrs are null", () => {
+  it("has no inline color on price cell when attrs are null", () => {
     const el = doc(stockRowHtml(stock, null, 0, "Apple"));
-    expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("gray");
+    expect(el.querySelector(".col-price")?.getAttribute("style") ?? "").toBe("");
   });
 
   it("applies lightgray 1d change background for REGULAR market state", () => {
