@@ -1,24 +1,24 @@
-import { html, nothing, type TemplateResult } from 'lit';
-import { nameColor, prepostColor, rateColor } from './display.js';
-import { dataText, formatRate, prepostText, priceText } from './format.js';
-import type { MarketState, StockEntry, YahooFinanceAttributes } from './types.js';
+import { html, nothing, type TemplateResult } from "lit";
+import { nameColor, prepostColor, rateColor } from "./display.js";
+import { dataText, formatRate, prepostText, priceText } from "./format.js";
+import type { MarketState, StockEntry, YahooFinanceAttributes } from "./types.js";
 
 const _PREPOST_BG: Partial<Record<MarketState, string>> = {
-  PREPRE: 'lightblue',
-  PRE: 'khaki',
-  POST: 'pink',
-  POSTPOST: 'indigo',
+  PREPRE: "lightblue",
+  PRE: "khaki",
+  POST: "pink",
+  POSTPOST: "indigo",
 };
 
 const _PRICE_COLOR: Record<MarketState, string> = {
-  PREPRE: 'lightblue',
-  PRE: 'khaki',
-  REGULAR: 'white',
-  POST: 'palevioletred',
-  POSTPOST: 'mediumpurple',
+  PREPRE: "lightblue",
+  PRE: "khaki",
+  REGULAR: "white",
+  POST: "palevioletred",
+  POSTPOST: "mediumpurple",
 };
 
-export const DATA_LABELS = ['PE', 'FPE', 'Div', 'Vol'];
+export const DATA_LABELS = ["PE", "FPE", "Div", "Vol"];
 
 export function headerHtml(dataIndex = 0): TemplateResult {
   return html`<div class="stock-header">
@@ -27,7 +27,7 @@ export function headerHtml(dataIndex = 0): TemplateResult {
     <div class="col-1d">1d%</div>
     <div class="col-50d">50d%</div>
     <div class="col-200d">200d%</div>
-    <div class="col-data">${DATA_LABELS[dataIndex] ?? 'PE'}</div>
+    <div class="col-data">${DATA_LABELS[dataIndex] ?? "PE"}</div>
     <div class="col-price">Price</div>
   </div>`;
 }
@@ -40,20 +40,20 @@ export function stockRowHtml(
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
 
-  const bg1d = ms === 'REGULAR' ? 'lightgray' : null;
+  const bg1d = ms === "REGULAR" ? "lightgray" : null;
   const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
-  const priceColor = ms ? _PRICE_COLOR[ms] : 'gray';
+  const priceColor = ms ? _PRICE_COLOR[ms] : "gray";
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
     <div class="col-name" style="color:${nameColor(attrs)};">${label}</div>
     <div
       class="col-prepost"
-      style="color:${prepostColor(attrs)};${bgPrepost ? `background-color:${bgPrepost};` : ''}"
+      style="color:${prepostColor(attrs)};${bgPrepost ? `background-color:${bgPrepost};` : ""}"
     >${prepostText(attrs)}</div>
     <div
       class="col-1d"
-      style="color:${rateColor(attrs?.regularMarketChangePercent ?? 0)};${bg1d ? `background-color:${bg1d};` : ''}"
+      style="color:${rateColor(attrs?.regularMarketChangePercent ?? 0)};${bg1d ? `background-color:${bg1d};` : ""}"
     >${formatRate(attrs?.regularMarketChangePercent, 2)}</div>
     <div class="col-50d" style="color:${rateColor(attrs?.fiftyDayAverageChangePercent ?? 0, 30)};"
     >${formatRate(attrs?.fiftyDayAverageChangePercent, 1)}</div>

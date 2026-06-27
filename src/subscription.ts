@@ -1,4 +1,4 @@
-import type { Hass } from './types.js';
+import type { Hass } from "./types.js";
 
 export class SubscriptionManager {
   private _gen: number;
@@ -14,7 +14,7 @@ export class SubscriptionManager {
   }
 
   subscribe(
-    connection: Hass['connection'],
+    connection: Hass["connection"],
     trackedIds: Set<string> | null,
     onMatch: () => void
   ): void {
@@ -25,7 +25,7 @@ export class SubscriptionManager {
         if (this._gen === gen && trackedIds?.has(event.data.entity_id)) {
           onMatch();
         }
-      }, 'state_changed')
+      }, "state_changed")
       .then((unsub) => {
         if (this._gen === gen) {
           this._unsub = unsub;

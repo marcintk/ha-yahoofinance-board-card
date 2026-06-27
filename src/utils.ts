@@ -1,11 +1,11 @@
-import type { MarketState } from './types.js';
+import type { MarketState } from "./types.js";
 
 export function isPreMarket(state: MarketState | null | undefined): boolean {
-  return state === 'PREPRE' || state === 'PRE';
+  return state === "PREPRE" || state === "PRE";
 }
 
 export function isPostMarket(state: MarketState | null | undefined): boolean {
-  return state === 'POST' || state === 'POSTPOST';
+  return state === "POST" || state === "POSTPOST";
 }
 
 export function timeAgo(ms: number): string {

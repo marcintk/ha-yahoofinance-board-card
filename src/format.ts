@@ -1,11 +1,11 @@
-import { html, type TemplateResult } from 'lit';
-import type { YahooFinanceAttributes } from './types.js';
-import { isPostMarket, isPreMarket } from './utils.js';
+import { html, type TemplateResult } from "lit";
+import type { YahooFinanceAttributes } from "./types.js";
+import { isPostMarket, isPreMarket } from "./utils.js";
 
 const _DASH = html`<span style="color:gray;">-</span>`;
 
 export function formatRate(rate: number | null | undefined, precision: number): string {
-  if (rate == null || Number.isNaN(rate)) return '-';
+  if (rate == null || Number.isNaN(rate)) return "-";
   const abs = Math.abs(rate).toFixed(precision);
   if (rate > 0) return `+${abs}`;
   if (rate < 0) return `-${abs}`;
@@ -14,7 +14,7 @@ export function formatRate(rate: number | null | undefined, precision: number): 
 
 export function formatPrice(price: number | null | undefined, fallback = 0): string {
   const data = price || fallback;
-  if (!data) return '-';
+  if (!data) return "-";
   if (data >= 1e6) return `${(data / 1e6).toFixed(1)}M`;
   if (data >= 10000) return `${(data / 1000).toFixed(0)}K`;
   if (data > 1000) return data.toFixed(0);
@@ -23,7 +23,7 @@ export function formatPrice(price: number | null | undefined, fallback = 0): str
 }
 
 export function priceText(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return '-';
+  if (!attrs) return "-";
   const state = attrs.marketState;
   if (isPreMarket(state)) return formatPrice(attrs.preMarketPrice, attrs.regularMarketPrice);
   if (isPostMarket(state)) return formatPrice(attrs.postMarketPrice, attrs.regularMarketPrice);
@@ -31,20 +31,20 @@ export function priceText(attrs: YahooFinanceAttributes | null): string {
 }
 
 export function prepostText(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return '';
+  if (!attrs) return "";
   const state = attrs.marketState;
   if (isPreMarket(state)) return formatRate(attrs.preMarketChangePercent, 2);
   if (isPostMarket(state)) return formatRate(attrs.postMarketChangePercent, 2);
-  return '';
+  return "";
 }
 
 export function dataText(
   attrs: YahooFinanceAttributes | null | undefined,
   dataIndex: number
 ): TemplateResult {
-  if (dataIndex === 0) return _dataVal(attrs?.trailingPE, 1, 'X', 50);
-  if (dataIndex === 1) return _dataVal(attrs?.forwardPE, 1, 'X', 50);
-  if (dataIndex === 2) return _dataVal(attrs?.dividendRate, 2, '', 0);
+  if (dataIndex === 0) return _dataVal(attrs?.trailingPE, 1, "X", 50);
+  if (dataIndex === 1) return _dataVal(attrs?.forwardPE, 1, "X", 50);
+  if (dataIndex === 2) return _dataVal(attrs?.dividendRate, 2, "", 0);
   if (dataIndex === 3) return _volumeVal(attrs?.regularMarketVolume);
   return _DASH;
 }
@@ -57,9 +57,9 @@ function _dataVal(
 ): TemplateResult {
   const data = raw ?? NaN;
   if (Number.isNaN(data) || data === 0) return _DASH;
-  let color = 'gray';
-  if (threshold > 0 && data > 0) color = 'seagreen';
-  if (threshold > 0 && data > threshold) color = 'indianred';
+  let color = "gray";
+  if (threshold > 0 && data > 0) color = "seagreen";
+  if (threshold > 0 && data > threshold) color = "indianred";
   return html`<span style="color:${color};">${data.toFixed(precision)}${suffix}</span>`;
 }
 
@@ -67,6 +67,6 @@ function _volumeVal(raw: number | undefined): TemplateResult {
   const data = raw ?? 0;
   if (!data) return _DASH;
   const [n, s] =
-    data > 1e9 ? [data / 1e9, 'G'] : data > 1e6 ? [data / 1e6, 'M'] : [data / 1e3, 'K'];
+    data > 1e9 ? [data / 1e9, "G"] : data > 1e6 ? [data / 1e6, "M"] : [data / 1e3, "K"];
   return html`<span style="color:gray;">${n.toFixed(0)}${s}</span>`;
 }
