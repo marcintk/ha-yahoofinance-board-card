@@ -38,6 +38,7 @@ export function stockRowHtml(
 
   const bg1d = ms === "REGULAR" ? "lightgray" : null;
   const stateColor = colors[ms ?? "UNKNOWN"];
+  const prepostBg = ms && ms !== "REGULAR" ? stateColor : null;
   const nc = nameColor(attrs);
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
@@ -45,7 +46,7 @@ export function stockRowHtml(
     <div class="col-name" style=${nc ? `color:${nc};` : nothing}>${label}</div>
     <div
       class="col-prepost"
-      style="color:${prepostColor(attrs)};background-color:${stateColor};"
+      style="color:${prepostColor(attrs)};${prepostBg ? `background-color:${prepostBg};` : ""}"
     >${prepostText(attrs)}</div>
     <div
       class="col-1d"

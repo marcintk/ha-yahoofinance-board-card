@@ -75,18 +75,18 @@ sorted:
 
 ### Card options
 
-| Option              | Type             | Default                | Description                                                                                                                                                                                             |
-| ------------------- | ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                                                                                                                             |
-| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                                                                                                                                          |
-| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                                                                                                                                          |
-| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons                                                                                                              |
-| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                                                                                                                               |
-| `colors`            | map              | theme-based            | Per-state color override (keys: `UNKNOWN`, `REGULAR`, `PREPRE`, `PRE`, `POST`, `POSTPOST`); each applies to price text + pre/post background. See [Market states and colors](#market-states-and-colors) |
-| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                                                                                                                            |
-| `lazy_refresh`      | number           | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately                                                                     |
-| `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                                                                                          |
-| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)                                                                                                                       |
+| Option              | Type             | Default                | Description                                                                                                                         |
+| ------------------- | ---------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                                                         |
+| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                                                                      |
+| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                                                                      |
+| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons                                          |
+| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                                                           |
+| `colors`            | map              | —                      | Per-state color overrides; see [Market states and colors](#market-states-and-colors)                                                |
+| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                                                        |
+| `lazy_refresh`      | number           | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately |
+| `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                      |
+| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)                                                   |
 
 ### Stock entry options
 
@@ -124,7 +124,7 @@ Finance ticker:
 
 | Column   | Shows                                                                                     |
 | -------- | ----------------------------------------------------------------------------------------- |
-| Name     | Stock name; colored by 1d change during `REGULAR` session, theme text color otherwise     |
+| Name     | Stock name; colored by 1d% during `REGULAR` session, theme secondary color otherwise      |
 | Pre/Post | Pre or post market change %; background color indicates session type                      |
 | 1d%      | Regular market change %; highlighted gray background during `REGULAR` session             |
 | 50d%     | 50-day average change % (±30% threshold for color)                                        |
@@ -134,35 +134,25 @@ Finance ticker:
 
 ### Market states and colors
 
-Each market state has a single color, used both as the **Price** text color and the **Pre/Post**
-background. `REGULAR` and `UNKNOWN` default to theme variables so the card stays readable on any
-theme (light or dark).
+The card uses one color per market state, applied as the **Price** text color and — during pre/post
+sessions — as the **Pre/Post** column background.
 
-| State                     | Default color                 | Name color     |
-| ------------------------- | ----------------------------- | -------------- |
-| `UNKNOWN` (market closed) | `var(--secondary-text-color)` | theme text     |
-| `REGULAR`                 | `var(--primary-text-color)`   | by 1d change % |
-| `PREPRE`                  | lightblue                     | theme text     |
-| `PRE`                     | khaki                         | theme text     |
-| `POST`                    | palevioletred                 | theme text     |
-| `POSTPOST`                | mediumpurple                  | theme text     |
+| State      | When                       | Color                            |
+| ---------- | -------------------------- | -------------------------------- |
+| `UNKNOWN`  | Market closed, data static | `--secondary-text-color` (theme) |
+| `REGULAR`  | Normal trading hours       | `--primary-text-color` (theme)   |
+| `PREPRE`   | Pre-pre market             | lightblue                        |
+| `PRE`      | Pre-market                 | khaki                            |
+| `POST`     | Post-market                | palevioletred                    |
+| `POSTPOST` | Post-post market           | mediumpurple                     |
 
-Override any state via the `colors` option — each value applies to both the price text and the
-pre/post background for that state:
+Override any state via `colors:` in the card config:
 
 ```yaml
-type: custom:ha-yahoofinance-board-card
 colors:
-  REGULAR: "var(--primary-text-color)"
   PRE: "#d4af37"
   POSTPOST: indigo
-pinned:
-  - symbol: dji
-    name: DOW JONES
 ```
-
-Neutral text (name outside `REGULAR`, dashes, and the Dividend/Volume data cells) follows
-`--secondary-text-color` from the active Home Assistant theme, falling back to gray.
 
 ### Data column cycle
 

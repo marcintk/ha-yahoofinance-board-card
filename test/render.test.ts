@@ -171,17 +171,17 @@ describe("stockRowHtml", () => {
     expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("mediumpurple");
   });
 
-  it("applies primary-text-color prepost background for REGULAR market state", () => {
+  it("does not set prepost background for REGULAR market state", () => {
     const el = doc(stockRowHtml(stock, baseAttrs, 0, "Apple"));
-    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain(
-      "background-color:var(--primary-text-color)"
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).not.toContain(
+      "background-color"
     );
   });
 
-  it("applies secondary-text-color prepost background when state is unknown", () => {
+  it("does not set prepost background when state is unknown", () => {
     const el = doc(stockRowHtml(stock, null, 0, "Apple"));
-    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain(
-      "background-color:var(--secondary-text-color)"
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).not.toContain(
+      "background-color"
     );
   });
 
@@ -219,10 +219,15 @@ describe("stockRowHtml", () => {
     );
   });
 
-  it("applies user color override to price and prepost cells", () => {
+  it("applies user color override to price cell", () => {
     const colors = { ...DEFAULT_STATE_COLORS, REGULAR: "rebeccapurple" };
     const el = doc(stockRowHtml(stock, baseAttrs, 0, "Apple", colors));
     expect(el.querySelector(".col-price")?.getAttribute("style")).toContain("rebeccapurple");
+  });
+
+  it("applies user color override to prepost background for off-hours states", () => {
+    const colors = { ...DEFAULT_STATE_COLORS, PRE: "rebeccapurple" };
+    const el = doc(stockRowHtml(stock, { ...baseAttrs, marketState: "PRE" }, 0, "Apple", colors));
     expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("rebeccapurple");
   });
 
