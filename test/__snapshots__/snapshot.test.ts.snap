@@ -129,7 +129,7 @@ exports[`stockRowHtml per market state > REGULAR 1`] = `
 "<!----><div class="stock-row">
     <div class="col-name" style="color:seagreen;"><!--?-->Apple</div>
     <div class="col-prepost" style="color:gray;"><!--?--></div>
-    <div class="col-1d" style="color:seagreen;background-color:lightgray;"><!--?-->+2.50</div>
+    <div class="col-1d" style="color:seagreen;background-color:var(--primary-text-color);"><!--?-->+2.50</div>
     <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
     <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
     <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
@@ -141,7 +141,7 @@ exports[`stockRowHtml per market state > REGULAR with mark 1`] = `
 "<!----><div class="stock-row" style="background-color:gold;">
     <div class="col-name" style="color:seagreen;"><!--?-->Apple</div>
     <div class="col-prepost" style="color:gray;"><!--?--></div>
-    <div class="col-1d" style="color:seagreen;background-color:lightgray;"><!--?-->+2.50</div>
+    <div class="col-1d" style="color:seagreen;background-color:var(--primary-text-color);"><!--?-->+2.50</div>
     <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
     <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
     <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>

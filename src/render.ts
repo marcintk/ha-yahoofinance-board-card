@@ -36,8 +36,8 @@ export function stockRowHtml(
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
 
-  const bg1d = ms === "REGULAR" ? "lightgray" : null;
   const stateColor = colors[ms ?? "UNKNOWN"];
+  const bg1d = ms === "REGULAR" ? stateColor : null;
   const prepostBg = ms && ms !== "REGULAR" ? stateColor : null;
   const nc = nameColor(attrs);
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
