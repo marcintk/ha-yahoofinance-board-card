@@ -68,24 +68,24 @@ exports[`CARD_STYLES > matches snapshot 1`] = `
 exports[`stockRowHtml per market state > POST 1`] = `
 "<!----><div class="stock-row">
     <div class="col-name"><!--?-->Apple</div>
-    <div class="col-prepost" style="color:indianred;background-color:palevioletred;"><!--?-->-0.50</div>
+    <div class="col-prepost" style="color:indianred;background-color:plum;"><!--?-->-0.50</div>
     <div class="col-1d" style="color:seagreen;"><!--?-->+2.50</div>
     <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
     <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
     <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
-    <div class="col-price" style="color:palevioletred;"><!--?-->174.0</div>
+    <div class="col-price" style="color:plum;"><!--?-->174.0</div>
   </div>"
 `;
 
 exports[`stockRowHtml per market state > POSTPOST 1`] = `
 "<!----><div class="stock-row">
     <div class="col-name"><!--?-->Apple</div>
-    <div class="col-prepost" style="color:indianred;background-color:mediumpurple;"><!--?-->-0.50</div>
+    <div class="col-prepost" style="color:indianred;background-color:darkslateblue;"><!--?-->-0.50</div>
     <div class="col-1d" style="color:seagreen;"><!--?-->+2.50</div>
     <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
     <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
     <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
-    <div class="col-price" style="color:mediumpurple;"><!--?-->174.0</div>
+    <div class="col-price" style="color:darkslateblue;"><!--?-->174.0</div>
   </div>"
 `;
 

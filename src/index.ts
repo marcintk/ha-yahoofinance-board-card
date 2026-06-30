@@ -252,7 +252,12 @@ class YahooFinanceBoardCard extends HTMLElement {
 
       const prefix = this._prefix;
       const rowMeta = this._rowMeta;
-      const colors = { ...DEFAULT_STATE_COLORS, ...this._config.colors };
+      const colors = {
+        ...DEFAULT_STATE_COLORS,
+        ...Object.fromEntries(
+          Object.entries(this._config.colors ?? {}).map(([k, v]) => [k.toUpperCase(), v])
+        ),
+      };
 
       if (debug) this._debug.track("rendered");
 

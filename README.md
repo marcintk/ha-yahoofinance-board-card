@@ -137,21 +137,21 @@ Finance ticker:
 The card uses one color per market state, applied as the **Price** text color, the **Pre/Post**
 column background during pre/post sessions, and the **1d%** column background during regular hours.
 
-| State      | When                       | Default                          |
-| ---------- | -------------------------- | -------------------------------- |
-| `UNKNOWN`  | Market closed, data static | `--secondary-text-color` (theme) |
-| `REGULAR`  | Normal trading hours       | `--primary-text-color` (theme)   |
-| `PREPRE`   | Pre-pre market             | lightblue                        |
-| `PRE`      | Pre-market                 | khaki                            |
-| `POST`     | Post-market                | palevioletred                    |
-| `POSTPOST` | Post-post market           | mediumpurple                     |
+| `colors:` key | When                                | Default                          |
+| ------------- | ----------------------------------- | -------------------------------- |
+| `prepre`      | Pre-pre market                      | lightblue                        |
+| `pre`         | Pre-market                          | khaki                            |
+| `regular`     | Normal trading hours                | `--primary-text-color` (theme)   |
+| `post`        | Post-market                         | plum                             |
+| `postpost`    | Post-post market                    | darkslateblue                    |
+| `unknown`     | Entity unavailable or state missing | `--secondary-text-color` (theme) |
 
 Override any state via `colors:` in the card config:
 
 ```yaml
 colors:
-  PRE: "#d4af37"
-  POSTPOST: indigo
+  pre: "#d4af37"
+  postpost: indigo
 ```
 
 ## Development
