@@ -231,9 +231,18 @@ describe("stockRowHtml", () => {
     expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("rebeccapurple");
   });
 
-  it("applies lightgray 1d change background for REGULAR market state", () => {
+  it("applies state color as 1d% background for REGULAR market state", () => {
     const el = doc(stockRowHtml(stock, baseAttrs, 0, "Apple"));
-    expect(el.querySelector(".col-1d")?.getAttribute("style")).toContain("lightgray");
+    expect(el.querySelector(".col-1d")?.getAttribute("style")).toContain(
+      "var(--primary-text-color)"
+    );
+  });
+
+  it("applies colors.REGULAR override as 1d% background", () => {
+    const el = doc(
+      stockRowHtml(stock, baseAttrs, 0, "Apple", { ...DEFAULT_STATE_COLORS, REGULAR: "white" })
+    );
+    expect(el.querySelector(".col-1d")?.getAttribute("style")).toContain("background-color:white");
   });
 
   it("does not inject HTML from label content", () => {

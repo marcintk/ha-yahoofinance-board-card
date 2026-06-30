@@ -134,8 +134,8 @@ Finance ticker:
 
 ### Market states and colors
 
-The card uses one color per market state, applied as the **Price** text color and — during pre/post
-sessions — as the **Pre/Post** column background.
+The card uses one color per market state, applied as the **Price** text color, the **Pre/Post**
+column background during pre/post sessions, and the **1d%** column background during regular hours.
 
 | State      | When                       | Default                          |
 | ---------- | -------------------------- | -------------------------------- |
