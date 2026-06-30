@@ -201,6 +201,14 @@ describe("YahooFinanceBoardCard", () => {
       // unspecified states keep their defaults
       expect(html).toContain("var(--secondary-text-color)");
     });
+
+    it("accepts lowercase color keys from config", () => {
+      const card = makeCard();
+      // ponytail: cast needed — runtime normalises to uppercase, type expects uppercase
+      card.setConfig({ ...baseConfig, colors: { regular: "goldenrod" } as never });
+      card.hass = makeHass({ "sensor.yahoofinance_dji": makeState(baseAttrs) });
+      expect(card.shadowRoot.innerHTML).toContain("goldenrod");
+    });
   });
 
   describe("set hass", () => {

@@ -139,19 +139,19 @@ column background during pre/post sessions, and the **1d%** column background du
 
 | State      | When                       | Default                          |
 | ---------- | -------------------------- | -------------------------------- |
-| `UNKNOWN`  | Market closed, data static | `--secondary-text-color` (theme) |
-| `REGULAR`  | Normal trading hours       | `--primary-text-color` (theme)   |
-| `PREPRE`   | Pre-pre market             | lightblue                        |
-| `PRE`      | Pre-market                 | khaki                            |
-| `POST`     | Post-market                | palevioletred                    |
-| `POSTPOST` | Post-post market           | mediumpurple                     |
+| `unknown`  | Market closed, data static | `--secondary-text-color` (theme) |
+| `regular`  | Normal trading hours       | `--primary-text-color` (theme)   |
+| `prepre`   | Pre-pre market             | lightblue                        |
+| `pre`      | Pre-market                 | khaki                            |
+| `post`     | Post-market                | palevioletred                    |
+| `postpost` | Post-post market           | mediumpurple                     |
 
 Override any state via `colors:` in the card config:
 
 ```yaml
 colors:
-  PRE: "#d4af37"
-  POSTPOST: indigo
+  pre: "#d4af37"
+  postpost: indigo
 ```
 
 ## Development
