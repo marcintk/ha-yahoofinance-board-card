@@ -16,6 +16,15 @@ export interface YahooFinanceAttributes {
   regularMarketVolume?: number;
 }
 
+export interface ColorsConfig {
+  prepre?: string;
+  pre?: string;
+  regular?: string;
+  post?: string;
+  postpost?: string;
+  unknown?: string;
+}
+
 export interface StockEntry {
   symbol: string;
   name: string;
@@ -33,6 +42,8 @@ export interface CardConfig {
   fixed_refresh?: number;
   data_rotate_every?: number;
   icons?: "auto" | "none";
+  colors?: ColorsConfig;
+  highlight_state?: "all" | "regular" | "none";
 }
 
 export interface Hass {

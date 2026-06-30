@@ -1,21 +1,13 @@
 import { html, nothing, type TemplateResult } from "lit";
 import { nameColor, prepostColor, rateColor } from "./display.js";
 import { dataText, formatRate, prepostText, priceText } from "./format.js";
-import type { MarketState, StockEntry, YahooFinanceAttributes } from "./types.js";
+import type { ColorsConfig, StockEntry, YahooFinanceAttributes } from "./types.js";
 
-const _PREPOST_BG: Partial<Record<MarketState, string>> = {
+const _PREPOST_BG: Record<"PREPRE" | "PRE" | "POST" | "POSTPOST", string> = {
   PREPRE: "lightblue",
   PRE: "khaki",
-  POST: "pink",
-  POSTPOST: "indigo",
-};
-
-const _PRICE_COLOR: Record<MarketState, string> = {
-  PREPRE: "lightblue",
-  PRE: "khaki",
-  REGULAR: "white",
-  POST: "palevioletred",
-  POSTPOST: "mediumpurple",
+  POST: "lightpink",
+  POSTPOST: "plum",
 };
 
 export const DATA_LABELS = ["PE", "FPE", "Div", "Vol"];
@@ -36,14 +28,23 @@ export function stockRowHtml(
   stock: StockEntry,
   attrs: YahooFinanceAttributes | null,
   dataIndex: number,
-  label: string
+  label: string,
+  colors?: ColorsConfig,
+  highlightState: "all" | "regular" | "none" = "all"
 ): TemplateResult {
   const ms = attrs?.marketState ?? null;
 
-  const bg1d = ms === "REGULAR" ? "lightgray" : null;
-  const bgPrepost = ms ? (_PREPOST_BG[ms] ?? null) : null;
-  const priceColor = ms ? _PRICE_COLOR[ms] : null;
-  const nc = nameColor(attrs);
+  const msKey = ms?.toLowerCase() as keyof ColorsConfig;
+  const stateColor = ms
+    ? ms !== "REGULAR"
+      ? (colors?.[msKey] ?? _PREPOST_BG[ms as "PREPRE" | "PRE" | "POST" | "POSTPOST"])
+      : (colors?.regular ?? "var(--primary-text-color)")
+    : null;
+  const bg1d = ms === "REGULAR" && highlightState !== "none" ? stateColor : null;
+  const bgPrepost = highlightState === "all" && ms && ms !== "REGULAR" ? stateColor : null;
+  const rawNc = nameColor(attrs);
+  const nc = !ms ? (colors?.unknown ?? rawNc) : rawNc;
+  const priceColor = ms && highlightState !== "none" ? stateColor : null;
   const rowStyle = stock.mark ? `background-color:${stock.mark};` : undefined;
 
   return html`<div class="stock-row" style=${rowStyle ?? nothing}>
@@ -73,7 +74,9 @@ export function stockSectionHtml(
   prefix: string,
   dataIndex: number,
   rowMeta: Map<string, string>,
-  sort = false
+  sort = false,
+  colors?: ColorsConfig,
+  highlightState: "all" | "regular" | "none" = "all"
 ): TemplateResult {
   const entries = stocks.map((stock) => ({
     stock,
@@ -86,6 +89,6 @@ export function stockSectionHtml(
     );
   return html`${entries.map(({ stock, attrs }) => {
     const label = rowMeta.get(stock.symbol) ?? stock.name;
-    return stockRowHtml(stock, attrs, dataIndex, label);
+    return stockRowHtml(stock, attrs, dataIndex, label, colors, highlightState);
   })}`;
 }

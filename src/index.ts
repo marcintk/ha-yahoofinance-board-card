@@ -271,12 +271,30 @@ class YahooFinanceBoardCard extends HTMLElement {
             ${headerHtml(this._dataIndex)}
             ${
               pinned.length
-                ? stockSectionHtml(pinned, states, prefix, this._dataIndex, rowMeta)
+                ? stockSectionHtml(
+                    pinned,
+                    states,
+                    prefix,
+                    this._dataIndex,
+                    rowMeta,
+                    false,
+                    this._config?.colors,
+                    this._config?.highlight_state ?? "all"
+                  )
                 : nothing
             }
             ${
               sorted.length
-                ? stockSectionHtml(sorted, states, prefix, this._dataIndex, rowMeta, true)
+                ? stockSectionHtml(
+                    sorted,
+                    states,
+                    prefix,
+                    this._dataIndex,
+                    rowMeta,
+                    true,
+                    this._config?.colors,
+                    this._config?.highlight_state ?? "all"
+                  )
                 : nothing
             }
           </ha-card>

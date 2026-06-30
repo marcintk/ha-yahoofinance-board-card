@@ -75,17 +75,19 @@ sorted:
 
 ### Card options
 
-| Option              | Type             | Default                | Description                                                                                                                         |
-| ------------------- | ---------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                                                         |
-| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                                                                      |
-| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                                                                      |
-| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons                                          |
-| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                                                           |
-| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                                                        |
-| `lazy_refresh`      | number           | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately |
-| `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                      |
-| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)                                                   |
+| Option              | Type                         | Default                | Description                                                                                                                                                                                                |
+| ------------------- | ---------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prefix`            | string                       | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                                                                                                                                |
+| `pinned`            | list                         | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                                                                                                                                             |
+| `sorted`            | list                         | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                                                                                                                                             |
+| `icons`             | `auto` \| `none`             | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons                                                                                                                 |
+| `data_rotate_every` | number                       | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                                                                                                                                  |
+| `height`            | string                       | auto                   | Card height (CSS value); omit to fit content                                                                                                                                                               |
+| `lazy_refresh`      | number                       | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately                                                                        |
+| `fixed_refresh`     | number                       | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                                                                                             |
+| `debug`             | boolean                      | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)                                                                                                                          |
+| `colors`            | map                          | see market states      | Override default colors per market state (keys: `prepre`, `pre`, `regular`, `post`, `postpost`)                                                                                                            |
+| `highlight_state`   | `all` \| `regular` \| `none` | `all`                  | Controls state-based visual treatment: `all` — prepost backgrounds + 1d% highlight + price color; `regular` — 1d% highlight + price color only (no prepost backgrounds); `none` — no state coloring at all |
 
 ### Stock entry options
 
@@ -133,13 +135,23 @@ Finance ticker:
 
 ### Market states and colors
 
-| State      | Pre/Post background | Name color     |
-| ---------- | ------------------- | -------------- |
-| `PREPRE`   | lightblue           | gray           |
-| `PRE`      | khaki               | gray           |
-| `REGULAR`  | — (none)            | by 1d change % |
-| `POST`     | pink                | gray           |
-| `POSTPOST` | indigo              | gray           |
+Default colors per market state — override any of them via the `colors` key. Use `highlight_state`
+to suppress backgrounds entirely.
+
+| Key        | Background color (col)       | Price text color       |
+| ---------- | ---------------------------- | ---------------------- |
+| `prepre`   | lightblue (Pre/Post)         | lightblue              |
+| `pre`      | khaki (Pre/Post)             | khaki                  |
+| `regular`  | `--primary-text-color` (1d%) | `--primary-text-color` |
+| `post`     | lightpink (Pre/Post)         | lightpink              |
+| `postpost` | plum (Pre/Post)              | plum                   |
+
+```yaml
+colors:
+  pre: "#d4af37"
+  postpost: indigo
+  regular: white
+```
 
 ### Data column cycle
 
