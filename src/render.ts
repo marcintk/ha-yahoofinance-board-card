@@ -9,8 +9,8 @@ export const DEFAULT_STATE_COLORS: StateColors = {
   REGULAR: "var(--primary-text-color)",
   PREPRE: "lightblue",
   PRE: "khaki",
-  POST: "palevioletred",
-  POSTPOST: "mediumpurple",
+  POST: "plum",
+  POSTPOST: "darkslateblue",
 };
 
 export const DATA_LABELS = ["PE", "FPE", "Div", "Vol"];

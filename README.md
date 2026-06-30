@@ -137,14 +137,14 @@ Finance ticker:
 The card uses one color per market state, applied as the **Price** text color, the **Pre/Post**
 column background during pre/post sessions, and the **1d%** column background during regular hours.
 
-| State      | When                       | Default                          |
-| ---------- | -------------------------- | -------------------------------- |
-| `unknown`  | Market closed, data static | `--secondary-text-color` (theme) |
-| `regular`  | Normal trading hours       | `--primary-text-color` (theme)   |
-| `prepre`   | Pre-pre market             | lightblue                        |
-| `pre`      | Pre-market                 | khaki                            |
-| `post`     | Post-market                | palevioletred                    |
-| `postpost` | Post-post market           | mediumpurple                     |
+| `colors:` key | When                                | Default                          |
+| ------------- | ----------------------------------- | -------------------------------- |
+| `prepre`      | Pre-pre market                      | lightblue                        |
+| `pre`         | Pre-market                          | khaki                            |
+| `regular`     | Normal trading hours                | `--primary-text-color` (theme)   |
+| `post`        | Post-market                         | plum                             |
+| `postpost`    | Post-post market                    | darkslateblue                    |
+| `unknown`     | Entity unavailable or state missing | `--secondary-text-color` (theme) |
 
 Override any state via `colors:` in the card config:
 
