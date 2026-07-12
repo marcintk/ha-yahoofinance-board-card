@@ -10,7 +10,7 @@ export function rateColor(rate: number, threshold = 10.0): string {
 }
 
 export function nameColor(attrs: YahooFinanceAttributes | null): string | null {
-  if (!attrs || attrs.marketState !== "REGULAR") return null;
+  if (attrs?.marketState !== "REGULAR") return null;
   return rateColor(attrs.regularMarketChangePercent ?? 0);
 }
 
