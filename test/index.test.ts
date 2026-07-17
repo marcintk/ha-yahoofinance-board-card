@@ -810,13 +810,24 @@ describe("YahooFinanceBoardCard", () => {
       expect(card.shadowRoot.innerHTML).toContain("DOW");
     });
 
-    it("renders debug overlay and version badge when debug:true", () => {
+    it("renders debug overlay when debug:true", () => {
       const card = makeCard();
       card._config = { ...baseConfig, debug: true };
       card._hass = makeHass({ "sensor.yahoofinance_dji": makeState(baseAttrs) });
       card._trackedIds = new Set();
       card._render();
       expect(card.shadowRoot.innerHTML).toContain('id="yf-debug"');
+      expect(card.shadowRoot.innerHTML).toContain("position:relative");
+      expect(card.shadowRoot.textContent).not.toContain("vtest");
+    });
+
+    it("renders version badge without debug overlay when show_version:true", () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, show_version: true };
+      card._hass = makeHass({ "sensor.yahoofinance_dji": makeState(baseAttrs) });
+      card._trackedIds = new Set();
+      card._render();
+      expect(card.shadowRoot.innerHTML).not.toContain('id="yf-debug"');
       expect(card.shadowRoot.innerHTML).toContain("position:relative");
       expect(card.shadowRoot.textContent).toContain("vtest");
     });
