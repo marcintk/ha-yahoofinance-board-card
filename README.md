@@ -86,7 +86,8 @@ sorted:
 | `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                                                        |
 | `lazy_refresh`      | number           | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately |
 | `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                      |
-| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters) and version badge (top-left)                                                   |
+| `show_version`      | boolean          | `false`                | Shows card version badge (top-left corner)                                                                                          |
+| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters)                                                                                |
 
 ### Stock entry options
 

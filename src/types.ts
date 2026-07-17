@@ -32,6 +32,7 @@ export interface CardConfig {
   sorted?: StockEntry[];
   height?: string | number;
   debug?: boolean;
+  show_version?: boolean;
   lazy_refresh?: number;
   fixed_refresh?: number;
   data_rotate_every?: number;
