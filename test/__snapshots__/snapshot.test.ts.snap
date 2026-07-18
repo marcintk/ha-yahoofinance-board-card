@@ -65,6 +65,54 @@ exports[`CARD_STYLES > matches snapshot 1`] = `
 "
 `;
 
+exports[`headerHtml per dataIndex > dataIndex 0 (PE) 1`] = `
+"<!----><div class="stock-header">
+    <div class="col-name"></div>
+    <div class="col-prepost">Pre/Post</div>
+    <div class="col-1d">1d%</div>
+    <div class="col-50d">50d%</div>
+    <div class="col-200d">200d%</div>
+    <div class="col-data"><!--?-->PE</div>
+    <div class="col-price">Price</div>
+  </div>"
+`;
+
+exports[`headerHtml per dataIndex > dataIndex 1 (FPE) 1`] = `
+"<!----><div class="stock-header">
+    <div class="col-name"></div>
+    <div class="col-prepost">Pre/Post</div>
+    <div class="col-1d">1d%</div>
+    <div class="col-50d">50d%</div>
+    <div class="col-200d">200d%</div>
+    <div class="col-data"><!--?-->FPE</div>
+    <div class="col-price">Price</div>
+  </div>"
+`;
+
+exports[`headerHtml per dataIndex > dataIndex 2 (Div) 1`] = `
+"<!----><div class="stock-header">
+    <div class="col-name"></div>
+    <div class="col-prepost">Pre/Post</div>
+    <div class="col-1d">1d%</div>
+    <div class="col-50d">50d%</div>
+    <div class="col-200d">200d%</div>
+    <div class="col-data"><!--?-->Div</div>
+    <div class="col-price">Price</div>
+  </div>"
+`;
+
+exports[`headerHtml per dataIndex > dataIndex 3 (Vol) 1`] = `
+"<!----><div class="stock-header">
+    <div class="col-name"></div>
+    <div class="col-prepost">Pre/Post</div>
+    <div class="col-1d">1d%</div>
+    <div class="col-50d">50d%</div>
+    <div class="col-200d">200d%</div>
+    <div class="col-data"><!--?-->Vol</div>
+    <div class="col-price">Price</div>
+  </div>"
+`;
+
 exports[`stockRowHtml per market state > POST 1`] = `
 "<!----><div class="stock-row">
     <div class="col-name"><!--?-->Apple</div>
@@ -159,4 +207,64 @@ exports[`stockRowHtml per market state > UNKNOWN (null attrs) 1`] = `
     <div class="col-data"><!--?--><span style="color:var(--secondary-text-color, gray);">-</span></div>
     <div class="col-price" style="color:var(--secondary-text-color);"><!--?-->-</div>
   </div>"
+`;
+
+exports[`stockSectionHtml > null attrs (no matching states) 1`] = `
+"<!----><!--?--><!----><div class="stock-row">
+    <div class="col-name"><!--?-->Microsoft</div>
+    <div class="col-prepost" style="color:gray;"><!--?--></div>
+    <div class="col-1d" style="color:gray;"><!--?-->-</div>
+    <div class="col-50d" style="color:gray;"><!--?-->-</div>
+    <div class="col-200d" style="color:gray;"><!--?-->-</div>
+    <div class="col-data"><!--?--><span style="color:var(--secondary-text-color, gray);">-</span></div>
+    <div class="col-price" style="color:var(--secondary-text-color);"><!--?-->-</div>
+  </div><!----><!----><div class="stock-row">
+    <div class="col-name"><!--?-->Apple</div>
+    <div class="col-prepost" style="color:gray;"><!--?--></div>
+    <div class="col-1d" style="color:gray;"><!--?-->-</div>
+    <div class="col-50d" style="color:gray;"><!--?-->-</div>
+    <div class="col-200d" style="color:gray;"><!--?-->-</div>
+    <div class="col-data"><!--?--><span style="color:var(--secondary-text-color, gray);">-</span></div>
+    <div class="col-price" style="color:var(--secondary-text-color);"><!--?-->-</div>
+  </div><!----><!--?-->"
+`;
+
+exports[`stockSectionHtml > sorted puts highest changePercent first 1`] = `
+"<!----><!--?--><!----><div class="stock-row">
+    <div class="col-name" style="color:seagreen;"><!--?-->Apple</div>
+    <div class="col-prepost" style="color:gray;"><!--?--></div>
+    <div class="col-1d" style="color:seagreen;background-color:var(--primary-text-color);"><!--?-->+2.50</div>
+    <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
+    <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
+    <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
+    <div class="col-price" style="color:var(--primary-text-color);"><!--?-->175.5</div>
+  </div><!----><!----><div class="stock-row">
+    <div class="col-name"><!--?-->Microsoft</div>
+    <div class="col-prepost" style="color:seagreen;background-color:khaki;"><!--?-->+0.80</div>
+    <div class="col-1d" style="color:indianred;"><!--?-->-1.00</div>
+    <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
+    <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
+    <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
+    <div class="col-price" style="color:khaki;"><!--?-->178.0</div>
+  </div><!----><!--?-->"
+`;
+
+exports[`stockSectionHtml > unsorted preserves input order 1`] = `
+"<!----><!--?--><!----><div class="stock-row">
+    <div class="col-name"><!--?-->Microsoft</div>
+    <div class="col-prepost" style="color:seagreen;background-color:khaki;"><!--?-->+0.80</div>
+    <div class="col-1d" style="color:indianred;"><!--?-->-1.00</div>
+    <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
+    <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
+    <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
+    <div class="col-price" style="color:khaki;"><!--?-->178.0</div>
+  </div><!----><!----><div class="stock-row">
+    <div class="col-name" style="color:seagreen;"><!--?-->Apple</div>
+    <div class="col-prepost" style="color:gray;"><!--?--></div>
+    <div class="col-1d" style="color:seagreen;background-color:var(--primary-text-color);"><!--?-->+2.50</div>
+    <div class="col-50d" style="color:seagreen;"><!--?-->+5.0</div>
+    <div class="col-200d" style="color:indianred;"><!--?-->-3.0</div>
+    <div class="col-data"><!--?--><span style="color:seagreen;"><!--?-->30.0<!--?-->X</span></div>
+    <div class="col-price" style="color:var(--primary-text-color);"><!--?-->175.5</div>
+  </div><!----><!--?-->"
 `;
