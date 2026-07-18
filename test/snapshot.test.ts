@@ -1,3 +1,4 @@
+import { snapHtml } from "ha-card-shared/test-utils";
 import { render, type TemplateResult } from "lit";
 import { describe, expect, it } from "vitest";
 import { CARD_STYLES } from "../src/index.js";
@@ -6,8 +7,7 @@ import { DEFAULT_STATE_COLORS, headerHtml, stockRowHtml, stockSectionHtml } from
 function doc(template: TemplateResult): string {
   const el = document.createElement("div");
   render(template, el);
-  // Lit embeds non-deterministic instance IDs in HTML comments — normalize them.
-  return el.innerHTML.replace(/<!--\?lit\$\d+\$-->/g, "<!--?-->");
+  return snapHtml(el.innerHTML);
 }
 
 const baseAttrs = {
