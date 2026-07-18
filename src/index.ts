@@ -1,9 +1,8 @@
 /// <reference path="../node_modules/ha-card-shared/globals.d.ts" />
+import { DebugMetrics, SubscriptionManager } from "ha-card-shared/runtime";
 import { html, nothing, render } from "lit";
-import { DebugMetrics } from "./debug.js";
 import { resolveIcon } from "./icons.js";
 import { DATA_LABELS, DEFAULT_STATE_COLORS, headerHtml, stockSectionHtml } from "./render.js";
-import { SubscriptionManager } from "./subscription.js";
 import type { CardConfig, Hass, StockEntry } from "./types.js";
 
 export const CARD_STYLES = `
