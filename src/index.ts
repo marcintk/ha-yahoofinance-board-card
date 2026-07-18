@@ -275,7 +275,7 @@ class YahooFinanceBoardCard extends HTMLElement {
             ${
               show_version
                 ? html`<div
-                  style="position:absolute;top:2px;left:4px;font-family:monospace;font-size:9px;color:#888;pointer-events:none;"
+                  style="position:absolute;top:4px;left:6px;font-family:monospace;font-size:9px;color:#888;pointer-events:none;"
                 >v${__CARD_VERSION__}</div>`
                 : nothing
             }
