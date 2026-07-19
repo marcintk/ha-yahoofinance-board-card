@@ -1,13 +1,17 @@
-@node_modules/ha-card-shared/CLAUDE-SHARED.md @package.json @TODO.md
+@node_modules/ha-card-shared/CLAUDE-SHARED.md @package.json
 
 # ha-yahoofinance-board-card
 
-## Module Map
+## Design Invariants
 
-Every `src/*.ts` module has a corresponding `test/*.test.ts`. New source files must ship with their
-test file. Shared interfaces and types live in `src/types.ts`; global declarations
-(`__CARD_VERSION__`, `Window.customCards`) are in `src/global.d.ts`. `src/types.ts` is the one
-exception — it has no test file.
+Durable visual/UX constraints. Preserve unless the user explicitly changes them.
+
+- Pinned stocks always render in user-configured order — never auto-sorted
+- Sorted stocks always rank by `regularMarketChangePercent` descending (top gainers first)
+- Data column cycles in fixed order: PE → FPE → DivRate → Volume
+- Market state (PREPRE/PRE/REGULAR/POST/POSTPOST) drives price source, prepost column
+  color/background, and name color — all three change together
+- User-supplied values bound via DOM APIs only — never string-concatenated into HTML
 
 ## Architecture Notes
 
