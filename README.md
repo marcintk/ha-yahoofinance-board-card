@@ -33,11 +33,12 @@ it provides the `sensor.yahoofinance_<symbol>` entities this card reads. See
 
 ### Manual
 
-1. Download `card.js` from the
+1. Download `ha-yahoofinance-board-card.js` from the
    [latest release](https://github.com/marcintk/ha-yahoofinance-board-card/releases/latest)
-2. Copy it to `<config>/www/ha-yahoofinance-board-card/card.js` (create the folder if needed)
+2. Copy it to `<config>/www/ha-yahoofinance-board-card/ha-yahoofinance-board-card.js` (create the
+   folder if needed)
 3. In Home Assistant → Settings → Dashboards → Resources → **Add resource**
-   - URL: `/local/ha-yahoofinance-board-card/card.js`
+   - URL: `/local/ha-yahoofinance-board-card/ha-yahoofinance-board-card.js`
    - Resource type: **JavaScript module**
 4. Reload your browser
 
