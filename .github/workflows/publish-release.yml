@@ -8,6 +8,8 @@ on:
 
 jobs:
   release:
+    # Pinned at v1.4.1: the v2.x version uploads dist/<package-name>.js and drafts the
+    # release. This card ships dist/card.js (see hacs.json), so keep the v1 behavior.
     uses: marcintk/ha-card-shared/.github/workflows/shared-publish-release.yml@v1.4.1
     permissions:
       contents: write
