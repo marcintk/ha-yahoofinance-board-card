@@ -73,15 +73,16 @@ function makeDriver(page, framesDir, clip) {
 }
 
 async function runScenario(page, d) {
-  await d.hold(20); // one data-column cycle (data_rotate_every: 2) at rest
-  await d.hold(20); // a second cycle
+  await d.hold(15); // rest on the initial render
 
-  // spike AAPL's 1d% past NVDA (re-sorts the "sorted" section) and flip USD/PLN
-  // from pre-market to regular hours (price source + color switch together)
-  await page.evaluate(() => window.__bumpPrice());
-  await d.hold(30); // hold on the re-sort / recolor
+  // four scripted market ticks (see TICKS in record-harness.html), each holding
+  // long enough to read the price/rate changes and, on ticks 2 and 4, the sorted
+  // section re-ranking live
+  for (let i = 1; i <= 4; i++) {
+    await page.evaluate((n) => window.__tick(n), i);
+    await d.hold(15);
+  }
 
-  await d.hold(40); // two more data-column cycles after the update
   await d.hold(10); // resting frames before the loop point
 }
 

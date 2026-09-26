@@ -293,20 +293,55 @@
 
       card.hass = makeHass();
 
-      // expose a hook for the recorder: spikes Apple's 1d% past NVidia's (re-sorting
-      // the "sorted" section on camera) and flips USD/PLN from pre-market to regular
-      // hours (its price source, prepost background, and name color all switch together).
-      window.__bumpPrice = () => {
-        states["sensor.yahoofinance_aapl"] = a({
-          ...states["sensor.yahoofinance_aapl"].attributes,
-          regularMarketChangePercent: 5.4,
-        });
-        states["sensor.yahoofinance_usdpln_x"] = a({
-          ...states["sensor.yahoofinance_usdpln_x"].attributes,
-          marketState: "REGULAR",
-          regularMarketPrice: 4.04,
-          regularMarketChangePercent: 0.5,
-        });
+      // A scripted sequence of live-market ticks — each one a partial patch keyed by
+      // entity id — so the recorder can call window.__tick(1), __tick(2), … at
+      // intervals and the board visibly keeps moving: prices and 1d/50d/200d% drift,
+      // the sorted section re-ranks more than once, and one row's market state flips.
+      const TICKS = [
+        // modest drift across a mix of pinned and sorted rows
+        {
+          "sensor.yahoofinance_dji": { regularMarketChangePercent: 0.55 },
+          "sensor.yahoofinance_gc_f": { regularMarketChangePercent: 1.05, regularMarketPrice: 2658.2 },
+          "sensor.yahoofinance_aapl": { regularMarketChangePercent: 1.9, regularMarketPrice: 229.1 },
+          "sensor.yahoofinance_nvda": { regularMarketChangePercent: 4.3, regularMarketPrice: 139.6 },
+        },
+        // AAPL spikes past NVDA (re-sorts the sorted section) and USD/PLN flips
+        // PRE -> REGULAR (its price source, prepost background, and name color
+        // switch together)
+        {
+          "sensor.yahoofinance_aapl": { regularMarketChangePercent: 5.4, regularMarketPrice: 233.8 },
+          "sensor.yahoofinance_usdpln_x": {
+            marketState: "REGULAR",
+            regularMarketPrice: 4.04,
+            regularMarketChangePercent: 0.5,
+          },
+          "sensor.yahoofinance_gspc": { regularMarketChangePercent: 0.35 },
+        },
+        // TSLA drops further, META slides, BTC jumps
+        {
+          "sensor.yahoofinance_tsla": {
+            regularMarketChangePercent: -3.6,
+            postMarketChangePercent: -1.4,
+            postMarketPrice: 244.9,
+          },
+          "sensor.yahoofinance_meta": { regularMarketChangePercent: -1.2, regularMarketPrice: 605.1 },
+          "sensor.yahoofinance_btc_usd": { regularMarketChangePercent: 4.8, regularMarketPrice: 99850.0 },
+        },
+        // NVDA regains the lead (re-sorts again), AMD flips positive, VIX spikes
+        {
+          "sensor.yahoofinance_nvda": { regularMarketChangePercent: 6.9, regularMarketPrice: 143.9 },
+          "sensor.yahoofinance_amd": { regularMarketChangePercent: 0.9, regularMarketPrice: 121.4 },
+          "sensor.yahoofinance_vix": { regularMarketChangePercent: 8.1, regularMarketPrice: 16.4 },
+        },
+      ];
+
+      // expose a hook for the recorder: applies TICKS[i - 1] and re-assigns .hass
+      window.__tick = (i) => {
+        const patch = TICKS[i - 1];
+        if (!patch) return;
+        for (const [id, attrs] of Object.entries(patch)) {
+          states[id] = a({ ...states[id].attributes, ...attrs });
+        }
         card.hass = makeHass();
       };
 
