@@ -37,7 +37,8 @@ export function detectIcon(symbol: string): string {
   if (symbol.endsWith("_f")) return "◆";
   if (symbol.endsWith("_x")) return "¤";
   if (KNOWN_INDICES.has(symbol)) return "△";
-  if (KNOWN_CRYPTO_BASES.has(symbol.split("_")[0])) return "⬢";
+  // biome-ignore lint/style/noNonNullAssertion: String.split always yields at least one element
+  if (KNOWN_CRYPTO_BASES.has(symbol.split("_")[0]!)) return "⬢";
   return "";
 }
 

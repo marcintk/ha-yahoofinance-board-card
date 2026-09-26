@@ -1,8 +1,8 @@
-import { snapHtml } from "ha-card-shared/test-utils";
 import { render, type TemplateResult } from "lit";
 import { describe, expect, it } from "vitest";
 import { CARD_STYLES } from "../src/index.js";
 import { DEFAULT_STATE_COLORS, headerHtml, stockRowHtml, stockSectionHtml } from "../src/render.js";
+import { snapHtml } from "./helpers.js";
 
 function doc(template: TemplateResult): string {
   const el = document.createElement("div");
