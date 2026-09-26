@@ -1,8 +1,16 @@
-import { cardBundle } from "ha-card-shared/rollup.base.mjs";
+import nodeResolve from "@rollup/plugin-node-resolve";
+import terser from "@rollup/plugin-terser";
+import typescript from "@rollup/plugin-typescript";
 
-// ha-card-shared >= v2 names the bundle after the package. This card ships as
-// dist/card.js (see hacs.json "filename" and the README resource URL), so pin it.
-const config = cardBundle();
-config.output.file = "dist/card.js";
+const version = process.env.VERSION ?? "0.0.0-dev";
 
-export default config;
+export default {
+  input: "src/index.ts",
+  output: {
+    file: "dist/card.js",
+    format: "es",
+    banner: `/* ha-yahoofinance-board-card v${version} */`,
+    intro: `const __CARD_VERSION__ = '${version}';`,
+  },
+  plugins: [nodeResolve(), typescript(), ...(process.env.NODE_ENV === "production" ? [terser()] : [])],
+};
