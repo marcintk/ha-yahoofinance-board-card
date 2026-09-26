@@ -26,22 +26,19 @@ it provides the `sensor.yahoofinance_<symbol>` entities this card reads. See
 
 ### Via HACS (recommended)
 
-1. In HACS → Frontend → click the three-dot menu → **Custom repositories**
-   - Repository: `https://github.com/marcintk/ha-yahoofinance-board-card` (exact URL)
-   - Category: **Dashboard**
-2. Search **Yahoo Finance Board Card** → Install
-3. Reload your browser
-4. Add the card to your dashboard (see Configuration below)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcintk&repository=ha-yahoofinance-board-card&category=plugin)
+
+Click the badge to open this card in your own HACS, or find it manually: HACS → Frontend → search
+**Yahoo Finance Board Card**. Then Install, reload your browser, and add the card to your dashboard
+(see Configuration below).
 
 ### Manual
 
-1. Download `card.js` from the
-   [latest release](https://github.com/marcintk/ha-yahoofinance-board-card/releases/latest)
-2. Copy it to `<config>/www/ha-yahoofinance-board-card/card.js` (create the folder if needed)
-3. In Home Assistant → Settings → Dashboards → Resources → **Add resource**
-   - URL: `/local/ha-yahoofinance-board-card/card.js`
-   - Resource type: **JavaScript module**
-4. Reload your browser
+Drop `card.js` from the
+[latest release](https://github.com/marcintk/ha-yahoofinance-board-card/releases/latest) into
+`<config>/www/ha-yahoofinance-board-card/`, then register
+`/local/ha-yahoofinance-board-card/card.js` as a **JavaScript Module** under Settings → Dashboards →
+Resources.
 
 ## Configuration
 
@@ -172,7 +169,7 @@ colors:
 [downloads-shield]:
   https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
 [hacs]: https://hacs.xyz
-[hacs-shield]: https://img.shields.io/badge/HACS-Custom-orange.svg
+[hacs-shield]: https://img.shields.io/badge/HACS-Default-41BDF5.svg
 [license]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE
 [license-shield]: https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026
