@@ -159,30 +159,30 @@ colors:
 
 <!-- Reference links -->
 
-[repo]: https://github.com/marcintk/ha-yahoofinance-board-card
-[new-issue]: https://github.com/marcintk/ha-yahoofinance-board-card/issues/new
-[discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
-[hacs]: https://hacs.xyz
-[hacs-shield]: https://img.shields.io/badge/HACS-Custom-orange.svg
-[releases]: https://github.com/marcintk/ha-yahoofinance-board-card/releases
-[releases-shield]: https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg
-[license]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE
-[license-shield]: https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2026
 [ci]:
   https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml
 [ci-shield]:
   https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml/badge.svg
-[coverage-shield]: https://img.shields.io/badge/coverage-100%25-brightgreen
-[downloads-shield]:
-  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
 [codeql]: https://github.com/marcintk/ha-yahoofinance-board-card/security/code-scanning
 [codeql-shield]:
   https://img.shields.io/github/actions/workflow/status/marcintk/ha-yahoofinance-board-card/codeql-analysis.yml?branch=main&label=CodeQL
+[coverage-shield]: https://img.shields.io/badge/coverage-100%25-brightgreen
+[demo-img]: https://raw.githubusercontent.com/marcintk/ha-yahoofinance-board-card/main/docs/demo.gif
+[discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
+[downloads-shield]:
+  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
+[hacs]: https://hacs.xyz
+[hacs-shield]: https://img.shields.io/badge/HACS-Custom-orange.svg
+[license]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE
+[license-shield]: https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026
+[new-issue]: https://github.com/marcintk/ha-yahoofinance-board-card/issues/new
+[releases]: https://github.com/marcintk/ha-yahoofinance-board-card/releases
+[releases-shield]: https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg
+[repo]: https://github.com/marcintk/ha-yahoofinance-board-card
 [scorecard]:
   https://securityscorecards.dev/viewer/?uri=github.com/marcintk/ha-yahoofinance-board-card
 [scorecard-shield]:
   https://img.shields.io/ossf-scorecard/github.com/marcintk/ha-yahoofinance-board-card?label=OpenSSF&style=flat
 [socket]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/socket.yml
 [socket-shield]: https://img.shields.io/badge/Socket.dev-Firewall%20%2B%20Scanning-fb3387.svg
-[demo-img]: https://raw.githubusercontent.com/marcintk/ha-yahoofinance-board-card/main/docs/demo.gif
