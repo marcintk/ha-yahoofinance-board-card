@@ -1,5 +1,7 @@
 # Yahoo Finance Board Card
 
+[![Yahoo Finance Board Card][demo-img]][repo]
+
 Home Assistant custom Lovelace card displaying a compact stock market board — price, pre/post market
 change, 1d/50d/200d change percentages, and a rotating data column (PE, Forward PE, Dividend Rate,
 Volume). Built on top of the [yahoofinance](https://github.com/iprak/yahoofinance) integration.
@@ -14,8 +16,6 @@ discussion][discussions].
 [![CI][ci-shield]][ci] [![CodeQL][codeql-shield]][codeql]
 [![OpenSSF Scorecard][scorecard-shield]][scorecard] [![Socket.dev][socket-shield]][socket]
 
-![Preview](docs/preview.png)
-
 ## Requirements
 
 Requires the [yahoofinance](https://github.com/iprak/yahoofinance) integration (HACS Integration) —
@@ -26,22 +26,19 @@ it provides the `sensor.yahoofinance_<symbol>` entities this card reads. See
 
 ### Via HACS (recommended)
 
-1. In HACS → Frontend → click the three-dot menu → **Custom repositories**
-   - Repository: `https://github.com/marcintk/ha-yahoofinance-board-card` (exact URL)
-   - Category: **Dashboard**
-2. Search **Yahoo Finance Board Card** → Install
-3. Reload your browser
-4. Add the card to your dashboard (see Configuration below)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcintk&repository=ha-yahoofinance-board-card&category=plugin)
+
+Click the badge to open this card in your own HACS, or find it manually: HACS → Frontend → search
+**Yahoo Finance Board Card**. Then Install, reload your browser, and add the card to your dashboard
+(see Configuration below).
 
 ### Manual
 
-1. Download `card.js` from the
-   [latest release](https://github.com/marcintk/ha-yahoofinance-board-card/releases/latest)
-2. Copy it to `<config>/www/ha-yahoofinance-board-card/card.js` (create the folder if needed)
-3. In Home Assistant → Settings → Dashboards → Resources → **Add resource**
-   - URL: `/local/ha-yahoofinance-board-card/card.js`
-   - Resource type: **JavaScript module**
-4. Reload your browser
+Drop `card.js` from the
+[latest release](https://github.com/marcintk/ha-yahoofinance-board-card/releases/latest) into
+`<config>/www/ha-yahoofinance-board-card/`, then register
+`/local/ha-yahoofinance-board-card/card.js` as a **JavaScript Module** under Settings → Dashboards →
+Resources.
 
 ## Configuration
 
@@ -159,25 +156,27 @@ colors:
 
 <!-- Reference links -->
 
-[new-issue]: https://github.com/marcintk/ha-yahoofinance-board-card/issues/new
-[discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
-[hacs]: https://hacs.xyz
-[hacs-shield]: https://img.shields.io/badge/HACS-Custom-orange.svg
-[releases]: https://github.com/marcintk/ha-yahoofinance-board-card/releases
-[releases-shield]: https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg
-[license]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE
-[license-shield]: https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2026
 [ci]:
   https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml
 [ci-shield]:
   https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml/badge.svg
-[coverage-shield]: https://img.shields.io/badge/coverage-100%25-brightgreen
-[downloads-shield]:
-  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
 [codeql]: https://github.com/marcintk/ha-yahoofinance-board-card/security/code-scanning
 [codeql-shield]:
   https://img.shields.io/github/actions/workflow/status/marcintk/ha-yahoofinance-board-card/codeql-analysis.yml?branch=main&label=CodeQL
+[coverage-shield]: https://img.shields.io/badge/coverage-100%25-brightgreen
+[demo-img]: https://raw.githubusercontent.com/marcintk/ha-yahoofinance-board-card/main/docs/demo.gif
+[discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
+[downloads-shield]:
+  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
+[hacs]: https://hacs.xyz
+[hacs-shield]: https://img.shields.io/badge/HACS-Default-41BDF5.svg
+[license]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE
+[license-shield]: https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026
+[new-issue]: https://github.com/marcintk/ha-yahoofinance-board-card/issues/new
+[releases]: https://github.com/marcintk/ha-yahoofinance-board-card/releases
+[releases-shield]: https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg
+[repo]: https://github.com/marcintk/ha-yahoofinance-board-card
 [scorecard]:
   https://securityscorecards.dev/viewer/?uri=github.com/marcintk/ha-yahoofinance-board-card
 [scorecard-shield]:
