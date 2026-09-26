@@ -701,6 +701,17 @@ describe("YahooFinanceBoardCard", () => {
       card._render();
       expect(trackSpy).toHaveBeenCalledWith("rendered");
     });
+
+    it("produces identical DOM on repeated renders with unchanged data", () => {
+      const card = makeCard();
+      card._config = baseConfig;
+      card._hass = makeHass({ "sensor.yahoofinance_dji": makeState(baseAttrs) });
+      card._trackedIds = new Set();
+      card._render();
+      const first = card.shadowRoot.innerHTML;
+      card._render();
+      expect(card.shadowRoot.innerHTML).toBe(first);
+    });
   });
 
   describe("debug overlay", () => {
