@@ -18,7 +18,7 @@
       "prefix": "sensor.yahoofinance_",
       "icons": "auto",
       "lazy_refresh": 0,
-      "data_rotate_every": 4,
+      "data_rotate_every": 2,
       "pinned": "DOW JONES, S&P 500, NASDAQ, Gold, USD/PLN — rendered in configured order, never sorted",
       "sorted": "Apple, Microsoft, NVidia (mark: gold), Tesla (icon: ★) — ranked by regularMarketChangePercent descending"
     },
@@ -31,17 +31,17 @@
     "tool": "Playwright (headless Chromium), scripts/demo/record-demo.mjs",
     "capture_method": "Real page.screenshot() with a fixed clip, sampled in a sleep/hold loop. Motion in the gif is the card's own JS (data-column rotation timer, the re-sort, the market-state recolor) sampled continuously — nothing is synthesized.",
     "clip": "measured once from #wrap's bounding box after window.__ready, reused for every frame; width/height floored to even numbers for the encoder (flooring, not rounding — rounding up can catch a 1px sliver of page background below the card and it reads as a dark line)",
-    "encode": "ffmpeg two-pass palette (palettegen max_colors=128 stats_mode=diff, paletteuse dither=bayer) scaled to 460px wide.",
+    "encode": "ffmpeg two-pass palette (palettegen max_colors=128 stats_mode=diff, paletteuse dither=bayer) scaled to 920px wide — the captured resolution (deviceScaleFactor: 2 over a 460px-wide box), so no downscale.",
     "output_path": "docs/demo.gif",
     "fps": 10
   },
 
   "scenario_beats": [
-    "rest ~4s on the initial render — one full data-column cycle (PE → FPE → Div → Vol at data_rotate_every: 4)",
-    "hold ~4s more — a second data-column cycle",
-    "call window.__bumpPrice() — AAPL's 1d% jumps past NVDA's, re-sorting the sorted section; USD/PLN flips PRE → REGULAR, switching its price source and colors together. hold ~6s",
-    "hold ~8s — two more data-column cycles after the update",
-    "hold ~2s of resting frames before the gif loops"
+    "rest ~2s on the initial render — one full data-column cycle (PE → FPE → Div → Vol at data_rotate_every: 2)",
+    "hold ~2s more — a second data-column cycle",
+    "call window.__bumpPrice() — AAPL's 1d% jumps past NVDA's, re-sorting the sorted section; USD/PLN flips PRE → REGULAR, switching its price source and colors together. hold ~3s",
+    "hold ~4s — two more data-column cycles after the update",
+    "hold ~1s of resting frames before the gif loops"
   ],
 
   "known_risks": [
