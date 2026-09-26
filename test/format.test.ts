@@ -1,6 +1,6 @@
 import { render } from "lit";
 import { describe, expect, it } from "vitest";
-import { dataText, formatPrice, formatRate, prepostText, priceText } from "../src/format.js";
+import { dataText, formatPrice, formatRate } from "../src/format.js";
 
 function renderDataText(attrs: Parameters<typeof dataText>[0], state: number): HTMLElement {
   const el = document.createElement("div");
@@ -78,78 +78,6 @@ describe("formatPrice", () => {
 
   it("uses default fallback of 0 when omitted", () => {
     expect(formatPrice(0)).toBe("-");
-  });
-});
-
-describe("priceText", () => {
-  it("returns - for null attrs", () => {
-    expect(priceText(null)).toBe("-");
-  });
-
-  it("returns preMarketPrice for PREPRE", () => {
-    expect(
-      priceText({ marketState: "PREPRE", preMarketPrice: 120.0, regularMarketPrice: 100.0 })
-    ).toBe("120.0");
-  });
-
-  it("returns preMarketPrice for PRE", () => {
-    expect(
-      priceText({ marketState: "PRE", preMarketPrice: 120.0, regularMarketPrice: 100.0 })
-    ).toBe("120.0");
-  });
-
-  it("returns postMarketPrice for POST", () => {
-    expect(
-      priceText({ marketState: "POST", postMarketPrice: 130.0, regularMarketPrice: 100.0 })
-    ).toBe("130.0");
-  });
-
-  it("returns postMarketPrice for POSTPOST", () => {
-    expect(
-      priceText({ marketState: "POSTPOST", postMarketPrice: 130.0, regularMarketPrice: 100.0 })
-    ).toBe("130.0");
-  });
-
-  it("returns regularMarketPrice for REGULAR", () => {
-    expect(priceText({ marketState: "REGULAR", regularMarketPrice: 100.0 })).toBe("100.0");
-  });
-
-  it("falls back to regularMarketPrice when preMarketPrice is 0", () => {
-    expect(priceText({ marketState: "PRE", preMarketPrice: 0, regularMarketPrice: 100.0 })).toBe(
-      "100.0"
-    );
-  });
-
-  it("falls back to regularMarketPrice when postMarketPrice is 0", () => {
-    expect(priceText({ marketState: "POST", postMarketPrice: 0, regularMarketPrice: 100.0 })).toBe(
-      "100.0"
-    );
-  });
-});
-
-describe("prepostText", () => {
-  it("returns empty string for null attrs", () => {
-    expect(prepostText(null)).toBe("");
-  });
-
-  it("returns preMarketChangePercent for PREPRE", () => {
-    expect(prepostText({ marketState: "PREPRE", preMarketChangePercent: 1.5 })).toBe("+1.50");
-  });
-
-  it("returns preMarketChangePercent for PRE", () => {
-    expect(prepostText({ marketState: "PRE", preMarketChangePercent: -2.5 })).toBe("-2.50");
-  });
-
-  it("returns postMarketChangePercent for POST", () => {
-    expect(prepostText({ marketState: "POST", postMarketChangePercent: 1.5 })).toBe("+1.50");
-  });
-
-  it("returns postMarketChangePercent for POSTPOST", () => {
-    expect(prepostText({ marketState: "POSTPOST", postMarketChangePercent: -2.5 })).toBe("-2.50");
-  });
-
-  it("returns empty string for REGULAR", () => {
-    expect(prepostText({ marketState: "REGULAR" })).toBe("");
   });
 });
 
