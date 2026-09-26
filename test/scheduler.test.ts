@@ -68,6 +68,32 @@ describe("RenderScheduler", () => {
     });
   });
 
+  describe("hasPendingRender", () => {
+    it("is false initially, true while a debounced render is pending, false once it fires", () => {
+      const scheduler = new RenderScheduler();
+      expect(scheduler.hasPendingRender()).toBe(false);
+
+      scheduler.scheduleRender(100, vi.fn());
+      expect(scheduler.hasPendingRender()).toBe(true);
+
+      vi.advanceTimersByTime(100);
+      expect(scheduler.hasPendingRender()).toBe(false);
+    });
+
+    it("is false immediately after an immediate (lazyMs=0) render", () => {
+      const scheduler = new RenderScheduler();
+      scheduler.scheduleRender(0, vi.fn());
+      expect(scheduler.hasPendingRender()).toBe(false);
+    });
+
+    it("is false after cancelPendingRender", () => {
+      const scheduler = new RenderScheduler();
+      scheduler.scheduleRender(100, vi.fn());
+      scheduler.cancelPendingRender();
+      expect(scheduler.hasPendingRender()).toBe(false);
+    });
+  });
+
   describe("cancelPendingRender", () => {
     it("cancels a pending debounced render", () => {
       const scheduler = new RenderScheduler();

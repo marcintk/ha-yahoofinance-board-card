@@ -19,16 +19,17 @@ export function rateColor(rate: number, threshold = 10.0): string {
 export function deriveMarketPhase(attrs: YahooFinanceAttributes | null): MarketPhase {
   const state = attrs?.marketState ?? "UNKNOWN";
   const isRegular = state === "REGULAR";
-  const isExtended =
-    state === "PRE" || state === "PREPRE" || state === "POST" || state === "POSTPOST";
+  const isPre = state === "PRE" || state === "PREPRE";
+  const isPost = state === "POST" || state === "POSTPOST";
+  const isExtended = isPre || isPost;
 
   let activePrice: number | undefined;
   let activeChangePercent: number | undefined;
 
-  if (state === "PRE" || state === "PREPRE") {
+  if (isPre) {
     activePrice = attrs?.preMarketPrice || attrs?.regularMarketPrice;
     activeChangePercent = attrs?.preMarketChangePercent;
-  } else if (state === "POST" || state === "POSTPOST") {
+  } else if (isPost) {
     activePrice = attrs?.postMarketPrice || attrs?.regularMarketPrice;
     activeChangePercent = attrs?.postMarketChangePercent;
   } else {

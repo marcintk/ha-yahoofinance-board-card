@@ -51,6 +51,10 @@ export class RenderScheduler {
     }, lazyMs);
   }
 
+  hasPendingRender(): boolean {
+    return this._renderTimer !== null;
+  }
+
   cancelPendingRender(): void {
     if (this._renderTimer !== null) {
       clearTimeout(this._renderTimer);
