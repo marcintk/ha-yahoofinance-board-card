@@ -25,7 +25,7 @@ const ROOT = new URL("../..", import.meta.url).pathname;
 const HARNESS_PATH = "/scripts/demo/record-harness.html";
 const VIEW_WIDTH = 700;
 const FPS = 10;
-const OUT_WIDTH = 920; // final gif width; height follows the card's own box
+const OUT_WIDTH = 460; // final gif width; height follows the card's own box (more rows = taller)
 
 const MIME = {
   ".html": "text/html",
