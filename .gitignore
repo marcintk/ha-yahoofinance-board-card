@@ -1,5 +1,21 @@
 .claude/
+!.claude/agents/
 .serena/
-node_modules/
-coverage/
+.vitest/
+.work/
 dist/
+coverage/
+node_modules/
+
+# Stray shell/editor/tooling dotfiles that land in the working tree
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.idea
+.mcp.json
+.profile
+.ripgreprc
+.vscode
+.zprofile
+.zshrc

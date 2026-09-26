@@ -1,16 +1,18 @@
 # Yahoo Finance Board Card
 
-[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz)
-[![GitHub Release](https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/releases)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE)
-[![Maintenance](https://img.shields.io/maintenance/yes/2026)](https://github.com/marcintk/ha-yahoofinance-board-card)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml)
-[![Lines of code](https://sloc.xyz/github/marcintk/ha-yahoofinance-board-card/?category=code)](https://github.com/marcintk/ha-yahoofinance-board-card)
-[![CI](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml/badge.svg)](https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml)
-
 Home Assistant custom Lovelace card displaying a compact stock market board — price, pre/post market
 change, 1d/50d/200d change percentages, and a rotating data column (PE, Forward PE, Dividend Rate,
 Volume). Built on top of the [yahoofinance](https://github.com/iprak/yahoofinance) integration.
+
+Bug or feature request? [Open an issue][new-issue]. Idea, question, or setup to share? [Start a
+discussion][discussions].
+
+[![hacs_badge][hacs-shield]][hacs] [![GitHub Release][releases-shield]][releases]
+[![License][license-shield]][license] ![Maintenance][maintenance-shield]
+[![Coverage][coverage-shield]][ci] [![Downloads][downloads-shield]][releases]
+
+[![CI][ci-shield]][ci] [![CodeQL][codeql-shield]][codeql]
+[![OpenSSF Scorecard][scorecard-shield]][scorecard] [![Socket.dev][socket-shield]][socket]
 
 ![Preview](docs/preview.png)
 
@@ -155,6 +157,30 @@ colors:
   postpost: indigo
 ```
 
-## Development
+<!-- Reference links -->
 
-See [CLAUDE.md](CLAUDE.md) for build commands, contributing guidelines, and release instructions.
+[new-issue]: https://github.com/marcintk/ha-yahoofinance-board-card/issues/new
+[discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
+[hacs]: https://hacs.xyz
+[hacs-shield]: https://img.shields.io/badge/HACS-Custom-orange.svg
+[releases]: https://github.com/marcintk/ha-yahoofinance-board-card/releases
+[releases-shield]: https://img.shields.io/github/release/marcintk/ha-yahoofinance-board-card.svg
+[license]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/LICENSE
+[license-shield]: https://img.shields.io/github/license/marcintk/ha-yahoofinance-board-card.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026
+[ci]:
+  https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml
+[ci-shield]:
+  https://github.com/marcintk/ha-yahoofinance-board-card/actions/workflows/card-build-and-test.yml/badge.svg
+[coverage-shield]: https://img.shields.io/badge/coverage-100%25-brightgreen
+[downloads-shield]:
+  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
+[codeql]: https://github.com/marcintk/ha-yahoofinance-board-card/security/code-scanning
+[codeql-shield]:
+  https://img.shields.io/github/actions/workflow/status/marcintk/ha-yahoofinance-board-card/codeql-analysis.yml?branch=main&label=CodeQL
+[scorecard]:
+  https://securityscorecards.dev/viewer/?uri=github.com/marcintk/ha-yahoofinance-board-card
+[scorecard-shield]:
+  https://img.shields.io/ossf-scorecard/github.com/marcintk/ha-yahoofinance-board-card?label=OpenSSF&style=flat
+[socket]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/socket.yml
+[socket-shield]: https://img.shields.io/badge/Socket.dev-Firewall%20%2B%20Scanning-fb3387.svg
