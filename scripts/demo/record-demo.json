@@ -20,7 +20,7 @@
       "lazy_refresh": 0,
       "data_rotate_every": 2,
       "pinned": "DOW JONES, S&P 500, NASDAQ, FTSE 100, Nikkei 225, Gold, Crude Oil, USD/PLN, USD/JPY, DAX, VIX — rendered in configured order, never sorted",
-      "sorted": "Apple, Microsoft, NVidia (mark: gold), Tesla (icon: ★), Amazon, Alphabet, Meta, Bitcoin, AMD, Netflix, JPMorgan — ranked by regularMarketChangePercent descending"
+      "sorted": "Apple, Microsoft, NVidia (mark: gold), Tesla, Amazon (star: true), Alphabet, Meta, Bitcoin, AMD, Netflix, JPMorgan — ranked by regularMarketChangePercent descending"
     },
     "fake_data": "One state object per sensor.yahoofinance_<slug> entity, shaped like the real YahooFinanceAttributes (src/types.ts). Indices/commodities/FX pairs legitimately omit PE/dividend/volume, same as real sensor data. No real Home Assistant, no WebSocket: the harness gives the card a connection object with no subscribeEvents, so the card re-renders on every `card.hass = …` assignment (SubscriptionManager bails out early). The same connection object is reused across assignments so the card never treats it as a reconnect.",
     "mount_order": "createElement → setConfig → appendChild → set .hass. setConfig before connecting matters for the same reason it does elsewhere in this card family.",

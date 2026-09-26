@@ -24,6 +24,7 @@ export interface StockEntry {
   name: string;
   icon?: string;
   mark?: string;
+  star?: boolean;
 }
 
 export interface CardConfig {

@@ -40,7 +40,7 @@ Drop `card.js` from the
 `/local/ha-yahoofinance-board-card/card.js` as a **JavaScript Module** under Settings → Dashboards →
 Resources.
 
-## Configuration
+## Usage
 
 Add a **Manual card** to your dashboard and paste:
 
@@ -72,55 +72,10 @@ sorted:
     icon: "★"
 ```
 
-### Card options
+## Display
 
-| Option              | Type             | Default                | Description                                                                                                                         |
-| ------------------- | ---------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                                                         |
-| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX)                                                                      |
-| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities)                                                                      |
-| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons                                          |
-| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                                                           |
-| `colors`            | map              | —                      | Per-state color overrides; see [Market states and colors](#market-states-and-colors)                                                |
-| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                                                        |
-| `lazy_refresh`      | number           | `1`                    | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately |
-| `fixed_refresh`     | number           | `60`                   | Re-render every N seconds regardless of events; `0` = disabled                                                                      |
-| `show_version`      | boolean          | `false`                | Shows card version badge (top-left corner)                                                                                          |
-| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters)                                                                                |
-
-### Stock entry options
-
-| Field    | Type   | Default  | Description                                                                                         |
-| -------- | ------ | -------- | --------------------------------------------------------------------------------------------------- |
-| `symbol` | string | required | Yahoo Finance symbol slug (lowercase, see note below)                                               |
-| `name`   | string | required | Display name shown in the name column                                                               |
-| `icon`   | string | —        | Icon character shown before the name; overrides `icons: auto` detection or adds an icon when `none` |
-| `mark`   | string | —        | CSS color applied as the row background (e.g. `"gold"`, `"#1a1a2e"`)                                |
-
-#### Auto icon detection (`icons: auto`)
-
-| Symbol pattern    | Examples                                                   | Icon | Type      |
-| ----------------- | ---------------------------------------------------------- | ---- | --------- |
-| ends `_f`         | `gc_f`, `bz_f`, `cl_f`, `ng_f`                             | `◆`  | Commodity |
-| ends `_x`         | `usdpln_x`, `usdjpy_x`                                     | `¤`  | FX pair   |
-| known index list  | `dji`, `gspc`, `ixic`, `dax`, `ftse`, `n225`, `tnx`, `vix` | `△`  | Index     |
-| known crypto base | `btc_usd`, `eth_usd`, `sol_usd`                            | `⬢`  | Crypto    |
-| everything else   | `aapl`, `tsla`, `brk_a`                                    | —    | Equity    |
-
-### Symbol naming
-
-Entity IDs follow the pattern `sensor.yahoofinance_<slug>` where `<slug>` is derived from the Yahoo
-Finance ticker:
-
-| Ticker    | Slug      | Entity ID                     |
-| --------- | --------- | ----------------------------- |
-| `^DJI`    | `dji`     | `sensor.yahoofinance_dji`     |
-| `BRK-A`   | `brk_a`   | `sensor.yahoofinance_brk_a`   |
-| `GC=F`    | `gc_f`    | `sensor.yahoofinance_gc_f`    |
-| `AMS.MC`  | `ams_mc`  | `sensor.yahoofinance_ams_mc`  |
-| `BTC-USD` | `btc_usd` | `sensor.yahoofinance_btc_usd` |
-
-### Columns
+`pinned` stocks render in configured order; `sorted` stocks are ranked by 1-day change percentage
+descending (top gainers first). Each row cycles through the columns below.
 
 | Column   | Shows                                                                                     |
 | -------- | ----------------------------------------------------------------------------------------- |
@@ -132,10 +87,62 @@ Finance ticker:
 | Data     | Cycles through PE / Forward PE / Dividend Rate / Volume every `data_rotate_every` seconds |
 | Price    | Current price: pre/post/regular market depending on session                               |
 
-### Market states and colors
+## Configuration
+
+### Card
+
+| Option              | Type             | Default                | Description                                                                                      |
+| ------------------- | ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------ |
+| `prefix`            | string           | `sensor.yahoofinance_` | Entity ID prefix for Yahoo Finance entities                                                      |
+| `pinned`            | list             | `[]`                   | Stocks rendered in configured order (indices, commodities, FX) — see [Stock entry](#stock-entry) |
+| `sorted`            | list             | `[]`                   | Stocks sorted by 1-day change descending (individual equities) — see [Stock entry](#stock-entry) |
+| `icons`             | `auto` \| `none` | `none`                 | `auto` — prefix each row with a type icon detected from the symbol slug; `none` — no icons       |
+| `data_rotate_every` | number           | `60`                   | Seconds between data column cycles (PE → FPE → Div → Vol); `0` = disabled                        |
+| `colors`            | map              | —                      | Per-state color overrides — see [Colors](#colors)                                                |
+| `height`            | string           | auto                   | Card height (CSS value); omit to fit content                                                     |
+| `show_version`      | boolean          | `false`                | Shows card version badge (top-left corner)                                                       |
+| `debug`             | boolean          | `false`                | Enables debug overlay (event/filter/render counters)                                             |
+
+### Refresh
+
+The card subscribes to Home Assistant state changes and re-renders when a tracked sensor updates.
+
+| Option          | Type   | Default | Description                                                                                                                         |
+| --------------- | ------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `lazy_refresh`  | number | `1`     | Seconds to wait before re-rendering after a state change; resets if another event arrives during the wait; `0` = render immediately |
+| `fixed_refresh` | number | `60`    | Re-render every N seconds regardless of events; `0` = disabled                                                                      |
+
+### Stock entry
+
+| Field    | Type    | Default  | Description                                                                                         |
+| -------- | ------- | -------- | --------------------------------------------------------------------------------------------------- |
+| `symbol` | string  | required | Yahoo Finance symbol slug (lowercase, see [Symbol naming](#symbol-naming))                          |
+| `name`   | string  | required | Display name shown in the name column                                                               |
+| `icon`   | string  | —        | Icon character shown before the name; overrides `icons: auto` detection or adds an icon when `none` |
+| `mark`   | string  | —        | CSS color applied as the row background (e.g. `"gold"`, `"#1a1a2e"`)                                |
+| `star`   | boolean | `false`  | Appends a fixed `★` suffix after the name (independent of `icon`/`mark`)                            |
+
+#### Auto icon detection (`icons: auto`)
+
+| Symbol pattern    | Examples                                                   | Icon | Type      |
+| ----------------- | ---------------------------------------------------------- | ---- | --------- |
+| ends `_f`         | `gc_f`, `bz_f`, `cl_f`, `ng_f`                             | `◆`  | Commodity |
+| ends `_x`         | `usdpln_x`, `usdjpy_x`                                     | `¤`  | FX pair   |
+| known index list  | `dji`, `gspc`, `ixic`, `dax`, `ftse`, `n225`, `tnx`, `vix` | `△`  | Index     |
+| known crypto base | `btc_usd`, `eth_usd`, `sol_usd`                            | `⬢`  | Crypto    |
+| everything else   | `aapl`, `tsla`, `brk_a`                                    | —    | Equity    |
+
+### Colors
 
 The card uses one color per market state, applied as the **Price** text color, the **Pre/Post**
 column background during pre/post sessions, and the **1d%** column background during regular hours.
+
+```yaml
+type: custom:ha-yahoofinance-board-card
+colors:
+  pre: "#d4af37"
+  postpost: indigo
+```
 
 | `colors:` key | When                                | Default                          |
 | ------------- | ----------------------------------- | -------------------------------- |
@@ -146,13 +153,18 @@ column background during pre/post sessions, and the **1d%** column background du
 | `postpost`    | Post-post market                    | darkslateblue                    |
 | `unknown`     | Entity unavailable or state missing | `--secondary-text-color` (theme) |
 
-Override any state via `colors:` in the card config:
+## Symbol naming
 
-```yaml
-colors:
-  pre: "#d4af37"
-  postpost: indigo
-```
+Entity IDs follow the pattern `sensor.yahoofinance_<slug>` where `<slug>` is derived from the Yahoo
+Finance ticker:
+
+| Ticker    | Slug      | Entity ID                     |
+| --------- | --------- | ----------------------------- |
+| `^DJI`    | `dji`     | `sensor.yahoofinance_dji`     |
+| `BRK-A`   | `brk_a`   | `sensor.yahoofinance_brk_a`   |
+| `GC=F`    | `gc_f`    | `sensor.yahoofinance_gc_f`    |
+| `AMS.MC`  | `ams_mc`  | `sensor.yahoofinance_ams_mc`  |
+| `BTC-USD` | `btc_usd` | `sensor.yahoofinance_btc_usd` |
 
 <!-- Reference links -->
 
