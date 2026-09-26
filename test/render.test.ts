@@ -212,6 +212,20 @@ describe("stockRowHtml", () => {
     );
   });
 
+  it("defaults name color to gray when regularMarketChangePercent is missing during REGULAR", () => {
+    const el = doc(
+      stockRowHtml(stock, { marketState: "REGULAR", regularMarketPrice: 100 }, 0, "Apple")
+    );
+    expect(el.querySelector(".col-name")?.getAttribute("style")).toContain("gray");
+  });
+
+  it("defaults prepost color to gray when changePercent is missing during an extended state", () => {
+    const el = doc(
+      stockRowHtml(stock, { marketState: "PRE", regularMarketPrice: 100 }, 0, "Apple")
+    );
+    expect(el.querySelector(".col-prepost")?.getAttribute("style")).toContain("color:gray");
+  });
+
   it("colors price cell with secondary-text-color when state is unknown", () => {
     const el = doc(stockRowHtml(stock, null, 0, "Apple"));
     expect(el.querySelector(".col-price")?.getAttribute("style")).toContain(

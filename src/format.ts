@@ -1,6 +1,5 @@
 import { html, type TemplateResult } from "lit";
 import type { YahooFinanceAttributes } from "./types.js";
-import { isPostMarket, isPreMarket } from "./utils.js";
 
 const _NEUTRAL = "var(--secondary-text-color, gray)";
 const _DASH = html`<span style="color:${_NEUTRAL};">-</span>`;
@@ -21,22 +20,6 @@ export function formatPrice(price: number | null | undefined, fallback = 0): str
   if (data > 1000) return data.toFixed(0);
   if (data > 10) return data.toFixed(1);
   return data.toFixed(2);
-}
-
-export function priceText(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return "-";
-  const state = attrs.marketState;
-  if (isPreMarket(state)) return formatPrice(attrs.preMarketPrice, attrs.regularMarketPrice);
-  if (isPostMarket(state)) return formatPrice(attrs.postMarketPrice, attrs.regularMarketPrice);
-  return formatPrice(attrs.regularMarketPrice);
-}
-
-export function prepostText(attrs: YahooFinanceAttributes | null): string {
-  if (!attrs) return "";
-  const state = attrs.marketState;
-  if (isPreMarket(state)) return formatRate(attrs.preMarketChangePercent, 2);
-  if (isPostMarket(state)) return formatRate(attrs.postMarketChangePercent, 2);
-  return "";
 }
 
 export function dataText(

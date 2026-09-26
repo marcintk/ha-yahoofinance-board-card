@@ -214,6 +214,28 @@ describe("DebugMetrics", () => {
       expect(d.tableHtml()).toContain("(2h ago)");
     });
 
+    it('stays in seconds up to 59s and switches to "1m" at 60s', () => {
+      const d1 = new DebugMetrics();
+      vi.setSystemTime(new Date("2026-06-13T10:00:00.000Z"));
+      d1.track("rendered");
+      vi.advanceTimersByTime(59_999);
+      expect(d1.tableHtml()).toContain("(59s ago)");
+
+      const d2 = new DebugMetrics();
+      vi.setSystemTime(new Date("2026-06-13T10:00:00.000Z"));
+      d2.track("rendered");
+      vi.advanceTimersByTime(60_000);
+      expect(d2.tableHtml()).toContain("(1m ago)");
+    });
+
+    it('switches to "1h" at exactly 3600000ms', () => {
+      const d = new DebugMetrics();
+      vi.setSystemTime(new Date("2026-06-13T10:00:00.000Z"));
+      d.track("rendered");
+      vi.advanceTimersByTime(3_600_000);
+      expect(d.tableHtml()).toContain("(1h ago)");
+    });
+
     it("timestamp is colored indianred", () => {
       const d = new DebugMetrics();
       expect(d.tableHtml()).toContain("color:indianred");
