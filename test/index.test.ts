@@ -142,6 +142,18 @@ describe("YahooFinanceBoardCard", () => {
       card._buildTrackedIds();
       expect(card._rowMeta.get("dji")).toBe("△ DOW JONES");
     });
+
+    it("appends a star suffix in _rowMeta when the stock entry has star: true", () => {
+      const card = makeCard();
+      card._config = {
+        prefix: "sensor.yahoofinance_",
+        pinned: [],
+        sorted: [{ symbol: "nvda", name: "NVidia", star: true }],
+        icons: "none",
+      };
+      card._buildTrackedIds();
+      expect(card._rowMeta.get("nvda")).toBe("NVidia ★");
+    });
   });
 
   describe("setConfig", () => {

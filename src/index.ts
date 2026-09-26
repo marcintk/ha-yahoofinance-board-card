@@ -152,7 +152,9 @@ class YahooFinanceBoardCard extends HTMLElement {
     this._rowMeta = new Map(
       allStocks.map((s) => {
         const icon = resolveIcon(s.symbol, s.icon, iconsMode);
-        return [s.symbol, icon ? `${icon} ${s.name}` : s.name];
+        const base = icon ? `${icon} ${s.name}` : s.name;
+        const label = s.star ? `${base} ★` : base;
+        return [s.symbol, label];
       })
     );
   }
