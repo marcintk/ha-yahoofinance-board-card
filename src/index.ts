@@ -115,6 +115,7 @@ class YahooFinanceBoardCard extends HTMLElement {
   }
 
   private _scheduleRender(): void {
+    if (this._scheduler.hasPendingRender()) return;
     if (this._config?.debug) this._debug.track("filtered");
     const lazyMs = (this._config?.lazy_refresh ?? 1) * 1000;
     this._scheduler.scheduleRender(lazyMs, () => {

@@ -418,6 +418,22 @@ describe("YahooFinanceBoardCard", () => {
       card._scheduleRender();
       expect(trackSpy).toHaveBeenCalledWith("filtered");
     });
+
+    it("tracks filtered only once per debounce window, not once per call in a burst", () => {
+      const card = makeCard();
+      card._config = { ...baseConfig, debug: true, lazy_refresh: 1 };
+      card._hass = makeHass({});
+      card._trackedIds = new Set();
+      const trackSpy = vi.spyOn(card._debug, "track");
+      const filteredCalls = () => trackSpy.mock.calls.filter((c) => c[0] === "filtered").length;
+      card._scheduleRender();
+      card._scheduleRender();
+      card._scheduleRender();
+      expect(filteredCalls()).toBe(1);
+      vi.runAllTimers();
+      card._scheduleRender();
+      expect(filteredCalls()).toBe(2);
+    });
   });
 
   describe("_clearSubscription (timer cancellation)", () => {
