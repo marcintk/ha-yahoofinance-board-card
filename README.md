@@ -1,5 +1,7 @@
 # Yahoo Finance Board Card
 
+[![Yahoo Finance Board Card][demo-img]][repo]
+
 Home Assistant custom Lovelace card displaying a compact stock market board — price, pre/post market
 change, 1d/50d/200d change percentages, and a rotating data column (PE, Forward PE, Dividend Rate,
 Volume). Built on top of the [yahoofinance](https://github.com/iprak/yahoofinance) integration.
@@ -13,8 +15,6 @@ discussion][discussions].
 
 [![CI][ci-shield]][ci] [![CodeQL][codeql-shield]][codeql]
 [![OpenSSF Scorecard][scorecard-shield]][scorecard] [![Socket.dev][socket-shield]][socket]
-
-![Preview](docs/preview.png)
 
 ## Requirements
 
@@ -159,6 +159,7 @@ colors:
 
 <!-- Reference links -->
 
+[repo]: https://github.com/marcintk/ha-yahoofinance-board-card
 [new-issue]: https://github.com/marcintk/ha-yahoofinance-board-card/issues/new
 [discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
 [hacs]: https://hacs.xyz
@@ -184,3 +185,4 @@ colors:
   https://img.shields.io/ossf-scorecard/github.com/marcintk/ha-yahoofinance-board-card?label=OpenSSF&style=flat
 [socket]: https://github.com/marcintk/ha-yahoofinance-board-card/blob/main/socket.yml
 [socket-shield]: https://img.shields.io/badge/Socket.dev-Firewall%20%2B%20Scanning-fb3387.svg
+[demo-img]: https://raw.githubusercontent.com/marcintk/ha-yahoofinance-board-card/main/docs/demo.gif
