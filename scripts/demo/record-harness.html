@@ -111,6 +111,20 @@
           fiftyDayAverageChangePercent: 1.1,
           twoHundredDayAverageChangePercent: 3.4,
         }),
+        "sensor.yahoofinance_dax": a({
+          marketState: "REGULAR",
+          regularMarketPrice: 19340.6,
+          regularMarketChangePercent: 0.38,
+          fiftyDayAverageChangePercent: 3.5,
+          twoHundredDayAverageChangePercent: 12.1,
+        }),
+        "sensor.yahoofinance_vix": a({
+          marketState: "REGULAR",
+          regularMarketPrice: 14.8,
+          regularMarketChangePercent: -3.2,
+          fiftyDayAverageChangePercent: -6.4,
+          twoHundredDayAverageChangePercent: -10.5,
+        }),
         "sensor.yahoofinance_aapl": a({
           marketState: "REGULAR",
           regularMarketPrice: 227.5,
@@ -195,6 +209,37 @@
           fiftyDayAverageChangePercent: 15.6,
           twoHundredDayAverageChangePercent: 48.2,
         }),
+        "sensor.yahoofinance_amd": a({
+          marketState: "REGULAR",
+          regularMarketPrice: 118.6,
+          regularMarketChangePercent: -1.85,
+          fiftyDayAverageChangePercent: -5.1,
+          twoHundredDayAverageChangePercent: 9.3,
+          trailingPE: 48.7,
+          forwardPE: 24.2,
+          regularMarketVolume: 62_000_000,
+        }),
+        "sensor.yahoofinance_nflx": a({
+          marketState: "REGULAR",
+          regularMarketPrice: 895.4,
+          regularMarketChangePercent: 1.05,
+          fiftyDayAverageChangePercent: 8.9,
+          twoHundredDayAverageChangePercent: 32.6,
+          trailingPE: 44.3,
+          forwardPE: 36.1,
+          regularMarketVolume: 3_800_000,
+        }),
+        "sensor.yahoofinance_jpm": a({
+          marketState: "REGULAR",
+          regularMarketPrice: 246.8,
+          regularMarketChangePercent: 0.48,
+          fiftyDayAverageChangePercent: 2.9,
+          twoHundredDayAverageChangePercent: 21.4,
+          trailingPE: 14.6,
+          forwardPE: 13.2,
+          dividendRate: 4.6,
+          regularMarketVolume: 8_900_000,
+        }),
       };
 
       // one shared connection object — the card treats a changed `connection`
@@ -220,6 +265,8 @@
           { symbol: "cl_f", name: "Crude Oil" },
           { symbol: "usdpln_x", name: "USD/PLN" },
           { symbol: "usdjpy_x", name: "USD/JPY" },
+          { symbol: "dax", name: "DAX" },
+          { symbol: "vix", name: "VIX" },
         ],
         sorted: [
           { symbol: "aapl", name: "Apple" },
@@ -230,6 +277,9 @@
           { symbol: "googl", name: "Alphabet" },
           { symbol: "meta", name: "Meta" },
           { symbol: "btc_usd", name: "Bitcoin" },
+          { symbol: "amd", name: "AMD" },
+          { symbol: "nflx", name: "Netflix" },
+          { symbol: "jpm", name: "JPMorgan" },
         ],
       });
       document.getElementById("wrap").appendChild(card);
