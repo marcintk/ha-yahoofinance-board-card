@@ -9,7 +9,7 @@ REPO: {{REPO}} PR NUMBER: {{PR_NUMBER}}
 
 ## How to review
 
-1. Invoke the `code-review` skill at `high` effort against this PR's diff. Let it do the actual
+1. Invoke the `code-review` skill at `low` effort against this PR's diff. Let it do the actual
    analysis — don't freelance by eyeballing the diff yourself. This job only has
    `Bash(gh pr comment/diff/view/review:*)` (no general Bash, git, or test runner), so the review is
    limited to what it can determine from the diff and `gh pr` output alone.
