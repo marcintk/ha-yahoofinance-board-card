@@ -7,15 +7,14 @@ if [ "$branch" = "main" ]; then
   exit 1
 fi
 
-# Remember what was staged before the auto-fixers run (excluding deletions, which need no
-# re-staging and would abort a literal `git add` with "pathspec did not match any files" once
-# gone), so re-staging afterward can't sweep in unrelated tree-wide fixer drift the way
-# `git add -u` would.
-staged=$(git diff --cached --name-only --diff-filter=d)
+if ! git diff --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  echo "Error: You have unstaged or untracked changes in your working directory." >&2
+  echo "Please stage all changes (e.g., 'git add') or stash/remove them before committing." >&2
+  exit 1
+fi
 
+npm run typecheck                # tsc --noEmit: fail if types don't compile (read-only, so nothing is touched on failure)
 npm run check                    # biome: lint + auto-fix formatting in src/, test/
 npm run --if-present format:md   # prettier: auto-fix markdown (skipped if script absent)
 
-[ -n "$staged" ] && echo "$staged" | git add --pathspec-from-file=-
-
-npm run typecheck                # tsc --noEmit: fail if types don't compile
+git add -u                       # safe now — any tracked file the fixers touch needed reformatting, so it belongs in the commit
