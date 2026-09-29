@@ -29,8 +29,6 @@ pinned:
     name: "Crude Oil (WTI)"
   - symbol: ng_f
     name: "Natural Gas"
-  - symbol: usdpln_x
-    name: "USD/PLN"
   - symbol: usdcny_x
     name: "USD/CNY"
   - symbol: usdjpy_x
@@ -62,7 +60,7 @@ sorted:
   - symbol: tsla
     name: "Tesla"
   - symbol: nvda
-    name: "NVidia"
+    name: "NVIDIA"
   - symbol: amd
     name: "AMD"
   - symbol: intc
@@ -106,7 +104,6 @@ yahoofinance:
     - DAX
     - BRK-A
     - BRK-B
-    - SABR
     - AMS.MC
     - AAL
     - TSLA
@@ -129,7 +126,6 @@ yahoofinance:
     - NG=F
     - BTC-USD
     - ETH-USD
-    - USDPLN=X
     - USDCNY=X
     - USDJPY=X
     - USDRUB=X

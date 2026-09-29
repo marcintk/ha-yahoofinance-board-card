@@ -59,8 +59,6 @@ pinned:
     name: "NASDAQ"
   - symbol: gc_f
     name: "Gold"
-  - symbol: usdpln_x
-    name: "USD/PLN"
 sorted:
   - symbol: aapl
     name: "Apple"
@@ -129,7 +127,7 @@ The card subscribes to Home Assistant state changes and re-renders when a tracke
 | Symbol pattern    | Examples                                                   | Icon | Type      |
 | ----------------- | ---------------------------------------------------------- | ---- | --------- |
 | ends `_f`         | `gc_f`, `bz_f`, `cl_f`, `ng_f`                             | `◆`  | Commodity |
-| ends `_x`         | `usdpln_x`, `usdjpy_x`                                     | `¤`  | FX pair   |
+| ends `_x`         | `eurusd_x`, `usdjpy_x`                                     | `¤`  | FX pair   |
 | known index list  | `dji`, `gspc`, `ixic`, `dax`, `ftse`, `n225`, `tnx`, `vix` | `△`  | Index     |
 | known crypto base | `btc_usd`, `eth_usd`, `sol_usd`                            | `⬢`  | Crypto    |
 | everything else   | `aapl`, `tsla`, `brk_a`                                    | —    | Equity    |
