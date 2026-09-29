@@ -81,7 +81,7 @@ sorted:
 ---
 # homeassistant/configuration.yaml
 # Symbol names for entity IDs: lowercase, replace . with _, replace - with _, remove ^
-# Examples: ^DJI -> dji, BRK-A -> brk_a, GC=F -> gc_f, AMS.MC -> ams_mc, BTC-USD -> btc_usd
+# Examples: ^DJI -> dji, BRK-A -> brk_a, GC=F -> gc_f, BTC-USD -> btc_usd
 
 yahoofinance:
   scan_interval:
@@ -104,7 +104,6 @@ yahoofinance:
     - DAX
     - BRK-A
     - BRK-B
-    - AMS.MC
     - AAL
     - TSLA
     - BA

@@ -163,7 +163,6 @@ Finance ticker:
 | `^DJI`    | `dji`     | `sensor.yahoofinance_dji`     |
 | `BRK-A`   | `brk_a`   | `sensor.yahoofinance_brk_a`   |
 | `GC=F`    | `gc_f`    | `sensor.yahoofinance_gc_f`    |
-| `AMS.MC`  | `ams_mc`  | `sensor.yahoofinance_ams_mc`  |
 | `BTC-USD` | `btc_usd` | `sensor.yahoofinance_btc_usd` |
 
 <!-- Reference links -->
