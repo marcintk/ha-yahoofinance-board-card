@@ -67,7 +67,7 @@ sorted:
   - symbol: msft
     name: "Microsoft"
   - symbol: nvda
-    name: "NVidia"
+    name: "NVIDIA"
     mark: "gold"
   - symbol: tsla
     name: "Tesla"
