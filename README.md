@@ -179,7 +179,7 @@ Finance ticker:
 [demo-img]: https://raw.githubusercontent.com/marcintk/ha-yahoofinance-board-card/main/docs/demo.gif
 [discussions]: https://github.com/marcintk/ha-yahoofinance-board-card/discussions
 [downloads-shield]:
-  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/total?label=downloads
+  https://img.shields.io/github/downloads/marcintk/ha-yahoofinance-board-card/latest/card.js?label=downloads%40latest
 [hacs]: https://hacs.xyz
 [hacs-shield]: https://img.shields.io/badge/HACS-Default-41BDF5.svg
 [issues]: https://github.com/marcintk/ha-yahoofinance-board-card/issues
